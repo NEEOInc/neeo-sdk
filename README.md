@@ -6,7 +6,7 @@ If you're looking for examples, take a look at the example repository at https:/
 
 ## Prerequisite
 
-* You must have installed Node.js v6 installed, see http://nodejs.org
+* You must have installed Node.js v6, see http://nodejs.org
 
 ## SDK Documentation
 
