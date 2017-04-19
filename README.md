@@ -1,4 +1,4 @@
-# NEEO SDK
+# NEEO SDK [![Build Status](https://travis-ci.org/NEEOInc/neeo-sdk.svg?branch=master)](https://travis-ci.org/NEEOInc/neeo-sdk)
 
 This is the source code of the NEEO SDK to interact with the NEEO Brain.
 
