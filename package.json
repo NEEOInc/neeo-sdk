@@ -1,0 +1,40 @@
+{
+  "name": "neeo-sdk",
+  "version": "0.36.0",
+  "description": "NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.",
+  "repository": "https://github.com/NEEOInc/neeo-sdk",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "axios": "^0.15.3",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.16.1",
+    "bonjour": "^3.5.0",
+    "debug": "^2.6.1",
+    "express": "^4.14.1",
+    "tokensearch.js": "^0.5.28"
+  },
+  "devDependencies": {
+    "chai": "~3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "doxdox": "^2.0.2",
+    "istanbul": "^0.4.5",
+    "jshint": "^2.9.2",
+    "mocha": "^3.2.0",
+    "nock": "^9.0.13",
+    "sinon": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "test": "npm run jshint && istanbul cover --hook-run-in-context ./node_modules/.bin/_mocha -- --reporter list --timeout 5000 --recursive \"test/**/*.js\"",
+    "jshint": "jshint --show-non-errors --verbose lib/**/ test/**/",
+    "clean": "rm -rf ./dist && mkdir -p ./dist/docs",
+    "coverage:report": "istanbul report text",
+    "doc": "npm run clean && doxdox 'lib/**/*.js' --title \"NEEO SDK\" --layout bootstrap --output ./dist/docs/index.html",
+    "release": "npm run test && npm run doc && npm run release:copy && npm run release:listtodos",
+    "release:copy": "cp -r ./lib ./dist && cp *.md .jshintrc .gitignore .editorconfig .npmignore package.json License ./dist",
+    "release:listtodos": "grep -R --exclude='./node_modules/*' 'TODO' ./dist"
+  }
+}
