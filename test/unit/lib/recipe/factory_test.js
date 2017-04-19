@@ -1,0 +1,61 @@
+'use strict';
+
+const expect = require('chai').expect;
+const factory = require('../../../../lib/recipe/factory');
+
+describe('./lib/recipe/factory.js', function() {
+
+  it('should not fail when call factory without parameter', function() {
+    const result = factory.buildRecipesModel();
+    expect(result).to.deep.equal([]);
+  });
+
+  it('should filter invalid entries', function() {
+    const result = factory.buildRecipesModel([{ foo:'bar' }]);
+    expect(result).to.deep.equal([]);
+  });
+
+  it('should build recipe', function() {
+    const result = factory.buildRecipesModel([{
+      'type': 'launch',
+      'detail': {
+        'devicename': 'TV',
+        'roomname': 'Living%20Room',
+        'model': 'LHD32V78HUS%20(HOTEL%20TV)',
+        'manufacturer': 'Hisense',
+        'devicetype': 'TV'
+      },
+      'url': {
+        'identify': 'http://127.0.0.1:3000/v1/systeminfo/identbrain',
+        'setPowerOn': 'http://127.0.0.1:3000/v1/projects/home/rooms/6213841889238450176/recipes/6223454602382016512/execute',
+        'setPowerOff': 'http://127.0.0.1:3000/v1/projects/home/rooms/6213841889238450176/recipes/6223454602394599424/execute',
+        'getPowerState': 'http://127.0.0.1:3000/v1/projects/home/rooms/6213841889238450176/recipes/6223454602382016512/isactive'
+      },
+      'isCustom': false,
+      'isPoweredOn': false,
+      'uid': '6223454581767012352',
+      'powerKey': '6223454602377822208'
+    }]);
+    expect(result.length).to.equal(1);
+    expect(typeof result[0].action.identify).to.equal('function');
+    expect(typeof result[0].action.powerOn).to.equal('function');
+    expect(typeof result[0].action.getPowerState).to.equal('function');
+    expect(typeof result[0].action.powerOff).to.equal('function');
+  });
+
+  it('should validate power state answer, undefined parameter', function() {
+    const result = factory.validatePowerStateAnswer();
+    expect(result).to.equal(false);
+  });
+
+  it('should validate power state answer, json data', function() {
+    const result = factory.validatePowerStateAnswer({ foo: 'bar' });
+    expect(result).to.equal(false);
+  });
+
+  it('should validate power state answer, array', function() {
+    const result = factory.validatePowerStateAnswer([1,2,3]);
+    expect(result).to.equal(true);
+  });
+
+});
