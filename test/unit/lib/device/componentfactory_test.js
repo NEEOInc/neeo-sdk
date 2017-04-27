@@ -44,6 +44,18 @@ describe('./lib/device/componentfactory.js', function() {
     });
   });
 
+  it('should build a textlabel, without label', function() {
+    const param = { name: 'textlabel'};
+    const result = ComponentFactory.buildTextLabel('PREFIX/', param);
+    expect(result).to.deep.equal({
+      type: 'textlabel',
+      name: 'textlabel',
+      label: 'textlabel',
+      path: 'PREFIX/textlabel',
+      sensor: 'TEXTLABEL_SENSOR'
+    });
+  });
+
   it('should build a slider with a fancy name', function() {
     const param = { name: 'slidername ✘✘ //\\<script>'};
     const result = ComponentFactory.buildRangeSlider('PREFIX/', param);
@@ -119,6 +131,12 @@ describe('./lib/device/componentfactory.js', function() {
   it('should fail to build a button, empty build parameter', function() {
     expect(function() {
       ComponentFactory.buildButton('foo', {});
+    }).to.throw(/INVALID_BUILD_PARAMETER/);
+  });
+
+  it('should fail to build a textlabel, empty controller', function() {
+    expect(function() {
+      ComponentFactory.buildTextLabel('foo', {});
     }).to.throw(/INVALID_BUILD_PARAMETER/);
   });
 

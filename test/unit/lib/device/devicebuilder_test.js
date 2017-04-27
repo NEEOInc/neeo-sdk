@@ -120,6 +120,48 @@ describe('./lib/device/devicebuilder.js', function() {
     });
   });
 
+  it('should build device with a text label', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .build('foo');
+
+    const handler = device.handler.get('LABELNAME_SENSOR');
+    expect(typeof handler.controller.getter).to.equal('function');
+
+    delete device.handler;
+    delete device.subscriptionFunction;
+    expect(device).to.deep.equal({
+      'adapterName': 'apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50',
+      'apiversion': '1.0',
+      'type': 'ACCESSOIRE',
+      'manufacturer': 'NEEO',
+      setup: {},
+      'devices': [
+        {
+          'name': 'example-adapter',
+          'tokens': []
+        }
+      ],
+      'capabilities': [{
+        'type': 'sensor',
+        'name': 'LABELNAME_SENSOR',
+        'label': 'label',
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/LABELNAME_SENSOR',
+        'sensor': {
+          'type': 'custom',
+        }
+      },
+      {
+        'type': 'textlabel',
+        'name': 'labelname',
+        'label': 'label',
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
+        'sensor': 'LABELNAME_SENSOR'
+      }]
+    });
+  });
+
   it('should build device with a slider', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
