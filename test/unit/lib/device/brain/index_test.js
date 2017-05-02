@@ -27,7 +27,7 @@ describe('./lib/device/brain/index.js', function() {
       });
   });
 
-  it('should successfully detect invalid notification messages', function(done) {
+  it('should successfully detect invalid notification messages, using brain hostname', function(done) {
     const brain = 'brainUrl';
     const adapterName = 'adapter0';
     const url = 'http://foo.bar';
@@ -44,6 +44,26 @@ describe('./lib/device/brain/index.js', function() {
       });
   });
 
+  it('should successfully detect invalid notification messages, using brain object', function(done) {
+    const brain = {
+      host: 'brainUrl',
+      port: 3333
+    };
+    const adapterName = 'adapter0';
+    const url = 'http://foo.bar';
+
+    netMock = nock('http://brainUrl:3333').post('/v1/api/registerSdkDeviceAdapter').reply(200, '');
+    Index.start({ brain, baseUrl: url, adapterName })
+      .then(() => {
+        expect(netMock.isDone()).to.equal(true);
+        return Index.sendNotification();
+      })
+      .catch((error) => {
+        expect(error.message).to.equal('INVALID_NOTIFICATION_DATA');
+        done();
+      });
+  });
+  
   it('should successfully send notification to brain (value 50)', function(done) {
     const serverReply = [
       { name: 'slider001', type: 'range', label: 'my slider', eventKey: '6241612146438832128:EXAMPLE-SLIDER_SENSOR' },
