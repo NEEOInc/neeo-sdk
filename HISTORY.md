@@ -6,3 +6,9 @@
 
 ## 0.37.2 (4/21/2017)
 - handle encoded component names
+
+## 0.38.0 (5/2/2017)
+- make sure buttonhandler can be added only once per device definition
+- make sure enableDiscovery can be added only once per device definition
+- make sure registerSubscriptionFunction can be added only once per device definition
+- update docs

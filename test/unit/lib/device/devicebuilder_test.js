@@ -47,6 +47,42 @@ describe('./lib/device/devicebuilder.js', function() {
     }).to.throw(/DUPLICATE_PATH_DETECTED/);
   });
 
+  it('should fail to create device, multiple buttonhandler', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .addButton({ name: 'example-button', label: 'my button' })
+        .addButtonHander(function(){})
+        .addButtonHander(function(){});
+    }).to.throw(/BUTTONHANDLER_ALREADY_DEFINED/);
+  });
+
+  it('should fail to create device, invalid enableDiscovery', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .enableDiscovery({ headerText:'', description:'' }, function(){});
+    }).to.throw(/INVALID_DISCOVERY_PARAMETER/);
+  });
+
+  it('should fail to create device, multiple enableDiscovery', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .enableDiscovery({ headerText:'x', description:'x' }, function(){})
+        .enableDiscovery({ headerText:'x', description:'x' }, function(){});
+    }).to.throw(/DISCOVERHANLDER_ALREADY_DEFINED/);
+  });
+
+  it('should fail to create device, multiple registerSubscriptionFunction', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .registerSubscriptionFunction(function(){})
+        .registerSubscriptionFunction(function(){});
+    }).to.throw(/SUBSCRIPTIONHANLDER_ALREADY_DEFINED/);
+  });
+
   it('should fail to create device, controller is not a function', function() {
     expect(function() {
       new DeviceBuilder('example-adapter')
@@ -120,6 +156,23 @@ describe('./lib/device/devicebuilder.js', function() {
     });
   });
 
+  it('should build device with a subscriptionFunction', function() {
+    let callback;
+
+    function registerCallback(cb) {
+      callback = cb;
+    }
+
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .registerSubscriptionFunction(registerCallback)
+      .build('foo');
+
+    expect(device.subscriptionFunction).to.deep.equal(registerCallback);
+
+  });
+
   it('should build device with a text label', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
@@ -162,10 +215,11 @@ describe('./lib/device/devicebuilder.js', function() {
     });
   });
 
-  it('should build device with a slider', function() {
+  it('should build device with a slider and enabled discovery', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
       .setType('light')
+      .enableDiscovery({ headerText:'header text', description:'some hints' }, function(){})
       .addSlider({ name: 'example-slider', label: 'my slider', range: [0,200], unit: '@' },
         { setter: function() {}, getter: function() {} })
       .build('foo');
@@ -178,7 +232,12 @@ describe('./lib/device/devicebuilder.js', function() {
       'apiversion': '1.0',
       'type': 'LIGHT',
       'manufacturer': 'NEEO',
-      setup: {},
+      setup: {
+        discovery: true,
+        registration: false,
+        introheader: 'header text',
+        introtext: 'some hints'
+      },
       'devices': [
         {
           'name': 'example-adapter',

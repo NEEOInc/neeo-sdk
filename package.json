@@ -1,6 +1,6 @@
 {
   "name": "neeo-sdk",
-  "version": "0.37.2",
+  "version": "0.38.0",
   "description": "NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.",
   "repository": "https://github.com/NEEOInc/neeo-sdk",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "bonjour": "^3.5.0",
     "debug": "^2.6.1",
     "express": "^4.14.1",
-    "tokensearch.js": "^0.5.28"
+    "tokensearch.js": "^0.5.31"
   },
   "devDependencies": {
     "chai": "~3.5.0",

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.37.2 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.38.0 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/github.min.css">
@@ -163,7 +163,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.37.2</small>
+            <small>0.38.0</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -554,7 +554,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <div class="description lead">
 
-                            <p>Register a discovery function for your device.</p>
+                            <p>Register a discovery function for your device. This function can be only defined once per device definition.</p>
 
 
                         </div>
@@ -666,7 +666,7 @@ input[type="search"]::-webkit-search-cancel-button {
                         <div class="description lead">
 
                             <p>This is used for devices which need to send dynamic value updates (for switches or sliders) to the Brain they are registered on. When the device is added to a Brain the SDK will call the controller function with an update function as argument. This function can be used to then send updates to the Brain when the value of the device updates.
-For example a device with a physical slider can use this to keep the digital slider in sync.</p>
+For example a device with a physical slider can use this to keep the digital slider in sync. . This function can be only defined once per device definition.</p>
 
 
                         </div>
@@ -845,7 +845,7 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span cla
 
                         <div class="description lead">
 
-                            <p>Handles the events for all the registered buttons</p>
+                            <p>Handles the events for all the registered buttons. This function can be only defined once per device definition and MUST be defined if you have added at least one button.</p>
 
 
                         </div>

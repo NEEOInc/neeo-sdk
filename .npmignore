@@ -1,3 +1,8 @@
-test/
 coverage/
-examples/
+dist/
+docs/
+test/
+*.md
+.travis.yml
+.editorconfig
+.jshintrc
