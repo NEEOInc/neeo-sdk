@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 const urlbuilder = require('../../../../../lib/device/brain/urlbuilder.js');
-const BASE_URL_GETRECIPES = '/v1/api/recipes'
+const BASE_URL_GETRECIPES = '/v1/api/recipes';
 
 describe('./lib/device/brain/urlbuilder.js', function() {
 
@@ -29,5 +29,5 @@ describe('./lib/device/brain/urlbuilder.js', function() {
     expect(test).to.equal('http://brain.local:3000/v1/api/recipes');
     done();
   });
-  
+
 });
