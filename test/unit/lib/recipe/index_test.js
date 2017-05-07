@@ -25,6 +25,7 @@ describe('./lib/recipe/index.js', function() {
       expect(error.message).to.equal('MISSING_BRAIN_PARAMETER');
       done();
     });
+    
   });
 
   it('should get power state of recipes, valid response', function(done) {
