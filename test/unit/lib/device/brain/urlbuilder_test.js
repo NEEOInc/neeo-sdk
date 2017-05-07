@@ -16,5 +16,4 @@ describe('./lib/device/brain/urlbuilder.js', function() {
     expect(test).to.equal('http://brain.local:3000');
     done();
   });
-
 });
