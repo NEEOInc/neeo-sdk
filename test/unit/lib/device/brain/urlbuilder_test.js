@@ -29,7 +29,7 @@ describe('./lib/device/brain/urlbuilder.js', function() {
   it('should fail to create url, with missing parameter', function() {
     expect(function() {
       urlbuilder.buildBrainUrl();
-    }).to.throw(/URLBUILDER_INVALID_PARAMETER_BRAIN/);
+    }).to.throw(/URLBUILDER_MISSING_PARAMETER_BRAIN/);
   });
 
     it('should fail to create url, with invalid parameter', function() {
