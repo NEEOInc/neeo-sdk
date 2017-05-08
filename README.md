@@ -1,5 +1,7 @@
 # NEEO SDK [![Build Status](https://travis-ci.org/NEEOInc/neeo-sdk.svg?branch=master)](https://travis-ci.org/NEEOInc/neeo-sdk)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/NEEOInc/neeo-sdk.svg)](https://greenkeeper.io/)
+
 This is the source code of the NEEO SDK to interact with the NEEO Brain.
 
 If you're looking for examples, take a look at the example repository at https://github.com/NEEOInc/neeo-sdk-examples
