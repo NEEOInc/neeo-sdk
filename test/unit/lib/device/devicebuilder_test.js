@@ -170,7 +170,15 @@ describe('./lib/device/devicebuilder.js', function() {
       .build('foo');
 
     expect(device.subscriptionFunction).to.deep.equal(registerCallback);
+  });
 
+  it('should build device, use button group', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addButtonGroup('volume')
+      .addButtonHander(function(){})
+      .build('foo');
+    expect(device.capabilities.length).to.equal(3);
   });
 
   it('should build device with a text label', function() {

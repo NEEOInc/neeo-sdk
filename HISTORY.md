@@ -12,3 +12,9 @@
 - make sure enableDiscovery can be added only once per device definition
 - make sure registerSubscriptionFunction can be added only once per device definition
 - update docs
+
+## 0.38.2 (5/8/2017)
+- internal change, add urlbuilder, thanks @nklerk
+- add support for the MEDIAPLAYER device type
+- add option to define button groups
+- fixes issue #15, make sure failed notification are thrown 

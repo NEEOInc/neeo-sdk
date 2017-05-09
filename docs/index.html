@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.38.0 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.38.2 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/github.min.css">
@@ -163,7 +163,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.38.0</small>
+            <small>0.38.2</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -217,6 +217,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-addbutton" title="addButton">addButton</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-addbuttongroup" title="addButtonGroup">addButtonGroup</a>
                         </li>
 
 
@@ -387,7 +392,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <div class="description lead">
 
-                            <p>Optional parameter to define the device type. Default type is ACCESSOIRE. It is used to determine the display style and wiring suggestions in the NEEO app.</p>
+                            <p>Optional parameter to define the device type. Default type is ACCESSOIRE. It is used to determine the display style and wiring suggestions in the NEEO app. Please note, ACCESSOIRE devices do not generate a view but can be used in other views as shortcut.</p>
 
 
                         </div>
@@ -415,7 +420,7 @@ input[type="search"]::-webkit-search-cancel-button {
                                         <td>
                                             <code>string</code>
                                         </td>
-                                        <td><p>supported device classes, either 'ACCESSOIRE' or 'LIGHT'</p>
+                                        <td><p>supported device classes, either 'ACCESSOIRE', 'LIGHT' or 'MEDIAPLAYER'</p>
 </td>
                                         <td>
                                         </td>
@@ -761,7 +766,7 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span cla
 
                         <div class="description lead">
 
-                            <p>Add a button for this device, can be called multiple times for multiple buttons. Needs to be used with the addButtonHandler!</p>
+                            <p>Add a button for this device, can be called multiple times for multiple buttons. addButton can be combined with addButtonGroups. You need to be call the addButtonHandler function.</p>
 
 
                         </div>
@@ -810,7 +815,96 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span cla
 
 
                                 <pre><code class="hljs javascript">.addButton({ <span class="hljs-attr">name</span>: <span class="hljs-string">'power-on'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Power On'</span> })
-.addButton({ <span class="hljs-attr">name</span>: <span class="hljs-string">'power-off'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Power Off'</span> })</code></pre>
+.addButton({ <span class="hljs-attr">name</span>: <span class="hljs-string">'power-off'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Power Off'</span> })
+.addButtonHander(<span class="hljs-function">(<span class="hljs-params">deviceid, name</span>) =&gt;</span> {
+  <span class="hljs-comment">// handle button events here</span>
+})</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-addbuttongroup">
+                            <a href="#lib-device-devicebuilder.js-addbuttongroup" class="permalink">#</a>
+                            <span class="method-name" title="addButtonGroup(name)">addButtonGroup(name)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Add multiple buttons defined by the button group name. The UI elements on the NEEO Brain are build automatically depending on the existing buttons of a device. You can add multiple ButtonGroups to a device and you can combine ButtonGroups with addButton calls. You need to be call the addButtonHandler function.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>name</td>
+                                        <td>
+                                            <code>object</code>
+                                        </td>
+                                        <td><p>A button name group</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.addButtonGroup(<span class="hljs-string">'Numpad'</span>)
+.addButtonHander(<span class="hljs-function">(<span class="hljs-params">deviceid, name</span>) =&gt;</span> {
+  <span class="hljs-comment">// handle button events here</span>
+})</code></pre>
 
 
                         </section>
