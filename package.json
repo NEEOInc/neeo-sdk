@@ -12,7 +12,7 @@
     "bonjour": "^3.5.0",
     "debug": "^2.6.1",
     "express": "^4.14.1",
-    "tokensearch.js": "^0.5.31"
+    "tokensearch.js": "^0.6.1"
   },
   "devDependencies": {
     "chai": "~3.5.0",
