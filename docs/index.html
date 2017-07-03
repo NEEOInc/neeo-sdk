@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.38.2 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.42.3 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/github.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css">
 <style>
 
 input[type="search"]::-webkit-search-cancel-button {
@@ -163,7 +163,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.38.2</small>
+            <small>0.42.3</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -420,7 +420,7 @@ input[type="search"]::-webkit-search-cancel-button {
                                         <td>
                                             <code>string</code>
                                         </td>
-                                        <td><p>supported device classes, either 'ACCESSOIRE', 'LIGHT' or 'MEDIAPLAYER'</p>
+                                        <td><p>supported device classes, either 'ACCESSOIRE', 'AVRECEIVER', 'DVB' (aka. satellite reciever), 'DVD' (aka. discplayer), 'GAMECONSOLE', 'LIGHT', 'MEDIAPLAYER', 'PROJECTOR', 'TV' or 'VOD' (aka. Video-On-Demand box like Apple TV, Fire TV...)</p>
 </td>
                                         <td>
                                         </td>
@@ -766,7 +766,9 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span cla
 
                         <div class="description lead">
 
-                            <p>Add a button for this device, can be called multiple times for multiple buttons. addButton can be combined with addButtonGroups. You need to be call the addButtonHandler function.</p>
+                            <p>Add a button for this device, can be called multiple times for multiple buttons. addButton can be combined with addButtonGroups. You need to be call the addButtonHandler function. <strong>IMPORTANT:</strong> If your device supports a discrete &quot;Power On&quot; and &quot;Power Off&quot; command,
+name the macros like in the example below. In that case the NEEO Brain automatically recognise this feature and those commands to in the prebuild
+Recipes.</p>
 
 
                         </div>
@@ -814,8 +816,8 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span cla
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.addButton({ <span class="hljs-attr">name</span>: <span class="hljs-string">'power-on'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Power On'</span> })
-.addButton({ <span class="hljs-attr">name</span>: <span class="hljs-string">'power-off'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Power Off'</span> })
+                                <pre><code class="hljs javascript">.addButton({ <span class="hljs-attr">name</span>: <span class="hljs-string">'POWER ON'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Power On'</span> })
+.addButton({ <span class="hljs-attr">name</span>: <span class="hljs-string">'POWER OFF'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Power Off'</span> })
 .addButtonHander(<span class="hljs-function">(<span class="hljs-params">deviceid, name</span>) =&gt;</span> {
   <span class="hljs-comment">// handle button events here</span>
 })</code></pre>
@@ -1790,8 +1792,8 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span cla
 
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
 <script>
 
 (function () {

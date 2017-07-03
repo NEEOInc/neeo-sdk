@@ -52,6 +52,7 @@ describe('./lib/device/db.js', function() {
 
   it('should get a device', function() {
     const result = db.getDevice(0);
+    delete result.dataEntryTokens;
     expect(result).to.deep.equal({
       id: 0,
       adapterName: 'apt-3252ba1bb8e228793c05e9efbc0b9d7642ee04d1',
