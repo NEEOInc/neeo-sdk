@@ -22,6 +22,7 @@ describe('./lib/device/devicecapability.js', function() {
       buttons: [],
       sliders: [],
       textLabels: [],
+      imageUrls: [],
       switches: [],
       discovery: [],
     };
@@ -37,6 +38,7 @@ describe('./lib/device/devicecapability.js', function() {
         controller: function(){} }],
       sliders: [],
       textLabels: [],
+      imageUrls: [],
       switches: [],
       discovery: [],
       deviceidentifier: 'foobar'

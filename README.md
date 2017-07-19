@@ -109,7 +109,6 @@ or just use the helper function `.addButtonGroup('Channel Zapper')`.
 
 ## Transport Capability
 
-
 If you want to support different transport features (like skip, forward, next) you can include the following buttons (`addButton({..`):
 * `PLAY`, `PAUSE`, `STOP` (helper function: `.addButtonGroup('Transport')`)
 * `REVERSE`, `FORWARD` (helper function: `.addButtonGroup('Transport Search')`)
@@ -117,6 +116,24 @@ If you want to support different transport features (like skip, forward, next) y
 * `SKIP SECONDS BACKWARD`, `SKIP SECONDS FORWARD` (helper function: `.addButtonGroup('Transport Skip')`)
 
 This works for the devices `TV`, `DVB`, `GAMECONSOLE`, `MEDIAPLAYER`, `VOD`, `DVD` or `PROJECTOR`.
+
+## Record Capability
+
+To create a Record capability you need to implement the following buttons (`addButton({..`):
+* `MY RECORDINGS`
+* `RECORD`
+* `LIVE`
+
+or just use the helper function `.addButtonGroup('Record')`. The devicetype must be `TV`, `DVB`. Please note, if you don't have all 3 buttons you can implement only the buttons your device provides.
+
+## Timeshift Capability
+
+To create a Timeshift capability you need to implement the following buttons (`addButton({..`):
+* `PLAY`
+* `PAUSE`
+* `LIVE`
+
+or just use the helper function `.addButtonGroup('Timeshift')`. The devicetype must be `TV`, `DVB`. Please note, if you don't have all 3 buttons you can implement only the buttons your device provides.
 
 ## Input Capability
 

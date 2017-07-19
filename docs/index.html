@@ -3,15 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.42.3 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.43.7 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github.min.css">
 <style>
-
-input[type="search"]::-webkit-search-cancel-button {
-    -webkit-appearance: searchfield-cancel-button;
-}
 
 .jumbotron {
     margin-bottom: 0;
@@ -163,7 +159,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.42.3</small>
+            <small>0.43.7</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -180,7 +176,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
             <div class="col-md-3 hidden-sm hidden-xs">
 
-                <input type="search" class="form-control search" id="search-methods" placeholder="Search..." autocomplete="off">
+                <input type="text" class="form-control search" id="search-methods" placeholder="Search..." autocomplete="off">
 
                 <ul class="menu">
 
@@ -242,6 +238,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-addtextlabel" title="addTextLabel">addTextLabel</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-addimageurl" title="addImageUrl">addImageUrl</a>
                         </li>
 
 
@@ -1308,6 +1309,102 @@ Recipes.</p>
                     </div>
 
 
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-addimageurl">
+                            <a href="#lib-device-devicebuilder.js-addimageurl" class="permalink">#</a>
+                            <span class="method-name" title="addImageUrl(param, controller)">addImageUrl(param, controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Add an image to your custom element (for example to display the album cover of the current track)</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>param</td>
+                                        <td>
+                                            <code>object</code>
+                                        </td>
+                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, alternative image text), <strong>uri</strong> (address pointing to an image resource), <strong>size</strong> (image size in the ui, either 'small' or 'large')</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>object</code>
+                                        </td>
+                                        <td><p>An object which returns the address to the current image.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.addImageUrl(
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'albumcover'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Cover for current album'</span>, <span class="hljs-attr">size</span>: <span class="hljs-string">'small'</span> },
+  { controller.getImageUri }
+)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>object</code>
+                                    </p>
+
+                                    <p>DeviceBuilder</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
 
                 <a id="lib/index.js"></a>
 
@@ -1792,8 +1889,8 @@ Recipes.</p>
 
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
 <script>
 
 (function () {
@@ -1821,13 +1918,9 @@ Recipes.</p>
         hljs.highlightBlock(this);
     });
 
-    var $searchInput = $('#search-methods');
     var $methodLinks = $('.method-link');
-    var $methodNames = $('.method .method-name');
 
-    var urlQuery = window.location.search.match(/q=([^&]+)/);
-
-    $searchInput.on('keyup', function (e) {
+    $('#search-methods').on('keyup', function (e) {
 
         var query = new RegExp(e.target.value.replace(' ', '|'), 'ig');
 
@@ -1847,37 +1940,7 @@ Recipes.</p>
 
         });
 
-        $methodNames.each(function () {
-
-            var $this = $(this);
-
-            if (!$this.text().match(query)) {
-
-                $this.closest('.method').hide();
-
-            } else {
-
-                $this.closest('.method').show();
-
-            }
-
-        });
-
-        window.history.replaceState({}, '', window.location.pathname + '?q=' + e.target.value);
-
     });
-
-    $searchInput.on('search', function () {
-
-        $searchInput.trigger('keyup');
-
-    });
-
-    if (urlQuery && urlQuery.length > 1) {
-
-        $searchInput.val(urlQuery[1]).trigger('keyup');
-
-    }
 
     $(window).on('scroll', handleScrollEvent);
 

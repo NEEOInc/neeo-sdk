@@ -1,3 +1,8 @@
+## 0.43.7 (7/19/2017)
+
+- add new image component
+- add new Record and Timeshift button groups
+
 ## 0.42.2 (6/28/2017)
 - add example how to use the "Action Forward" feature
 - add support for more devicetypes

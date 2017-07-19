@@ -56,6 +56,20 @@ describe('./lib/device/componentfactory.js', function() {
     });
   });
 
+  it('should build a imageurl, without label', function() {
+    const param = { name: 'imageurl'};
+    const result = ComponentFactory.buildImageUrl('PREFIX/', param);
+    expect(result).to.deep.equal({
+      type: 'imageurl',
+      name: 'imageurl',
+      label: 'imageurl',
+      size: 'large',
+      path: 'PREFIX/imageurl',
+      imageUri: null,
+      sensor: 'IMAGEURL_SENSOR'
+    });
+  });
+
   it('should build a slider with a fancy name', function() {
     const param = { name: 'slidername ✘✘ //\\<script>'};
     const result = ComponentFactory.buildRangeSlider('PREFIX/', param);
@@ -137,6 +151,12 @@ describe('./lib/device/componentfactory.js', function() {
   it('should fail to build a textlabel, empty controller', function() {
     expect(function() {
       ComponentFactory.buildTextLabel('foo', {});
+    }).to.throw(/INVALID_BUILD_PARAMETER/);
+  });
+
+  it('should fail to build an imageurl, empty controller', function() {
+    expect(function() {
+      ComponentFactory.buildImageUrl('foo', {});
     }).to.throw(/INVALID_BUILD_PARAMETER/);
   });
 
