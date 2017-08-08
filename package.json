@@ -10,7 +10,7 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.16.1",
     "bonjour": "^3.5.0",
-    "debug": "^2.6.1",
+    "debug": "^3.0.0",
     "express": "^4.14.1",
     "tokensearch.js": "^0.7.1"
   },
