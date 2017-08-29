@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect;
-const Textlabel = require('../../../../../../../lib/device/express/routes/handler/textlabel');
+const Textlabel = require('../../../../../lib/device/handler/textlabel');
 const BluePromise = require('bluebird');
 
-describe('./lib/device/express/routes/handler/textlabel.js', function() {
+describe('./lib/device/handler/textlabel.js', function() {
 
   it('should call the getText function of the controller, controller returns promise', function(done) {
     const value = 'bar';

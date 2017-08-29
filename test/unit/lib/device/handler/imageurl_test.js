@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect;
-const ImageUrl = require('../../../../../../../lib/device/express/routes/handler/imageurl');
+const ImageUrl = require('../../../../../lib/device/handler/imageurl');
 const BluePromise = require('bluebird');
 
-describe('./lib/device/express/routes/handler/imageurl.js', function() {
+describe('./lib/device/handler/imageurl.js', function() {
   it('should call the getImageUri function of the controller, controller returns promise', function() {
     const value = 'bar';
     let getImageUriTriggered = false;

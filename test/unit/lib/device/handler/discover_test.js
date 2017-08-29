@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect;
-const Discover = require('../../../../../../../lib/device/express/routes/handler/discover');
+const Discover = require('../../../../../lib/device/handler/discover');
 const BluePromise = require('bluebird');
 
-describe('./lib/device/express/routes/handler/discover.js', function() {
+describe('./lib/device/handler/discover.js', function() {
 
   it('should call the run function of the controller, controller returns array wrapped in a promise', function(done) {
     const value = [{ id: 1, name: 'first' }, { id: 2, name: 'second' }, { id: 3, name: 'third' }];

@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect;
-const Slider = require('../../../../../../../lib/device/express/routes/handler/slider');
+const Slider = require('../../../../../lib/device/handler/slider');
 const BluePromise = require('bluebird');
 
-describe('./lib/device/express/routes/handler/slider.js', function() {
+describe('./lib/device/handler/slider.js', function() {
 
   it('should call the sliderGet function of the controller, controller returns promise', function(done) {
     const value = 5;

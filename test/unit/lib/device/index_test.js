@@ -17,16 +17,6 @@ describe('./lib/device/index.js', function() {
     expect(result.devicename).to.equal('foo');
   });
 
-  it('should fail to searchDevice, missing adaptername', function() {
-    const result = Device.searchDevice();
-    expect(result).to.equal(undefined);
-  });
-
-  it('should fail to getDevice, missing adaptername', function() {
-    const result = Device.getDevice();
-    expect(result).to.equal(undefined);
-  });
-
   it('should fail to startServer, missing parameter', function() {
     Device.startServer()
       .catch((error) => {

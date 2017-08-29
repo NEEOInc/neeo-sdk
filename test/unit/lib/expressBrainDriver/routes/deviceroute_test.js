@@ -1,9 +1,9 @@
 'use strict';
 
 const expect = require('chai').expect;
-const Deviceroute = require('../../../../../../lib/device/express/routes/deviceroute');
+const Deviceroute = require('../../../../../lib/expressBrainDriver/routes/deviceroute');
 
-describe('./lib/device/express/routes/deviceroute.js', function() {
+describe('./lib/expressBrainDriver/routes/deviceroute.js', function() {
 
   it('should fail to register invalid device (undefined)', function() {
     expect(function() {

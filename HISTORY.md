@@ -1,5 +1,12 @@
-## 0.43.7 (7/19/2017)
+## 0.45.7 (8/23/2017)
+- fixes error when unregistering the SDK from a Brain
+- fixes parameter order in device builder documentation
+- fixes switch get handler not being pass the device id
+- Internal changes to decouple Express from the SDK
+- Remove Timeshift button group
+- Validate Image Component contains valid size
 
+## 0.43.7 (7/19/2017)
 - add new image component
 - add new Record and Timeshift button groups
 

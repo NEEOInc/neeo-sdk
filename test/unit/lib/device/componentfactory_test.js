@@ -45,7 +45,7 @@ describe('./lib/device/componentfactory.js', function() {
   });
 
   it('should build a textlabel, without label', function() {
-    const param = { name: 'textlabel'};
+    const param = { name: 'textlabel' };
     const result = ComponentFactory.buildTextLabel('PREFIX/', param);
     expect(result).to.deep.equal({
       type: 'textlabel',
@@ -54,6 +54,18 @@ describe('./lib/device/componentfactory.js', function() {
       path: 'PREFIX/textlabel',
       sensor: 'TEXTLABEL_SENSOR'
     });
+  });
+
+  it('should fail to build a imageurl, with invalid size', function() {
+    const param = { name: 'imageurl', size: 'invalid' };
+    const fn = () => ComponentFactory.buildImageUrl('PREFIX/', param);
+    expect(fn).to.throw(/INVALID_IMAGEURL_SIZE/);
+  });
+
+  it('should to build a imageurl, with using no valid size definition - defaults to large', function() {
+    const param = { name: 'imageurl', szie: 'large' };
+    const result = ComponentFactory.buildImageUrl('PREFIX/', param);
+    expect(result.size).to.equal('large');
   });
 
   it('should build a imageurl, without label', function() {

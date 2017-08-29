@@ -126,15 +126,6 @@ To create a Record capability you need to implement the following buttons (`addB
 
 or just use the helper function `.addButtonGroup('Record')`. The devicetype must be `TV`, `DVB`. Please note, if you don't have all 3 buttons you can implement only the buttons your device provides.
 
-## Timeshift Capability
-
-To create a Timeshift capability you need to implement the following buttons (`addButton({..`):
-* `PLAY`
-* `PAUSE`
-* `LIVE`
-
-or just use the helper function `.addButtonGroup('Timeshift')`. The devicetype must be `TV`, `DVB`. Please note, if you don't have all 3 buttons you can implement only the buttons your device provides.
-
 ## Input Capability
 
 If you add support for a devicetype `TV`, `PROJECTOR` or `AVRECIEVER` you should provide discrete input change commands depending of your devices features, for example:

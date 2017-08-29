@@ -1,4 +1,6 @@
 {
+  "mocha" : true,
+  "expr": true,
   "node": true,
   "browser": false,
   "bitwise": true,

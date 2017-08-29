@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect;
-const Button = require('../../../../../../../lib/device/express/routes/handler/button');
+const Button = require('../../../../../lib/device/handler/button');
 const BluePromise = require('bluebird');
 
-describe('./lib/device/express/routes/handler/button.js', function() {
+describe('./lib/device/handler/button.js', function() {
 
   it('should call the button function of the controller, controller returns promise', function(done) {
     let buttonTriggered = false;

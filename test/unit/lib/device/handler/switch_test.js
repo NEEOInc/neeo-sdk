@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect;
-const Switch = require('../../../../../../../lib/device/express/routes/handler/switch');
+const Switch = require('../../../../../lib/device/handler/switch');
 const BluePromise = require('bluebird');
 
-describe('./lib/device/express/routes/handler/switch.js', function() {
+describe('./lib/device/handler/switch.js', function() {
 
   it('should call the switchGet function of the controller, controller returns promise', function(done) {
     const value = true;
