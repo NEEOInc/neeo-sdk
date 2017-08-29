@@ -3,11 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.43.7 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.45.7 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css">
 <style>
+
+input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: searchfield-cancel-button;
+}
 
 .jumbotron {
     margin-bottom: 0;
@@ -159,7 +163,7 @@
 
         <h1>
                 NEEO SDK
-            <small>0.43.7</small>
+            <small>0.45.7</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -176,7 +180,7 @@
 
             <div class="col-md-3 hidden-sm hidden-xs">
 
-                <input type="text" class="form-control search" id="search-methods" placeholder="Search..." autocomplete="off">
+                <input type="search" class="form-control search" id="search-methods" placeholder="Search..." autocomplete="off">
 
                 <ul class="menu">
 
@@ -905,7 +909,7 @@ Recipes.</p>
 
 
                                 <pre><code class="hljs javascript">.addButtonGroup(<span class="hljs-string">'Numpad'</span>)
-.addButtonHander(<span class="hljs-function">(<span class="hljs-params">deviceid, name</span>) =&gt;</span> {
+.addButtonHander(<span class="hljs-function">(<span class="hljs-params">name, deviceid</span>) =&gt;</span> {
   <span class="hljs-comment">// handle button events here</span>
 })</code></pre>
 
@@ -990,7 +994,7 @@ Recipes.</p>
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.addButtonHander(<span class="hljs-function">(<span class="hljs-params">deviceid, name</span>) =&gt;</span> {
+                                <pre><code class="hljs javascript">.addButtonHander(<span class="hljs-function">(<span class="hljs-params">name, deviceid</span>) =&gt;</span> {
    <span class="hljs-keyword">if</span> (name === <span class="hljs-string">'power-on'</span>) {
      <span class="hljs-comment">// Power on</span>
    } <span class="hljs-keyword">else</span> {
@@ -1282,7 +1286,7 @@ Recipes.</p>
 
                                 <pre><code class="hljs javascript">.addTextLabel(
   { <span class="hljs-attr">name</span>: <span class="hljs-string">'artistname'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Artist name'</span> },
-  { controller.getArtist }
+  controller.getArtist
  )</code></pre>
 
 
@@ -1346,7 +1350,7 @@ Recipes.</p>
                                         <td>
                                             <code>object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, alternative image text), <strong>uri</strong> (address pointing to an image resource), <strong>size</strong> (image size in the ui, either 'small' or 'large')</p>
+                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, alternative image text), <strong>uri</strong> (address pointing to an image resource), <strong>size</strong> (image size in the ui, either 'small' or 'large'). The small image has the size of a button while the large image is a square image using full width of the client.</p>
 </td>
                                         <td>
                                         </td>
@@ -1378,7 +1382,7 @@ Recipes.</p>
 
                                 <pre><code class="hljs javascript">.addImageUrl(
   { <span class="hljs-attr">name</span>: <span class="hljs-string">'albumcover'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Cover for current album'</span>, <span class="hljs-attr">size</span>: <span class="hljs-string">'small'</span> },
-  { controller.getImageUri }
+  controller.getImageUri
 )</code></pre>
 
 
@@ -1889,8 +1893,8 @@ Recipes.</p>
 
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
 <script>
 
 (function () {
@@ -1918,9 +1922,13 @@ Recipes.</p>
         hljs.highlightBlock(this);
     });
 
+    var $searchInput = $('#search-methods');
     var $methodLinks = $('.method-link');
+    var $methodNames = $('.method .method-name');
 
-    $('#search-methods').on('keyup', function (e) {
+    var urlQuery = window.location.search.match(/q=([^&]+)/);
+
+    $searchInput.on('keyup', function (e) {
 
         var query = new RegExp(e.target.value.replace(' ', '|'), 'ig');
 
@@ -1940,7 +1948,37 @@ Recipes.</p>
 
         });
 
+        $methodNames.each(function () {
+
+            var $this = $(this);
+
+            if (!$this.text().match(query)) {
+
+                $this.closest('.method').hide();
+
+            } else {
+
+                $this.closest('.method').show();
+
+            }
+
+        });
+
+        window.history.replaceState({}, '', window.location.pathname + '?q=' + e.target.value);
+
     });
+
+    $searchInput.on('search', function () {
+
+        $searchInput.trigger('keyup');
+
+    });
+
+    if (urlQuery && urlQuery.length > 1) {
+
+        $searchInput.val(urlQuery[1]).trigger('keyup');
+
+    }
 
     $(window).on('scroll', handleScrollEvent);
 
