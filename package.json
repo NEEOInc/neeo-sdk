@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "axios": "^0.15.3",
+    "axios": "^0.17.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.16.1",
     "bonjour": "^3.5.0",
