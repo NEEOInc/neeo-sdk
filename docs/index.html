@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.45.7 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.47.8 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
 <style>
 
 input[type="search"]::-webkit-search-cancel-button {
@@ -163,7 +163,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.45.7</small>
+            <small>0.47.8</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -211,7 +211,22 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
                         <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-supportstiming" title="supportsTiming">supportsTiming</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-definetiming" title="defineTiming">defineTiming</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-registersubscriptionfunction" title="registerSubscriptionFunction">registerSubscriptionFunction</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-registerinitialisefunction" title="registerInitialiseFunction">registerInitialiseFunction</a>
                         </li>
 
 
@@ -226,12 +241,22 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
                         <li class="method-link scope-public">
-                            <a href="#lib-device-devicebuilder.js-addbuttonhander" title="addButtonHander">addButtonHander</a>
+                            <a href="#lib-device-devicebuilder.js-addbuttonhandler" title="addButtonHandler">addButtonHandler</a>
                         </li>
 
 
                         <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-addslider" title="addSlider">addSlider</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-addsensor" title="addSensor">addSensor</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-addpowerstatesensor" title="addPowerStateSensor">addPowerStateSensor</a>
                         </li>
 
 
@@ -247,6 +272,46 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-addimageurl" title="addImageUrl">addImageUrl</a>
+                        </li>
+
+
+                        </ul>
+
+                    </li>
+
+
+                    <li>
+                        <a href="#lib/device/implementationservices/devicestate.js" class="file"><b>lib/device/implementationservices/devicestate.js</b></a>
+                        <ul>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-implementationservices-devicestate.js-adddevice" title="addDevice">addDevice</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-implementationservices-devicestate.js-getalldevices" title="getAllDevices">getAllDevices</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-implementationservices-devicestate.js-getclientobjectifreachable" title="getClientObjectIfReachable">getClientObjectIfReachable</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-implementationservices-devicestate.js-getcachepromise" title="getCachePromise">getCachePromise</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-implementationservices-devicestate.js-updatereachable" title="updateReachable">updateReachable</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-implementationservices-devicestate.js-buildinstance" title="buildInstance">buildInstance</a>
                         </li>
 
 
@@ -277,6 +342,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-index.js-module.exports.builddevice" title="buildDevice">buildDevice</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-index.js-module.exports.builddevicestate" title="buildDeviceState">buildDeviceState</a>
                         </li>
 
 
@@ -668,6 +738,142 @@ input[type="search"]::-webkit-search-cancel-button {
 
                     <div class="method scope-public">
 
+                        <h2 id="lib-device-devicebuilder.js-supportstiming">
+                            <a href="#lib-device-devicebuilder.js-supportstiming" class="permalink">#</a>
+                            <span class="method-name" title="supportsTiming()">supportsTiming()</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This function allows you to check if the current device type supports timing related information.</p>
+
+
+                        </div>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">   <span class="hljs-keyword">if</span> (device.supportsTiming()) { }</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>boolean</code>
+                                    </p>
+
+                                    <p>Whether timing is supported or not</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-definetiming">
+                            <a href="#lib-device-devicebuilder.js-definetiming" class="permalink">#</a>
+                            <span class="method-name" title="defineTiming(param)">defineTiming(param)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This function allows you to define timing related information, which will be used to generate the recipe.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>param</td>
+                                        <td>
+                                            <code>object</code>
+                                        </td>
+                                        <td><p>An object which contains at least one of the following attributes:</p>
+<ul>
+<li><strong>powerOnDelayMs</strong>, how long does it take (in ms) until the device is powered on and is ready to accept new commands</li>
+<li><strong>sourceSwitchDelayMs</strong>,: how long does it take (in ms) until the device switched input and is ready to accept new commands</li>
+<li><strong>shutdownDelayMs</strong>: how long does it take (in ms) until the device is powered off and is ready to accept new commands</li>
+</ul>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">   .defineTiming({ <span class="hljs-attr">powerOnDelayMs</span>: <span class="hljs-number">2000</span>, <span class="hljs-attr">sourceSwitchDelayMs</span>: <span class="hljs-number">500</span>, <span class="hljs-attr">shutdownDelayMs</span>: <span class="hljs-number">1000</span> })</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
                         <h2 id="lib-device-devicebuilder.js-registersubscriptionfunction">
                             <a href="#lib-device-devicebuilder.js-registersubscriptionfunction" class="permalink">#</a>
                             <span class="method-name" title="registerSubscriptionFunction(controller)">registerSubscriptionFunction(controller)</span>
@@ -676,7 +882,7 @@ input[type="search"]::-webkit-search-cancel-button {
                         <div class="description lead">
 
                             <p>This is used for devices which need to send dynamic value updates (for switches or sliders) to the Brain they are registered on. When the device is added to a Brain the SDK will call the controller function with an update function as argument. This function can be used to then send updates to the Brain when the value of the device updates.
-For example a device with a physical slider can use this to keep the digital slider in sync. . This function can be only defined once per device definition.</p>
+For example a device with a physical slider can use this to keep the digital slider in sync. This function can be only defined once per device definition.</p>
 
 
                         </div>
@@ -704,7 +910,8 @@ For example a device with a physical slider can use this to keep the digital sli
                                         <td>
                                             <code>function</code>
                                         </td>
-                                        <td><p>Callback function which will be called when the NEEO SDK Server starts, to register a callback function</p>
+                                        <td><p>Callback function which will be called when the NEEO SDK Server starts, to register the update notification callback function and optional callback functions. OptionalCallbacks: <strong>powerOnNotificationFunction</strong> - call this function with its deviceid when the device powers on.
+<strong>powerOffNotificationFunction</strong> - call this function with its deviceid when the device powers on</p>
 </td>
                                         <td>
                                         </td>
@@ -724,9 +931,15 @@ For example a device with a physical slider can use this to keep the digital sli
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript"><span class="hljs-keyword">let</span> updateCallbackReference;
-deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">updateCallback</span>) </span>{
+                                <pre><code class="hljs javascript"><span class="hljs-keyword">let</span> updateCallbackReference, markDeviceOn, markDeviceOff;
+deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">updateCallback, optionalCallbackFunctions</span>) </span>{
   updateCallbackReference = updateCallback;
+  <span class="hljs-keyword">if</span> (optionalCallbackFunctions &amp;&amp; optionalCallbackFunctions.powerOnNotificationFunction) {
+    markDeviceOn = optionalCallbackFunctions.powerOnNotificationFunction;
+  }
+  <span class="hljs-keyword">if</span> (optionalCallbackFunctions &amp;&amp; optionalCallbackFunctions.powerOffNotificationFunction) {
+    markDeviceOff = optionalCallbackFunctions.powerOffNotificationFunction;
+  }
 });
 
 <span class="hljs-comment">// Update sensor at some later point</span>
@@ -737,6 +950,98 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span cla
     value: updatedSensorValue
   });
 }</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-registerinitialisefunction">
+                            <a href="#lib-device-devicebuilder.js-registerinitialisefunction" class="permalink">#</a>
+                            <span class="method-name" title="registerInitialiseFunction(controller)">registerInitialiseFunction(controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>for example: start polling for devicestate, initialise service</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>function</code>
+                                        </td>
+                                        <td><p>Callback function which will be called when the device should be initialised. Controller must return a value or a promise object.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">
+.registerInitialiseFunction(controller.initialise)
+
+
+<span class="hljs-comment">// Example code in the controller:</span>
+<span class="hljs-built_in">module</span>.exports.initialise = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  debug(<span class="hljs-string">'initialise LIFX service, start polling'</span>);
+  lifxService = <span class="hljs-keyword">new</span> LifxService(deviceState);
+  setInterval(pollAllLifxDevices, DEVICE_POLL_TIME_MS);
+};</code></pre>
 
 
                         </section>
@@ -823,7 +1128,7 @@ Recipes.</p>
 
                                 <pre><code class="hljs javascript">.addButton({ <span class="hljs-attr">name</span>: <span class="hljs-string">'POWER ON'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Power On'</span> })
 .addButton({ <span class="hljs-attr">name</span>: <span class="hljs-string">'POWER OFF'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Power Off'</span> })
-.addButtonHander(<span class="hljs-function">(<span class="hljs-params">deviceid, name</span>) =&gt;</span> {
+.addButtonHandler(<span class="hljs-function">(<span class="hljs-params">deviceid, name</span>) =&gt;</span> {
   <span class="hljs-comment">// handle button events here</span>
 })</code></pre>
 
@@ -909,7 +1214,7 @@ Recipes.</p>
 
 
                                 <pre><code class="hljs javascript">.addButtonGroup(<span class="hljs-string">'Numpad'</span>)
-.addButtonHander(<span class="hljs-function">(<span class="hljs-params">name, deviceid</span>) =&gt;</span> {
+.addButtonHandler(<span class="hljs-function">(<span class="hljs-params">name, deviceid</span>) =&gt;</span> {
   <span class="hljs-comment">// handle button events here</span>
 })</code></pre>
 
@@ -939,9 +1244,9 @@ Recipes.</p>
 
                     <div class="method scope-public">
 
-                        <h2 id="lib-device-devicebuilder.js-addbuttonhander">
-                            <a href="#lib-device-devicebuilder.js-addbuttonhander" class="permalink">#</a>
-                            <span class="method-name" title="addButtonHander(controller)">addButtonHander(controller)</span>
+                        <h2 id="lib-device-devicebuilder.js-addbuttonhandler">
+                            <a href="#lib-device-devicebuilder.js-addbuttonhandler" class="permalink">#</a>
+                            <span class="method-name" title="addButtonHandler(controller)">addButtonHandler(controller)</span>
                         </h2>
 
                         <div class="description lead">
@@ -994,7 +1299,7 @@ Recipes.</p>
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.addButtonHander(<span class="hljs-function">(<span class="hljs-params">name, deviceid</span>) =&gt;</span> {
+                                <pre><code class="hljs javascript">.addButtonHandler(<span class="hljs-function">(<span class="hljs-params">name, deviceid</span>) =&gt;</span> {
    <span class="hljs-keyword">if</span> (name === <span class="hljs-string">'power-on'</span>) {
      <span class="hljs-comment">// Power on</span>
    } <span class="hljs-keyword">else</span> {
@@ -1095,6 +1400,185 @@ Recipes.</p>
 
                                 <pre><code class="hljs javascript">.addSlider(   { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-slider'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my slider'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
   { <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">newValue</span>) =&gt;</span> sensorValue = newValue, <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
+)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-addsensor">
+                            <a href="#lib-device-devicebuilder.js-addsensor" class="permalink">#</a>
+                            <span class="method-name" title="addSensor(param, controller)">addSensor(param, controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Add a (range) sensor to your custom device</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>param</td>
+                                        <td>
+                                            <code>object</code>
+                                        </td>
+                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote), <strong>range</strong> (optional, custom range of slider, default 0..100), <strong>unit</strong> (optional, custin slider unit, default %)</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>object</code>
+                                        </td>
+                                        <td><p>An object which contains a getter callback function.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.addSensor(   { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-sensor'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my sensor'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
+  { <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
+)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-addpowerstatesensor">
+                            <a href="#lib-device-devicebuilder.js-addpowerstatesensor" class="permalink">#</a>
+                            <span class="method-name" title="addPowerStateSensor(controller)">addPowerStateSensor(controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Add a power sensor to your custom device, so the NEEO Brain knows when this device is powered on or off. See <strong>registerSubscriptionFunction</strong> how the controller can send powerOn and powerOff notifications to the Brain.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>object</code>
+                                        </td>
+                                        <td><p>An object which contains a getter callback function, the function must return true or false as value or wrapped in a promise</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.addPowerStateSensor(   { <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
 )</code></pre>
 
 
@@ -1350,7 +1834,7 @@ Recipes.</p>
                                         <td>
                                             <code>object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, alternative image text), <strong>uri</strong> (address pointing to an image resource), <strong>size</strong> (image size in the ui, either 'small' or 'large'). The small image has the size of a button while the large image is a square image using full width of the client.</p>
+                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, alternative image text), <strong>uri</strong> (address pointing to an image resource), <strong>size</strong> (image size in the ui, either 'small' or 'large'). The small image has the size of a button while the large image is a square image using full width of the client. JPG and PNG images are supported.</p>
 </td>
                                         <td>
                                         </td>
@@ -1400,6 +1884,518 @@ Recipes.</p>
                                     </p>
 
                                     <p>DeviceBuilder</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+
+                <a id="lib/device/implementationservices/devicestate.js"></a>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-implementationservices-devicestate.js-adddevice">
+                            <a href="#lib-device-implementationservices-devicestate.js-adddevice" class="permalink">#</a>
+                            <span class="method-name" title="addDevice(id, clientobject, reachable)">addDevice(id, clientobject, reachable)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Adds a new device state to the instance.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>id</td>
+                                        <td>
+                                            <code>integer</code>
+                                        </td>
+                                        <td><p>a uniqe key to identify an entry</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>clientobject</td>
+                                        <td>
+                                            <code>object</code>
+                                        </td>
+                                        <td><p>any object which is linked to this unique identifier.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>reachable</td>
+                                        <td>
+                                            <code>boolean</code>
+                                        </td>
+                                        <td><p>this optional parameter defines if this device is currently reachable. Defaults to true.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">  <span class="hljs-keyword">this</span>.lifxClient.on(<span class="hljs-string">'light-new'</span>, (lifx) =&gt; {
+    debug(<span class="hljs-string">'discovered new light'</span>, lifx.id);
+    deviceState.addDevice(lifx.id, lifx);
+  });</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+                            <p><code>Void</code></p>
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-implementationservices-devicestate.js-getalldevices">
+                            <a href="#lib-device-implementationservices-devicestate.js-getalldevices" class="permalink">#</a>
+                            <span class="method-name" title="getAllDevices()">getAllDevices()</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            
+
+                        </div>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">discoverDevices</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> allDevices = deviceState.getAllDevices();
+    <span class="hljs-keyword">return</span> allDevices
+      .map(<span class="hljs-function">(<span class="hljs-params">deviceEntry</span>) =&gt;</span> {
+        <span class="hljs-keyword">return</span> {
+          <span class="hljs-attr">id</span>: deviceEntry.id,
+          <span class="hljs-attr">name</span>: deviceEntry.clientObject.label,
+          <span class="hljs-attr">reachable</span>: deviceEntry.reachable
+        };
+      });
+  };</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>Array</code>
+                                    </p>
+
+                                    <p>Returns all devices (client object, id, reachable state) this instance knows..</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-implementationservices-devicestate.js-getclientobjectifreachable">
+                            <a href="#lib-device-implementationservices-devicestate.js-getclientobjectifreachable" class="permalink">#</a>
+                            <span class="method-name" title="getClientObjectIfReachable(id)">getClientObjectIfReachable(id)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Gets the device state when the device is reachable. Used if you want to interact with the device state.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>id</td>
+                                        <td>
+                                            <code>integer</code>
+                                        </td>
+                                        <td><p>a uniqe key to identify an entry.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">  <span class="hljs-keyword">const</span> light = deviceState.getClientObjectIfReachable(deviceId);
+  <span class="hljs-keyword">if</span> (!light) {
+    <span class="hljs-keyword">return</span> BluePromise.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'NOT_REACHABLE'</span>));
+  }
+  <span class="hljs-keyword">return</span> light.turnOn();</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>Object</code>
+                                    </p>
+
+                                    <p>The stored device state if the device is reachable OR undefined when device is NOT reachable.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-implementationservices-devicestate.js-getcachepromise">
+                            <a href="#lib-device-implementationservices-devicestate.js-getcachepromise" class="permalink">#</a>
+                            <span class="method-name" title="getCachePromise(id)">getCachePromise(id)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Fetching data from a network device is expensive. The cachePromise helps by caching the device state for a certain amount of time. The CachePromise wraps the expensive call - either the cached device state is returned or when the cache is empty or expired a new device state is fetched.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>id</td>
+                                        <td>
+                                            <code>integer</code>
+                                        </td>
+                                        <td><p>a uniqe key to identify an entry.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">    getState(deviceId) {
+      <span class="hljs-keyword">const</span> light = <span class="hljs-keyword">this</span>.deviceState.getClientObjectIfReachable(deviceId);
+
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getLampState</span>(<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> BluePromise(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+          light.getState(<span class="hljs-function">(<span class="hljs-params">err, state</span>) =&gt;</span> {
+            <span class="hljs-keyword">if</span> (err) {
+              reject(err);
+            }
+            resolve(state);
+          });
+        });
+      }
+
+      <span class="hljs-keyword">return</span> deviceState
+        .getCachePromise(deviceId)
+        .getValue(getLampState);
+    }</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>Object</code>
+                                    </p>
+
+                                    <p>A cachedPromise object, you can call the getValue function which either returns the cached state or fetches a new state.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-implementationservices-devicestate.js-updatereachable">
+                            <a href="#lib-device-implementationservices-devicestate.js-updatereachable" class="permalink">#</a>
+                            <span class="method-name" title="updateReachable(id, reachable)">updateReachable(id, reachable)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Update the reachability state (online/offline) of a device.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>id</td>
+                                        <td>
+                                            <code>integer</code>
+                                        </td>
+                                        <td><p>a uniqe key to identify an entry.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>reachable</td>
+                                        <td>
+                                            <code>boolean</code>
+                                        </td>
+                                        <td><p>this parameter defines if this device is online (true) or offline (false).</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">  <span class="hljs-keyword">this</span>.lifxClient.on(<span class="hljs-string">'light-online'</span>, (lifx) =&gt; {
+    debug(<span class="hljs-string">'light-online'</span>, lifx.id);
+    deviceState.updateReachable(lifx.id, <span class="hljs-literal">true</span>);
+  });
+  <span class="hljs-keyword">this</span>.lifxClient.on(<span class="hljs-string">'light-offline'</span>, (lifx) =&gt; {
+    debug(<span class="hljs-string">'light-offline'</span>, lifx.id);
+    deviceState.updateReachable(lifx.id, <span class="hljs-literal">false</span>);
+  });</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+                            <p><code>Void</code></p>
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-implementationservices-devicestate.js-buildinstance">
+                            <a href="#lib-device-implementationservices-devicestate.js-buildinstance" class="permalink">#</a>
+                            <span class="method-name" title="buildInstance(cacheTimeMs)">buildInstance(cacheTimeMs)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Builds a new instance of the DeviceState.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>cacheTimeMs</td>
+                                        <td>
+                                            <code>integer</code>
+                                        </td>
+                                        <td><p>how long should a devicestate be cached, optional parameter, default is 2000ms.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceState object.</p>
 
 
 
@@ -1703,9 +2699,92 @@ Recipes.</p>
 
                     <div class="method scope-public">
 
+                        <h2 id="lib-index.js-module.exports.builddevicestate">
+                            <a href="#lib-index.js-module.exports.builddevicestate" class="permalink">#</a>
+                            <span class="method-name" title="buildDeviceState(cacheTimeMs)">buildDeviceState(cacheTimeMs)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This function builds a new DeviceState Object which helps organise client states, cache states and reachability</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>cacheTimeMs</td>
+                                        <td>
+                                            <code>integer</code>
+                                        </td>
+                                        <td><p>how long should a devicestate be cached (optional, default is 2000ms)</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript"> <span class="hljs-keyword">const</span> deviceState = neeoapi.buildDeviceState(<span class="hljs-number">2000</span>);</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceState</code>
+                                    </p>
+
+                                    <p>a new DeviceState instance</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
                         <h2 id="lib-index.js-module.exports.startserver">
                             <a href="#lib-index.js-module.exports.startserver" class="permalink">#</a>
-                            <span class="method-name" title="startServer(conf)">startServer(conf)</span>
+                            <span class="method-name" title="startServer(configuration)">startServer(configuration)</span>
                         </h2>
 
                         <div class="description lead">
@@ -1734,7 +2813,7 @@ Recipes.</p>
 
                                     <tbody>
                                     <tr>
-                                        <td>conf</td>
+                                        <td>configuration</td>
                                         <td>
                                             <code>Object</code>
                                         </td>
@@ -1894,7 +2973,7 @@ Recipes.</p>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 <script>
 
 (function () {

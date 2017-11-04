@@ -61,7 +61,7 @@ describe('./lib/device/brain/notificationMapping.js', function() {
 
     brainNotificationMapping.getNotificationKey(uniqueDeviceId, deviceId, componentName)
       .catch((error) => {
-        expect(error.message).to.equal('COMPONENTNAME_NOT_FOUND');
+        expect(error.message).to.equal('COMPONENTNAME_NOT_FOUND button');
         done();
       });
   });

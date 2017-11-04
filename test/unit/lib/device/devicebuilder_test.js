@@ -42,7 +42,7 @@ describe('./lib/device/devicebuilder.js', function() {
         .setManufacturer('NEEO')
         .addButton({ name: 'example-button', label: 'my button' })
         .addButton({ name: 'example-button', label: 'my button' })
-        .addButtonHander(function(){})
+        .addButtonHandler(function(){})
         .build('foo');
     }).to.throw(/DUPLICATE_PATH_DETECTED/);
   });
@@ -52,8 +52,8 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
         .addButton({ name: 'example-button', label: 'my button' })
-        .addButtonHander(function(){})
-        .addButtonHander(function(){});
+        .addButtonHandler(function(){})
+        .addButtonHandler(function(){});
     }).to.throw(/BUTTONHANDLER_ALREADY_DEFINED/);
   });
 
@@ -74,13 +74,22 @@ describe('./lib/device/devicebuilder.js', function() {
     }).to.throw(/DISCOVERHANLDER_ALREADY_DEFINED/);
   });
 
+  it('should fail to create device, multiple initialiseFunctions', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .registerInitialiseFunction(function(){})
+        .registerInitialiseFunction(function(){});
+    }).to.throw(/INITIALISATION_FUNCTION_ALREADY_DEFINED/);
+  });
+
   it('should fail to create device, multiple registerSubscriptionFunction', function() {
     expect(function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
         .registerSubscriptionFunction(function(){})
         .registerSubscriptionFunction(function(){});
-    }).to.throw(/SUBSCRIPTIONHANLDER_ALREADY_DEFINED/);
+    }).to.throw(/SUBSCRIPTIONHANDLER_ALREADY_DEFINED/);
   });
 
   it('should fail to create device, controller is not a function', function() {
@@ -88,9 +97,9 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
         .addButton({ name: 'example-button', label: 'my button' })
-        .addButtonHander(3)
+        .addButtonHandler(3)
         .build('foo');
-    }).to.throw(/MISSING_BUTTON_CONTROLLER_PARAMETER/);
+    }).to.throw(/MISSING_BUTTONHANDLER_CONTROLLER_PARAMETER/);
   });
 
   it('should fail to create device, duplicate names (button and slider)', function() {
@@ -98,9 +107,79 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
         .addButton({ name: 'example-foo', label: 'my button' })
-        .addButtonHander(function(){})
+        .addButtonHandler(function(){})
         .addSlider({ name: 'example-foo', label: 'my slider', range: [0,200], unit: '@' },
           { setter: function() {}, getter: function() {} })
+        .build('foo');
+    }).to.throw(/DUPLICATE_PATH_DETECTED/);
+  });
+
+  it('should fail to create device, missing param.name', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .addSlider({ label: 'my slider', range: [0,200], unit: '@' },
+          { setter: function() {}, getter: function() {} })
+        .build('foo');
+    }).to.throw(/MISSING_ELEMENT_NAME/);
+  });
+
+  it('should fail to create device, invalid timing parameter', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .setType('TV')
+        .defineTiming({})
+        .build('foo');
+    }).to.throw(/INVALID_TIMING_PARAMETER/);
+  });
+
+  it('should fail to create device, devicetype does not support timing', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .setType('LIGHT')
+        .defineTiming({ powerOnDelayMs: 500 })
+        .build('foo');
+    }).to.throw(/TIMING_DEFINED_BUT_DEVICETYPE_HAS_NO_SUPPORT/);
+  });
+
+  it('should fail to create device, invalid timing data (string)', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .setType('TV')
+        .defineTiming({ powerOnDelayMs: 'lala' })
+        .build('foo');
+    }).to.throw(/INVALID_TIMING_VALUE/);
+  });
+
+  it('should fail to create device, invalid timing data (negative)', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .setType('TV')
+        .defineTiming({ powerOnDelayMs: -55 })
+        .build('foo');
+    }).to.throw(/INVALID_TIMING_VALUE/);
+  });
+
+  it('should fail to create device, invalid timing data (too large)', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .setType('TV')
+        .defineTiming({ powerOnDelayMs: 999999999 })
+        .build('foo');
+    }).to.throw(/INVALID_TIMING_VALUE/);
+  });
+
+  it('should fail to create device, multiple power state definitions', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .addPowerStateSensor({ getter: function() {} })
+        .addPowerStateSensor({ getter: function() {} })
         .build('foo');
     }).to.throw(/DUPLICATE_PATH_DETECTED/);
   });
@@ -109,12 +188,12 @@ describe('./lib/device/devicebuilder.js', function() {
     const Device1 = new DeviceBuilder('example-adapter', 'XXX');
     const device1 = Device1
       .addButton({ name: 'example-button', label: 'my button' })
-      .addButtonHander(function(){})
+      .addButtonHandler(function(){})
       .build('foo');
     const Device2 = new DeviceBuilder('example-adapter', 'XXX');
     const device2 = Device2
       .addButton({ name: 'example-button', label: 'my button' })
-      .addButtonHander(function(){})
+      .addButtonHandler(function(){})
       .build('foo');
     expect(device1.adapterName).to.deep.equal(device2.adapterName);
   });
@@ -126,7 +205,7 @@ describe('./lib/device/devicebuilder.js', function() {
       .addAdditionalSearchToken('bar')
       .setType('light')
       .addButton({ name: 'example-button', label: 'my button' })
-      .addButtonHander(function(){})
+      .addButtonHandler(function(){})
       .build('foo');
 
     delete device.handler;
@@ -176,7 +255,7 @@ describe('./lib/device/devicebuilder.js', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
       .addButtonGroup('volume')
-      .addButtonHander(function(){})
+      .addButtonHandler(function(){})
       .build('foo');
     expect(device.capabilities.length).to.equal(3);
   });
@@ -264,7 +343,7 @@ describe('./lib/device/devicebuilder.js', function() {
               0,
               200
             ],
-            'unit': '@'
+            'unit': '%40'
           }
         },
         {
@@ -279,11 +358,68 @@ describe('./lib/device/devicebuilder.js', function() {
               0,
               200
             ],
-            'unit': '@'
+            'unit': '%40'
           }
         }
       ]
     });
+  });
+
+  it('should build device with a initialise function', function() {
+    function initFunction() {}
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .registerInitialiseFunction(initFunction)
+      .build('foo');
+    expect(device.initialiseFunction).to.equal(initFunction);
+  });
+
+  it('should build device with full timing', function() {
+    const powerOnDelayMs = 1111;
+    const sourceSwitchDelayMs = 2222;
+    const shutdownDelayMs = 3333;
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .setType('VOD')
+      .defineTiming({
+        powerOnDelayMs,
+        sourceSwitchDelayMs,
+        shutdownDelayMs
+      })
+      .build('foo');
+    expect(device.timing.standbyCommandDelay).to.equal(powerOnDelayMs);
+    expect(device.timing.sourceSwitchDelay).to.equal(sourceSwitchDelayMs);
+    expect(device.timing.shutdownDelay).to.equal(shutdownDelayMs);
+  });
+
+  it('should build device with partial timing', function() {
+    const powerOnDelayMs = 1111;
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .setType('VOD')
+      .defineTiming({
+        powerOnDelayMs
+      })
+      .build('foo');
+    expect(device.timing.standbyCommandDelay).to.equal(powerOnDelayMs);
+    expect(device.timing.sourceSwitchDelay).to.equal(undefined);
+    expect(device.timing.shutdownDelay).to.equal(undefined);
+  });
+
+  it('should build device with powerstate sensor', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addPowerStateSensor({ getter: function() {}})
+      .build('foo');
+
+    expect(device.capabilities.length).to.equal(1);
+    const powerstateCapability = device.capabilities[0];
+    expect(powerstateCapability.label).to.equal('Powerstate');
+    expect(powerstateCapability.name).to.equal('powerstate');
+    expect(powerstateCapability.sensor.type).to.equal('power');
   });
 
   it('should build device with a switch', function() {
@@ -327,6 +463,26 @@ describe('./lib/device/devicebuilder.js', function() {
         }
       ]
     });
+  });
+
+  it('should report if device supports timing - false', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .setType('ACCESSOIRE');
+
+    const supportsTiming = device.supportsTiming();
+    expect(supportsTiming).to.equal(false);
+  });
+
+  it('should report if device supports timing - true', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .setType('GAMECONSOLE');
+
+    const supportsTiming = device.supportsTiming();
+    expect(supportsTiming).to.equal(true);
   });
 
 });

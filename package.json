@@ -1,6 +1,6 @@
 {
   "name": "neeo-sdk",
-  "version": "0.45.7",
+  "version": "0.47.8",
   "description": "NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.",
   "repository": "https://github.com/NEEOInc/neeo-sdk",
   "license": "MIT",
@@ -19,7 +19,7 @@
     "doxdox": "^2.0.2",
     "jshint": "^2.9.5",
     "mocha": "^3.5.0",
-    "nock": "^9.0.13",
+    "nock": "^9.0.27",
     "nyc": "^11.1.0",
     "sinon": "^3.1.0",
     "sinon-chai": "^2.12.0"
@@ -31,10 +31,10 @@
     "test": "npm run jshint && nyc mocha \"test/**/*.js\"",
     "jshint": "jshint --show-non-errors --verbose lib/**/ test/**/",
     "clean": "rm -rf ./dist && mkdir -p ./dist/docs",
-    "coverage:report": "istanbul report text",
+    "coverage:report": "nyc report text",
     "doc": "npm run clean && doxdox 'lib/**/*.js' --title \"NEEO SDK\" --layout bootstrap --output ./dist/docs/index.html",
     "release": "npm run test && npm run doc && npm run release:copy && npm run release:listtodos",
-    "release:copy": "cp -r ./{lib,test} ./dist && cp *.md .jshintrc .gitignore index.js .editorconfig .npmignore .travis.yml package.json License ./dist",
+    "release:copy": "cp -r ./lib ./test ./dist && cp *.md .jshintrc .gitignore index.js .editorconfig .npmignore .travis.yml package.json License ./dist",
     "release:listtodos": "grep -R --exclude='./node_modules/*' 'TODO' ./dist"
   },
   "nyc": {
@@ -48,8 +48,8 @@
     ],
     "all": true,
     "reporter": [
-      "lcov",
-      "text-summary"
+      "text-summary",
+      "lcov"
     ]
   }
 }

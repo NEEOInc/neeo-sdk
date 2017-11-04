@@ -41,14 +41,4 @@ describe('./lib/expressBrainDriver/index.js', function() {
     expect(ExpressServer.stopExpress.args[0][0]).to.equal(conf);
   });
 
-  it('should register devices via server', function() {
-    // GIVEN
-    const device = {};
-
-    // WHEN
-    ExpressDriver.registerDevice(device);
-
-    // THEN
-    expect(ExpressServer.registerDevice.args[0][0]).to.equal(device);
-  });
 });

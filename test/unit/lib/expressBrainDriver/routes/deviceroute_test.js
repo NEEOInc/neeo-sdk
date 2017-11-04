@@ -5,21 +5,21 @@ const Deviceroute = require('../../../../../lib/expressBrainDriver/routes/device
 
 describe('./lib/expressBrainDriver/routes/deviceroute.js', function() {
 
-  it('should fail to register invalid device (undefined)', function() {
-    expect(function() {
-      Deviceroute.registerDevice();
-    }).to.throw(/INVALID_ADAPTER/);
-  });
-
-  it('should fail to register invalid device (no adapterName)', function() {
-    expect(function() {
-      Deviceroute.registerDevice({});
-    }).to.throw(/INVALID_ADAPTER/);
-  });
-
-  it('should register a device', function() {
-    const device = { adapterName: 'foobar' };
-    Deviceroute.registerDevice(device);
+  it('should find adapter in router', function() {
+    const adapterid = '123';
+    const next = function() {};
+    const handlerResult = 'AAA';
+    const handler = {
+      getDeviceByAdapterId: () => {
+        return Promise.resolve(handlerResult);
+      }
+    };
+    const req = {};
+    Deviceroute.registerHandler(handler);
+    return Deviceroute.params.adapterid[0](req, undefined, next, adapterid)
+      .then(() => {
+        expect(req.adapter).to.equal(handlerResult);
+      });
   });
 
 });

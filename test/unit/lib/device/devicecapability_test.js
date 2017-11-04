@@ -24,6 +24,7 @@ describe('./lib/device/devicecapability.js', function() {
       textLabels: [],
       imageUrls: [],
       switches: [],
+      sensors: [],
       discovery: [],
     };
     const result = DeviceCapability.build(data, 'unittest');
@@ -40,6 +41,7 @@ describe('./lib/device/devicecapability.js', function() {
       textLabels: [],
       imageUrls: [],
       switches: [],
+      sensors: [],
       discovery: [],
       deviceidentifier: 'foobar'
     };

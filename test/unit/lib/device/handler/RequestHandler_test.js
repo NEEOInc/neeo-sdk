@@ -13,9 +13,16 @@ describe('./lib/device/handler/index.js', function() {
   beforeEach(function() {
     db = {
       search: sinon.stub(),
-      getDevice: sinon.stub()
+      getDevice: sinon.stub(),
+      getDeviceByAdapterId: sinon.stub(),
     };
     requestHandler = new RequestHandler(db);
+  });
+
+  it('should handle getDeviceByAdapterId', function() {
+    const adapterId = '123';
+    requestHandler.getDeviceByAdapterId(adapterId);
+    expect(db.getDeviceByAdapterId).to.have.been.calledWith(adapterId);
   });
 
   it('should handle searchDevice', function() {

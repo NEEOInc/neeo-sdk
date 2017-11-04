@@ -47,4 +47,61 @@ describe('./lib/device/brain/notification.js', function() {
       });
   });
 
+  it('should not find new entry, valid data', function() {
+    const type = '6326866233966723072:BRIGHTNESS_SENSOR';
+    const data = 28;
+    const msg = { type, data };
+
+    const result = notification._isDuplicateMessage(msg);
+    expect(result).to.equal(false);
+  });
+
+  it('should not find new entry, valid data FALSE', function() {
+    const type = '6326866233966723072:BRIGHTNESS_SENSOR';
+    const data = false;
+    const msg = { type, data };
+
+    const result = notification._isDuplicateMessage(msg);
+    expect(result).to.equal(false);
+  });
+
+  it('should not find new entry, undefined', function() {
+    notification._updateCache();
+    const result = notification._isDuplicateMessage();
+    expect(result).to.equal(false);
+  });
+
+  it('should not find new entry, empty object', function() {
+    const result = notification._isDuplicateMessage({});
+    expect(result).to.equal(false);
+  });
+
+  it('should find cached entry', function() {
+    const type = '6326866233966723072:BRIGHTNESS_SENSOR';
+    const data = 28;
+    const msg = { type, data };
+    notification._updateCache(msg);
+
+    const result = notification._isDuplicateMessage(msg);
+    expect(result).to.equal(true);
+  });
+
+  it('should find cached entry, FALSE', function() {
+    const type = '6326866233966723072:BRIGHTNESS_SENSOR';
+    const data = false;
+    const msg = { type, data };
+    notification._updateCache(msg);
+
+    const result = notification._isDuplicateMessage(msg);
+    expect(result).to.equal(true);
+  });
+
+  it('should clear cache when threshold is exceeded', function() {
+    for (let i=0; i<60; i++) {
+      notification._updateCache({ type: i, data: i });
+    }
+    const result = notification.sensorValues.size;
+    expect(result).to.equal(8);
+  });
+
 });

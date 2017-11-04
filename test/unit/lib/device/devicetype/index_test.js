@@ -41,4 +41,14 @@ describe('./lib/device/devicetype/index.js', function() {
     expect(result).to.equal(false);
   });
 
+  it('TV does support timing', function() {
+    const result = devicetype.doesNotSupportTiming('TV');
+    expect(result).to.equal(false);
+  });
+
+  it('LIGHT does not support timing', function() {
+    const result = devicetype.doesNotSupportTiming('LIGHT');
+    expect(result).to.equal(true);
+  });
+
 });

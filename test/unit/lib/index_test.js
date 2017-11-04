@@ -2,6 +2,7 @@
 
 const chai = require('chai');
 chai.use(require('sinon-chai'));
+const nock = require('nock');
 const expect = chai.expect;
 const sinon = require('sinon');
 const neeoapi = require('../../../lib/index');
@@ -17,36 +18,127 @@ describe('./lib/index.js - neeoapi', function() {
     sandbox.restore();
   });
 
-  it('should expose discoverOneBrain', function() {
-    expect(neeoapi.discoverOneBrain).to.equal(discover.discoverOneBrain);
+  describe('simple checks', function() {
+    it('should expose discoverOneBrain', function() {
+      expect(neeoapi.discoverOneBrain).to.equal(discover.discoverOneBrain);
+    });
+
+    it('should expose getRecipes', function() {
+      expect(neeoapi.getRecipes).to.equal(recipes.getAllRecipes);
+    });
+
+    it('should expose getRecipesPowerState', function() {
+      expect(neeoapi.getRecipesPowerState).to.equal(recipes.getRecipePowerState);
+    });
+
+    it('should expose discoverOneBrain', function() {
+      expect(neeoapi.buildDevice).to.equal(device.buildCustomDevice);
+    });
+
+    it('should expose stopServer', function() {
+      expect(neeoapi.stopServer).to.equal(device.stopServer);
+    });
+
+    it('should startServer using expressDriver', function() {
+      // GIVEN
+      const conf = {};
+      sandbox.stub(device, 'startServer');
+
+      // WHEN
+      neeoapi.startServer(conf);
+
+      // THEN
+      expect(device.startServer).to.have.been.calledWith(conf, expressBrainDriver);
+    });
   });
 
-  it('should expose getRecipes', function() {
-    expect(neeoapi.getRecipes).to.equal(recipes.getAllRecipes);
-  });
+  describe('enhanced checks', function() {
+    const mockedBrainDriver = {
+      start: () => {},
+      stop: () => {},
+    };
 
-  it('should expose getRecipesPowerState', function() {
-    expect(neeoapi.getRecipesPowerState).to.equal(recipes.getRecipePowerState);
-  });
+    let nockScope;
 
-  it('should expose discoverOneBrain', function() {
-    expect(neeoapi.buildDevice).to.equal(device.buildCustomDevice);
-  });
+    beforeEach(function() {
+      nockScope = null;
+    });
 
-  it('should expose stopServer', function() {
-    expect(neeoapi.stopServer).to.equal(device.stopServer);
-  });
+    afterEach(function() {
+      if (nockScope) {
+        console.log('-->',nockScope.pendingMocks());
+        nockScope.done();
+      }
+      nock.cleanAll();
+    });
 
-  it('should startServer using expressDriver', function() {
-    // GIVEN
-    const conf = {};
-    sandbox.stub(device, 'startServer');
+    it('should not register additional subscription functions for simple device', function() {
+      let callbackCalled = false;
 
-    // WHEN
-    neeoapi.startServer(conf);
+      function callbackFunction(update, additional) {
+        expect(typeof update).to.equal('function');
+        expect(typeof additional.powerOnNotificationFunction).to.equal('undefined');
+        expect(typeof additional.powerOffNotificationFunction).to.equal('undefined');
+        callbackCalled = true;
+      }
 
-    // THEN
-    expect(device.startServer).to.have.been.calledWith(conf, expressBrainDriver);
+      nockScope = nock('http://foobrain:3333')
+        .post('/v1/api/registerSdkDeviceAdapter')
+        .reply(200);
+
+      const device = neeoapi.buildDevice('FOO')
+        .setManufacturer('NEEO')
+        .addButtonGroup('volume')
+        .addButtonHander(function(){})
+        .registerSubscriptionFunction(callbackFunction);
+
+      const conf = {
+        brain: 'foobrain',
+        brainport: 3333,
+        port: 1234,
+        name: 'UNIT',
+        baseurl: `http://127.0.0.1:1234/neeodeviceadapter`,
+        devices: [ device ],
+        maxConnectionAttempts: 1,
+      };
+      return neeoapi.startServer(conf, mockedBrainDriver)
+        .then(() => {
+          expect(callbackCalled).to.equal(true);
+        });
+    });
+
+    it('should register additional subscription functions when building a device with powerstate sensor', function() {
+      let callbackCalled = false;
+
+      function callbackFunction(update, additional) {
+        expect(typeof update).to.equal('function');
+        expect(typeof additional.powerOnNotificationFunction).to.equal('function');
+        expect(typeof additional.powerOffNotificationFunction).to.equal('function');
+        callbackCalled = true;
+      }
+      const device = neeoapi.buildDevice('FOO')
+        .setManufacturer('NEEO')
+        .addPowerStateSensor({ getter: function() {}})
+        .registerSubscriptionFunction(callbackFunction);
+
+      nockScope = nock('http://foo:3333')
+        .post('/v1/api/registerSdkDeviceAdapter')
+        .reply(200);
+
+      const conf = {
+        brain: 'foo',
+        brainport: 3333,
+        port: 3000,
+        name: 'UNIT',
+        baseurl: `http://127.0.0.1:1234/neeodeviceadapter`,
+        devices: [ device ],
+        maxConnectionAttempts: 1,
+      };
+      return neeoapi.startServer(conf, mockedBrainDriver)
+        .then(() => {
+          expect(callbackCalled).to.equal(true);
+        });
+    });
   });
 
 });

@@ -15,7 +15,12 @@ describe('./lib/device/brain/urlbuilder.js', function() {
     const test = urlbuilder.buildBrainUrl('brain.local');
     expect(test).to.equal('http://brain.local:3000');
   });
-  
+
+  it('should return brain url when string is provided and port is defined', function() {
+    const test = urlbuilder.buildBrainUrl('brain.local', undefined, 2323);
+    expect(test).to.equal('http://brain.local:2323');
+  });
+
   it('should return brain url and path when object is provided with uri', function() {
     const test = urlbuilder.buildBrainUrl({host:'test.local', port:6336}, BASE_URL_GETRECIPES);
     expect(test).to.equal('http://test.local:6336/v1/api/recipes');

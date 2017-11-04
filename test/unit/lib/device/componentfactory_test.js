@@ -44,6 +44,52 @@ describe('./lib/device/componentfactory.js', function() {
     });
   });
 
+  it('should build a minimal range sensor', function() {
+    const param = { name: 'aRangeSensor' };
+    const result = ComponentFactory.buildSensor('PREFIX/', param);
+    expect(result).to.deep.equal({
+      type: 'sensor',
+      name: 'aRangeSensor',
+      label: 'aRangeSensor',
+      path: 'PREFIX/aRangeSensor',
+      sensor: {
+        range: [0,100],
+        type: 'range',
+        unit: '%'
+      }
+    });
+  });
+
+  it('should build a advanced range sensor', function() {
+    const param = { name: 'aRangeSensor', label: 'foo', unit: '"', range: [5, 12] };
+    const result = ComponentFactory.buildSensor('PREFIX/', param);
+    expect(result).to.deep.equal({
+      type: 'sensor',
+      name: 'aRangeSensor',
+      label: 'foo',
+      path: 'PREFIX/aRangeSensor',
+      sensor: {
+        range: [5,12],
+        type: 'range',
+        unit: '%22'
+      }
+    });
+  });
+
+  it('should build a power sensor', function() {
+    const param = { name: 'aPowerSensor', label: 'foo', type: 'power' };
+    const result = ComponentFactory.buildSensor('PREFIX/', param);
+    expect(result).to.deep.equal({
+      type: 'sensor',
+      name: 'aPowerSensor',
+      label: 'foo',
+      path: 'PREFIX/aPowerSensor',
+      sensor: {
+        type: 'power',
+      }
+    });
+  });
+
   it('should build a textlabel, without label', function() {
     const param = { name: 'textlabel' };
     const result = ComponentFactory.buildTextLabel('PREFIX/', param);
