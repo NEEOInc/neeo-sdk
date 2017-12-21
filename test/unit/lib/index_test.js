@@ -66,7 +66,6 @@ describe('./lib/index.js - neeoapi', function() {
 
     afterEach(function() {
       if (nockScope) {
-        console.log('-->',nockScope.pendingMocks());
         nockScope.done();
       }
       nock.cleanAll();

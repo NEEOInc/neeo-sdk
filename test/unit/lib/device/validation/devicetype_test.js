@@ -1,13 +1,23 @@
 'use strict';
 
 const expect = require('chai').expect;
-const devicetype = require('../../../../../lib/device/devicetype/index.js');
+const devicetype = require('../../../../../lib/device/validation/devicetype.js');
 
-describe('./lib/device/devicetype/index.js', function() {
+describe('./lib/device/validation/devicetype.js', function() {
 
   it('should get TV devicetype', function() {
     const result = devicetype.getDeviceType('tv');
     expect(result).to.equal('TV');
+  });
+
+  it('should get ACCESSORY devicetype', function() {
+    const result = devicetype.getDeviceType('ACCESSORY');
+    expect(result).to.equal('ACCESSOIRE');
+  });
+
+  it('should get ACCESSOIRE devicetype - deprecated and used only for backwards compability', function() {
+    const result = devicetype.getDeviceType('ACCEssoire');
+    expect(result).to.equal('ACCESSOIRE');
   });
 
   it('should throw error when requesting invalid devicetype', function() {

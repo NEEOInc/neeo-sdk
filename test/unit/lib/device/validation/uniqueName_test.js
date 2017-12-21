@@ -17,7 +17,7 @@ describe('./lib/device/validation/uniqueName.js', function() {
     expect(name1).to.not.equal(name2);
   });
 
-  it('should create the same name twice, custom uniqe string', function() {
+  it('should create the same name twice, custom unique string', function() {
     const name1 = uniqueName('foo', 'la');
     const name2 = uniqueName('foo', 'la');
     const name3 = uniqueName('foo', 'lb');

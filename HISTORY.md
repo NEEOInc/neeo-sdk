@@ -1,3 +1,10 @@
+## 0.48.13 (12/21/2017)
+- add default timeout to network requests
+- add support for alwaysOn devices
+- fixed device type ACCESSOIRE renamed to ACCESSORY
+- fixed missing/unclear use how define the listening ip of the adapter, thanks @splattner
+- fixed more typos in docs
+
 ## 0.47.8 (11/1/2017)
 - add standalone sensor component (.addSensor)
 - add deviceState service, helps tracking and caching devices

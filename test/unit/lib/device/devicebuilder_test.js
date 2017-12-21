@@ -217,6 +217,7 @@ describe('./lib/device/devicebuilder.js', function() {
       'type': 'LIGHT',
       'manufacturer': 'NEEO',
       setup: {},
+      deviceCapabilities: [],
       'devices': [
         {
           'name': 'example-adapter',
@@ -277,6 +278,7 @@ describe('./lib/device/devicebuilder.js', function() {
       'type': 'ACCESSOIRE',
       'manufacturer': 'NEEO',
       setup: {},
+      deviceCapabilities: [],
       'devices': [
         {
           'name': 'example-adapter',
@@ -325,6 +327,7 @@ describe('./lib/device/devicebuilder.js', function() {
         introheader: 'header text',
         introtext: 'some hints'
       },
+      deviceCapabilities: [],
       'devices': [
         {
           'name': 'example-adapter',
@@ -409,6 +412,26 @@ describe('./lib/device/devicebuilder.js', function() {
     expect(device.timing.shutdownDelay).to.equal(undefined);
   });
 
+  it('should build device with alwayOn capability', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .setType('VOD')
+      .addCapability('alwaysOn')
+      .build('foo');
+    expect(device.deviceCapabilities).to.deep.equal(['alwaysOn']);
+  });
+
+  it('should fail to build a device with an invalid capability', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+        .setType('LIGHT')
+        .addCapability('invalid');
+    }).to.throw(/INVALID_CAPABILITY/);
+  });
+
   it('should build device with powerstate sensor', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
@@ -438,6 +461,7 @@ describe('./lib/device/devicebuilder.js', function() {
       'type': 'ACCESSOIRE',
       'manufacturer': 'NEEO',
       setup: {},
+      deviceCapabilities: [],
       'devices': [
         {
           'name': 'example-adapter',

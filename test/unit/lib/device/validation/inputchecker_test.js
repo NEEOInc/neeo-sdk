@@ -1,9 +1,9 @@
 'use strict';
 
 const expect = require('chai').expect;
-const inputchecker = require('../../../../../lib/device/devicetype/inputchecker.js');
+const inputchecker = require('../../../../../lib/device/validation/inputMacroChecker.js');
 
-describe('./lib/device/devicetype/inputchecker.js', function() {
+describe('./lib/device/validation/inputMacroChecker.js', function() {
 
   it('should throw error when parameter is not of type Array', function() {
     expect(() => {

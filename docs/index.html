@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.47.8 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.48.13 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
@@ -163,7 +163,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.47.8</small>
+            <small>0.48.13</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -272,6 +272,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-addimageurl" title="addImageUrl">addImageUrl</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-addcapability" title="addCapability">addCapability</a>
                         </li>
 
 
@@ -495,7 +500,7 @@ input[type="search"]::-webkit-search-cancel-button {
                                         <td>
                                             <code>string</code>
                                         </td>
-                                        <td><p>supported device classes, either 'ACCESSOIRE', 'AVRECEIVER', 'DVB' (aka. satellite reciever), 'DVD' (aka. discplayer), 'GAMECONSOLE', 'LIGHT', 'MEDIAPLAYER', 'PROJECTOR', 'TV' or 'VOD' (aka. Video-On-Demand box like Apple TV, Fire TV...)</p>
+                                        <td><p>supported device classes, either 'ACCESSORY', 'AVRECEIVER', 'DVB' (aka. satellite receiver), 'DVD' (aka. disc player), 'GAMECONSOLE', 'LIGHT', 'MEDIAPLAYER', 'PROJECTOR', 'TV' or 'VOD' (aka. Video-On-Demand box like Apple TV, Fire TV...)</p>
 </td>
                                         <td>
                                         </td>
@@ -672,7 +677,7 @@ input[type="search"]::-webkit-search-cancel-button {
                                         <td>
                                             <code>function</code>
                                         </td>
-                                        <td><p>Callback function which will be called when the NEEO brain search your device. This function should return an array of found devices, each object with an <strong>id</strong> attribute (unique device identifier, for example mac address), <strong>name</strong> the display name and the optional <strong>readchable</strong> attribute (true: device is reachable, false: device is not reachable)</p>
+                                        <td><p>Callback function which will be called when the NEEO brain search your device. This function should return an array of found devices, each object with an <strong>id</strong> attribute (unique device identifier, for example mac address), <strong>name</strong> the display name and the optional <strong>reachable</strong> attribute (true: device is reachable, false: device is not reachable)</p>
 </td>
                                         <td>
                                         </td>
@@ -881,7 +886,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <div class="description lead">
 
-                            <p>This is used for devices which need to send dynamic value updates (for switches or sliders) to the Brain they are registered on. When the device is added to a Brain the SDK will call the controller function with an update function as argument. This function can be used to then send updates to the Brain when the value of the device updates.
+                            <p>This is used for devices which need to send dynamic value updates (for example switches or sliders state) to the Brain they are registered on. When the device is added to a Brain the SDK will call the controller function with an update function as argument (aka. inject the function). This function can be used to then send updates to the Brain when the value of the device updates.
 For example a device with a physical slider can use this to keep the digital slider in sync. This function can be only defined once per device definition.</p>
 
 
@@ -910,7 +915,7 @@ For example a device with a physical slider can use this to keep the digital sli
                                         <td>
                                             <code>function</code>
                                         </td>
-                                        <td><p>Callback function which will be called when the NEEO SDK Server starts, to register the update notification callback function and optional callback functions. OptionalCallbacks: <strong>powerOnNotificationFunction</strong> - call this function with its deviceid when the device powers on.
+                                        <td><p>Callback function which will be called when the NEEO SDK Server starts, to register the update notification callback function and optional callback functions. OptionalCallbacks: if the device supports power state (see <strong>addPowerStateSensor</strong>) this additional callbacks are present: <strong>powerOnNotificationFunction</strong> - call this function with its deviceid when the device powers on.
 <strong>powerOffNotificationFunction</strong> - call this function with its deviceid when the device powers on</p>
 </td>
                                         <td>
@@ -932,7 +937,7 @@ For example a device with a physical slider can use this to keep the digital sli
 
 
                                 <pre><code class="hljs javascript"><span class="hljs-keyword">let</span> updateCallbackReference, markDeviceOn, markDeviceOff;
-deviceBuilder.registerSubscriptionFunction(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">updateCallback, optionalCallbackFunctions</span>) </span>{
+deviceBuilder.registerSubscriptionFunction(<span class="hljs-function">(<span class="hljs-params">updateCallback, optionalCallbackFunctions</span>) =&gt;</span> {
   updateCallbackReference = updateCallback;
   <span class="hljs-keyword">if</span> (optionalCallbackFunctions &amp;&amp; optionalCallbackFunctions.powerOnNotificationFunction) {
     markDeviceOn = optionalCallbackFunctions.powerOnNotificationFunction;
@@ -1368,7 +1373,7 @@ Recipes.</p>
                                         <td>
                                             <code>object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote), <strong>range</strong> (optional, custom range of slider, default 0..100), <strong>unit</strong> (optional, custin slider unit, default %)</p>
+                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote), <strong>range</strong> (optional, custom range of slider, default 0..100), <strong>unit</strong> (optional user readable label, default %)</p>
 </td>
                                         <td>
                                         </td>
@@ -1463,7 +1468,7 @@ Recipes.</p>
                                         <td>
                                             <code>object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote), <strong>range</strong> (optional, custom range of slider, default 0..100), <strong>unit</strong> (optional, custin slider unit, default %)</p>
+                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote), <strong>range</strong> (optional, custom range of slider, default 0..100), <strong>unit</strong> (optional user readable label, default %)</p>
 </td>
                                         <td>
                                         </td>
@@ -1893,6 +1898,88 @@ Recipes.</p>
                     </div>
 
 
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-addcapability">
+                            <a href="#lib-device-devicebuilder.js-addcapability" class="permalink">#</a>
+                            <span class="method-name" title="addCapability(capability)">addCapability(capability)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Define additional device capabilities, currently supported capabilities (case sensitive): - &quot;alwaysOn&quot; - the device does not need to be powered on to be useable. You don't need to specify 'POWER ON' and 'POWER OFF' buttons and the device is not identified as &quot;Stupid device&quot;</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>capability</td>
+                                        <td>
+                                            <code>string</code>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.addCapability(<span class="hljs-string">'alwaysOn'</span>)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>object</code>
+                                    </p>
+
+                                    <p>DeviceBuilder</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
 
                 <a id="lib/device/implementationservices/devicestate.js"></a>
 
@@ -1934,7 +2021,7 @@ Recipes.</p>
                                         <td>
                                             <code>integer</code>
                                         </td>
-                                        <td><p>a uniqe key to identify an entry</p>
+                                        <td><p>a unique key to identify an entry</p>
 </td>
                                         <td>
                                         </td>
@@ -2090,7 +2177,7 @@ Recipes.</p>
                                         <td>
                                             <code>integer</code>
                                         </td>
-                                        <td><p>a uniqe key to identify an entry.</p>
+                                        <td><p>a unique key to identify an entry.</p>
 </td>
                                         <td>
                                         </td>
@@ -2177,7 +2264,7 @@ Recipes.</p>
                                         <td>
                                             <code>integer</code>
                                         </td>
-                                        <td><p>a uniqe key to identify an entry.</p>
+                                        <td><p>a unique key to identify an entry.</p>
 </td>
                                         <td>
                                         </td>
@@ -2277,7 +2364,7 @@ Recipes.</p>
                                         <td>
                                             <code>integer</code>
                                         </td>
-                                        <td><p>a uniqe key to identify an entry.</p>
+                                        <td><p>a unique key to identify an entry.</p>
 </td>
                                         <td>
                                         </td>
@@ -2818,7 +2905,7 @@ Recipes.</p>
                                             <code>Object</code>
                                         </td>
                                         <td><ul>
-<li>Configuration Object with <strong>brain</strong> (NEEOBrain object), <strong>port</strong> (listening port), device <strong>name</strong> and all associated <strong>devices</strong>.</li>
+<li>Configuration Object with <strong>brain</strong> (NEEOBrain object), <strong>port</strong> (listening port), device <strong>name</strong> and all associated <strong>devices</strong>. Optionally you can add <strong>baseurl</strong> to define the listening ip - handy if you have multiple IP's or running in a docker container.</li>
 </ul>
 </td>
                                         <td>

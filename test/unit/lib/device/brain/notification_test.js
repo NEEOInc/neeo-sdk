@@ -22,7 +22,7 @@ describe('./lib/device/brain/notification.js', function() {
   });
 
   it('should notify brain with JSON data', function() {
-    const msg = { foo: 'bar' };
+    const msg = { type: 'foo', data: 'bar' };
     const answer = { data: 'reply' };
     netMock = nock(BRAIN_URI)
       .post('/v1/notifications', msg)
@@ -32,6 +32,39 @@ describe('./lib/device/brain/notification.js', function() {
       .then((result) => {
         expect(result).to.deep.equal(answer);
         expect(notification.queueSize).to.equal(0);
+      });
+  });
+
+  it('should detect duplicate message', function() {
+    const msg = { type: 'foo', data: 'bar' };
+    const answer = { data: 'reply' };
+    netMock = nock(BRAIN_URI)
+      .post('/v1/notifications', msg)
+      .reply(200, answer);
+
+    return notification.send(msg)
+      .then(() => {
+        return notification.send(msg);
+      })
+      .then(() => {
+        expect('should have failed').to.equal(false);
+      })
+      .catch((error) => {
+        expect(error.message).to.equal('DUPLICATE_MESSAGE');
+      });
+  });
+
+  it('should detect invalid message (undefined)', function() {
+    return notification.send()
+      .catch((error) => {
+        expect(error.message).to.equal('EMPTY_MESSAGE');
+      });
+  });
+
+  it('should detect invalid message (empty)', function() {
+    return notification.send({})
+      .catch((error) => {
+        expect(error.message).to.equal('EMPTY_MESSAGE');
       });
   });
 
