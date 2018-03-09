@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.48.13 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.49.2 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
@@ -163,7 +163,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.48.13</small>
+            <small>0.49.2</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -197,6 +197,16 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-settype" title="setType">setType</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-seticon" title="setIcon">setIcon</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-setspecificname" title="setSpecificName">setSpecificName</a>
                         </li>
 
 
@@ -521,6 +531,171 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
                                 <pre><code class="hljs javascript">.setType(<span class="hljs-string">'light'</span>)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-seticon">
+                            <a href="#lib-device-devicebuilder.js-seticon" class="permalink">#</a>
+                            <span class="method-name" title="setIcon(icon)">setIcon(icon)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Optional parameter to define the device icon. The default icon is defined according to the device type if no custom icon is set.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>icon</td>
+                                        <td>
+                                            <code>string</code>
+                                        </td>
+                                        <td><p>string identifying the icon, the following icons are currently available: 'sonos'</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.setIcon(<span class="hljs-string">'sonos'</span>)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-setspecificname">
+                            <a href="#lib-device-devicebuilder.js-setspecificname" class="permalink">#</a>
+                            <span class="method-name" title="setSpecificName(specificName)">setSpecificName(specificName)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>specificName</td>
+                                        <td>
+                                            <code>string</code>
+                                        </td>
+                                        <td><p>Optional name to use when adding the device to a room (a name based on the type will be used by default, for example: 'Accessory'). Note this does not apply to devices using discovery.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.setSpecificName(<span class="hljs-string">'Specific Device Name'</span>)</code></pre>
 
 
                         </section>
@@ -1440,7 +1615,7 @@ Recipes.</p>
 
                         <div class="description lead">
 
-                            <p>Add a (range) sensor to your custom device</p>
+                            <p>Add a (range/binary) sensor to your custom device</p>
 
 
                         </div>
@@ -1468,7 +1643,7 @@ Recipes.</p>
                                         <td>
                                             <code>object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote), <strong>range</strong> (optional, custom range of slider, default 0..100), <strong>unit</strong> (optional user readable label, default %)</p>
+                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote), <strong>type</strong> (optional, can be range, binary, default range) <strong>range</strong> (optional, custom range of sensor, default 0..100), <strong>unit</strong> (optional user readable label, default %)</p>
 </td>
                                         <td>
                                         </td>
@@ -1498,7 +1673,7 @@ Recipes.</p>
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.addSensor(   { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-sensor'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my sensor'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
+                                <pre><code class="hljs javascript">.addSensor(   { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-sensor'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my sensor'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'range'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
   { <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
 )</code></pre>
 
@@ -2092,7 +2267,7 @@ Recipes.</p>
 
                         <div class="description lead">
 
-                            
+
 
                         </div>
 
@@ -2500,7 +2675,7 @@ Recipes.</p>
 
                         <h2 id="lib-index.js-module.exports.discoveronebrain">
                             <a href="#lib-index.js-module.exports.discoveronebrain" class="permalink">#</a>
-                            <span class="method-name" title="discoverOneBrain()">discoverOneBrain()</span>
+                            <span class="method-name" title="discoverOneBrain(multiInterface)">discoverOneBrain(multiInterface)</span>
                         </h2>
 
                         <div class="description lead">
@@ -2511,6 +2686,55 @@ Recipes.</p>
                         </div>
 
 
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>multiInterface</td>
+                                        <td>
+                                            <code>Boolean</code>
+                                        </td>
+                                        <td><p>to allow to search for a brain on all interfaces (optional, default is false). If you have a mdns discovery service e.g. Bonjour, it must be turned off in advance.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">neeoapi.discoverOneBrain(<span class="hljs-literal">true</span>)
+    .then(<span class="hljs-function">(<span class="hljs-params">brain</span>) =&gt;</span> {
+      ...
+    }</code></pre>
+
+
+                        </section>
 
 
                         <section class="returns">

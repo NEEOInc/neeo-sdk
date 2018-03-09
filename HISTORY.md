@@ -1,3 +1,11 @@
+## 0.49.2 (03/09/2018)
+- improved validation errors to include details about the component that failed validation
+- added DeviceBuilder function to set icon
+- added DeviceBuilder function to set preferred display name
+- fixes unhandled promise rejection when adapterid on incoming request is invalid
+- added support for brain search on multiple network interfaces, thanks @tmrobert8
+- updated dependencies
+
 ## 0.48.13 (12/21/2017)
 - add default timeout to network requests
 - add support for alwaysOn devices

@@ -216,15 +216,97 @@ describe('./lib/device/devicebuilder.js', function() {
       'apiversion': '1.0',
       'type': 'LIGHT',
       'manufacturer': 'NEEO',
-      setup: {},
-      deviceCapabilities: [],
+      'setup': {},
+      'deviceCapabilities': [],
       'devices': [
         {
           'name': 'example-adapter',
           'tokens': [
             'foo',
             'bar'
-          ]
+          ],
+        }
+      ],
+      'capabilities': [{
+        'type': 'button',
+        'name': 'example-button',
+        'label': 'my button',
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-button'
+      }]
+    });
+  });
+
+  it('should build device with a button and a custom device icon', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addAdditionalSearchToken('foo')
+      .addAdditionalSearchToken('bar')
+      .setType('mediaplayer')
+      .setIcon('sonos')
+      .addButton({ name: 'example-button', label: 'my button' })
+      .addButtonHandler(function(){})
+      .build('foo');
+
+    delete device.handler;
+    delete device.subscriptionFunction;
+
+    expect(device).to.deep.equal({
+      'adapterName': 'apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50',
+      'apiversion': '1.0',
+      'type': 'MEDIAPLAYER',
+      'manufacturer': 'NEEO',
+      'setup': {},
+      'deviceCapabilities': [],
+      'devices': [
+        {
+          'name': 'example-adapter',
+          'tokens': [
+            'foo',
+            'bar'
+          ],
+          'icon': 'sonos',
+        }
+      ],
+      'capabilities': [{
+        'type': 'button',
+        'name': 'example-button',
+        'label': 'my button',
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-button'
+      }]
+    });
+  });
+
+  it('should build device with a button and a custom specific device name', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addAdditionalSearchToken('foo')
+      .addAdditionalSearchToken('bar')
+      .setType('mediaplayer')
+      .setIcon('sonos')
+      .setSpecificName('VERY SPECIFIC')
+      .addButton({ name: 'example-button', label: 'my button' })
+      .addButtonHandler(function(){})
+      .build('foo');
+
+    delete device.handler;
+    delete device.subscriptionFunction;
+
+    expect(device).to.deep.equal({
+      'adapterName': 'apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50',
+      'apiversion': '1.0',
+      'type': 'MEDIAPLAYER',
+      'manufacturer': 'NEEO',
+      'setup': {},
+      'deviceCapabilities': [],
+      'devices': [
+        {
+          'name': 'example-adapter',
+          'tokens': [
+            'foo',
+            'bar'
+          ],
+          'icon': 'sonos',
+          'specificname': 'VERY SPECIFIC'
         }
       ],
       'capabilities': [{
@@ -264,7 +346,8 @@ describe('./lib/device/devicebuilder.js', function() {
   it('should build device with a text label', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
-      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .addTextLabel({ name: 'labelname', label: 'label' }, function() {
+      })
       .build('foo');
 
     const handler = device.handler.get('LABELNAME_SENSOR');
@@ -277,12 +360,12 @@ describe('./lib/device/devicebuilder.js', function() {
       'apiversion': '1.0',
       'type': 'ACCESSOIRE',
       'manufacturer': 'NEEO',
-      setup: {},
-      deviceCapabilities: [],
+      'setup': {},
+      'deviceCapabilities': [],
       'devices': [
         {
           'name': 'example-adapter',
-          'tokens': []
+          'tokens': [],
         }
       ],
       'capabilities': [{
@@ -294,12 +377,12 @@ describe('./lib/device/devicebuilder.js', function() {
           'type': 'custom',
         }
       },
-      {
-        'type': 'textlabel',
-        'name': 'labelname',
-        'label': 'label',
-        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
-        'sensor': 'LABELNAME_SENSOR'
+        {
+          'type': 'textlabel',
+          'name': 'labelname',
+          'label': 'label',
+          'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
+          'sensor': 'LABELNAME_SENSOR'
       }]
     });
   });
@@ -321,17 +404,17 @@ describe('./lib/device/devicebuilder.js', function() {
       'apiversion': '1.0',
       'type': 'LIGHT',
       'manufacturer': 'NEEO',
-      setup: {
-        discovery: true,
-        registration: false,
-        introheader: 'header text',
-        introtext: 'some hints'
+      'setup': {
+        'discovery': true,
+        'registration': false,
+        'introheader': 'header text',
+        'introtext': 'some hints'
       },
-      deviceCapabilities: [],
+      'deviceCapabilities': [],
       'devices': [
         {
           'name': 'example-adapter',
-          'tokens': []
+          'tokens': [],
         }
       ],
       'capabilities': [
@@ -460,12 +543,12 @@ describe('./lib/device/devicebuilder.js', function() {
       'apiversion': '1.0',
       'type': 'ACCESSOIRE',
       'manufacturer': 'NEEO',
-      setup: {},
-      deviceCapabilities: [],
+      'setup': {},
+      'deviceCapabilities': [],
       'devices': [
         {
           'name': 'example-adapter',
-          'tokens': []
+          'tokens': [],
         }
       ],
       'capabilities': [

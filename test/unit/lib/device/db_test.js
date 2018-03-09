@@ -41,7 +41,7 @@ describe('./lib/device/db.js', function() {
       ],
       device: {
         name: 'example-device',
-        tokens: ['foo'],
+        tokens: ['foo']
       }
     });
   });

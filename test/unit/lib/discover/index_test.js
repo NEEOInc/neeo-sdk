@@ -1,12 +1,17 @@
 'use strict';
 
-const sinon = require('sinon');
-const expect = require('chai').expect;
-const Discover = require('../../../../lib/discover/index.js');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
 const mdns = require('../../../../lib/discover/mdns.js');
+const should = chai.should;
+const sinon = require('sinon');
+const Discover = require('../../../../lib/discover/index.js');
 const BluePromise = require('bluebird');
 
 describe('./lib/discover - successful discover', function() {
+  chai.use(chaiAsPromised);
+  should(should);
+
   let sandbox;
   const mdnsReply = {
     addresses: [ '192.168.111.32' ],
@@ -46,17 +51,14 @@ describe('./lib/discover - successful discover', function() {
   });
 
   it('should discover brain', function() {
-    return Discover.discoverOneBrain()
-      .then((res) => {
-        expect(res).to.deep.equal({
-          name: 'NEEO Living Room',
-          host: 'NEEO-123.local',
-          port: 3000,
-          version: '0.29.3',
-          region: 'US',
-          iparray: [ '192.168.111.32' ]
-        });
-      });
+    return Discover.discoverOneBrain().should.eventually.deep.equal({
+      name: 'NEEO Living Room',
+      host: 'NEEO-123.local',
+      port: 3000,
+      version: '0.29.3',
+      region: 'US',
+      iparray: ['192.168.111.32']
+    });
   });
 });
 
@@ -78,10 +80,7 @@ describe('./lib/discover - failed discover', function() {
   });
 
   it('should discover invalid brain', function() {
-    return Discover.discoverOneBrain()
-      .catch((error) => {
-        expect(error.message).to.equal('INVALID_SERVICE_FOUND');
-      });
+    return Discover.discoverOneBrain().should.be.rejectedWith(Error, 'INVALID_SERVICE_FOUND');
   });
 
 });

@@ -7,8 +7,8 @@ describe('./lib/device/componentfactory.js', function() {
 
   it('should build a button', function() {
     const param = { name: 'buttonname'};
-    const result = ComponentFactory.buildButton('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const button = ComponentFactory.buildButton('PREFIX/', param);
+    expect(button).to.deep.equal({
       type: 'button',
       name: 'buttonname',
       label: 'buttonname',
@@ -18,8 +18,8 @@ describe('./lib/device/componentfactory.js', function() {
 
   it('should build a button, using optional label', function() {
     const param = { name: 'buttonname', label: 'a button'};
-    const result = ComponentFactory.buildButton('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const button = ComponentFactory.buildButton('PREFIX/', param);
+    expect(button).to.deep.equal({
       type: 'button',
       name: 'buttonname',
       label: 'a button',
@@ -29,8 +29,8 @@ describe('./lib/device/componentfactory.js', function() {
 
   it('should build a slider', function() {
     const param = { name: 'slidername'};
-    const result = ComponentFactory.buildRangeSlider('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const slider = ComponentFactory.buildRangeSlider('PREFIX/', param);
+    expect(slider).to.deep.equal({
       type: 'slider',
       name: 'slidername',
       label: 'slidername',
@@ -46,8 +46,8 @@ describe('./lib/device/componentfactory.js', function() {
 
   it('should build a minimal range sensor', function() {
     const param = { name: 'aRangeSensor' };
-    const result = ComponentFactory.buildSensor('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+    expect(sensor).to.deep.equal({
       type: 'sensor',
       name: 'aRangeSensor',
       label: 'aRangeSensor',
@@ -62,8 +62,8 @@ describe('./lib/device/componentfactory.js', function() {
 
   it('should build a advanced range sensor', function() {
     const param = { name: 'aRangeSensor', label: 'foo', unit: '"', range: [5, 12] };
-    const result = ComponentFactory.buildSensor('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+    expect(sensor).to.deep.equal({
       type: 'sensor',
       name: 'aRangeSensor',
       label: 'foo',
@@ -78,8 +78,8 @@ describe('./lib/device/componentfactory.js', function() {
 
   it('should build a power sensor', function() {
     const param = { name: 'aPowerSensor', label: 'foo', type: 'power' };
-    const result = ComponentFactory.buildSensor('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+    expect(sensor).to.deep.equal({
       type: 'sensor',
       name: 'aPowerSensor',
       label: 'foo',
@@ -92,8 +92,8 @@ describe('./lib/device/componentfactory.js', function() {
 
   it('should build a textlabel, without label', function() {
     const param = { name: 'textlabel' };
-    const result = ComponentFactory.buildTextLabel('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const textlabel = ComponentFactory.buildTextLabel('PREFIX/', param);
+    expect(textlabel).to.deep.equal({
       type: 'textlabel',
       name: 'textlabel',
       label: 'textlabel',
@@ -102,22 +102,22 @@ describe('./lib/device/componentfactory.js', function() {
     });
   });
 
-  it('should fail to build a imageurl, with invalid size', function() {
+  it('should fail to build an imageurl, with invalid size', function() {
     const param = { name: 'imageurl', size: 'invalid' };
     const fn = () => ComponentFactory.buildImageUrl('PREFIX/', param);
     expect(fn).to.throw(/INVALID_IMAGEURL_SIZE/);
   });
 
-  it('should to build a imageurl, with using no valid size definition - defaults to large', function() {
+  it('should to build an imageurl, with using no valid size definition - defaults to large', function() {
     const param = { name: 'imageurl', szie: 'large' };
-    const result = ComponentFactory.buildImageUrl('PREFIX/', param);
-    expect(result.size).to.equal('large');
+    const image = ComponentFactory.buildImageUrl('PREFIX/', param);
+    expect(image.size).to.equal('large');
   });
 
-  it('should build a imageurl, without label', function() {
+  it('should build an imageurl, without label', function() {
     const param = { name: 'imageurl'};
-    const result = ComponentFactory.buildImageUrl('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const image = ComponentFactory.buildImageUrl('PREFIX/', param);
+    expect(image).to.deep.equal({
       type: 'imageurl',
       name: 'imageurl',
       label: 'imageurl',
@@ -130,8 +130,8 @@ describe('./lib/device/componentfactory.js', function() {
 
   it('should build a slider with a fancy name', function() {
     const param = { name: 'slidername ✘✘ //\\<script>'};
-    const result = ComponentFactory.buildRangeSlider('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const slider = ComponentFactory.buildRangeSlider('PREFIX/', param);
+    expect(slider).to.deep.equal({
       type: 'slider',
       name: 'slidername%20%E2%9C%98%E2%9C%98%20%2F%2F%5C%3Cscript%3E',
       label: 'slidername%20%E2%9C%98%E2%9C%98%20%2F%2F%5C%3Cscript%3E',
@@ -147,8 +147,8 @@ describe('./lib/device/componentfactory.js', function() {
 
   it('should build a slider, using optional parameters', function() {
     const param = { name: 'slidername', label: 'sliderfoo', range: [0,10], unit: 'BAR'};
-    const result = ComponentFactory.buildRangeSlider('PREFIX/', param);
-    expect(result).to.deep.equal({
+    const slider = ComponentFactory.buildRangeSlider('PREFIX/', param);
+    expect(slider).to.deep.equal({
       type: 'slider',
       name: 'slidername',
       label: 'sliderfoo',
