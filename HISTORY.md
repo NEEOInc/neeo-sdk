@@ -1,7 +1,21 @@
+## 0.50.3 (05/14/2018)
+- added new device type MUSICPLAYER
+- added flag to hide the label for a textlabel
+- added support for lists for SDK devices
+- added more sanity checks, thanks @tmrobert8
+- added new bridgeDevice capability, for example a Philips Hue is a bridge device which can add multiple devices.
+- added new option to register a device
+- added new subscriptions to track devices used, added and removed on the Brain
+- update devicestate service, added registerStateUpdate function
+- implement CLI with devices start and third-party devices installation support
+- added Brain version validation before starting the server
+- (Breaking) addSwitch setter now provides a boolean value instead of string
+
 ## 0.49.2 (03/09/2018)
 - improved validation errors to include details about the component that failed validation
 - added DeviceBuilder function to set icon
 - added DeviceBuilder function to set preferred display name
+- added possibility to add directories that can be browsed on the SDK device
 - fixes unhandled promise rejection when adapterid on incoming request is invalid
 - added support for brain search on multiple network interfaces, thanks @tmrobert8
 - updated dependencies

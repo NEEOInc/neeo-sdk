@@ -10,6 +10,11 @@ describe('./lib/device/validation/capability.js', function() {
     expect(result).to.equal('alwaysOn');
   });
 
+  it('should get bridgeDevice capability', function() {
+    const result = capability.getCapability('bridgeDevice');
+    expect(result).to.equal('bridgeDevice');
+  });
+
   it('should fail to get a undefined capability', function() {
     expect(function() {
       capability.getCapability();

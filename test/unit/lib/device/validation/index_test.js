@@ -22,4 +22,19 @@ describe('./lib/device/validation.js', function() {
     expect(result.length > 3).to.equal(true);
   });
 
+  it('should return false when calling stringLength with invalid parameters', function() {
+    const result = validation.stringLength();
+    expect(result).to.equal(false);
+  });
+
+  it('should fail stringLength check', function() {
+    const result = validation.stringLength('aaa', 1);
+    expect(result).to.equal(false);
+  });
+
+  it('should succeed stringLength check', function() {
+    const result = validation.stringLength('aaa', 5);
+    expect(result).to.equal(true);
+  });
+
 });

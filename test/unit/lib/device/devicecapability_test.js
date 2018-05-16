@@ -25,7 +25,9 @@ describe('./lib/device/devicecapability.js', function() {
       imageUrls: [],
       switches: [],
       sensors: [],
+      directories: [],
       discovery: [],
+      registration: [],
     };
     const result = DeviceCapability.build(data, 'unittest');
     expect(result.capabilities).to.deep.equal([]);
@@ -43,6 +45,8 @@ describe('./lib/device/devicecapability.js', function() {
       switches: [],
       sensors: [],
       discovery: [],
+      registration: [],
+      directories: [],
       deviceidentifier: 'foobar'
     };
     const result = DeviceCapability.build(data, 'unittest');

@@ -26,6 +26,91 @@ describe('./lib/device/devicebuilder.js', function() {
     }).to.throw(/INVALID_DEVICETYPE/);
   });
 
+  it('should fail to create device, name too long', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter-disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf')
+        .setManufacturer('NEEO')
+        .build('foo');
+    }).to.throw(/DEVICENNAME_TOO_LONG/);
+  });
+
+  it('should fail to create device, invalid specific name', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .setSpecificName('example-adapter-disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf')
+        .build('foo');
+    }).to.throw(/SPECIFIC_NAME_TOO_LONG/);
+  });
+
+  it('should fail to create device, invalid capability name (button)', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .addButton({ name: 'example-button-disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf', label: 'my button' })
+        .addButtonHandler(function(){})
+        .build('foo');
+    }).to.throw(/NAME_TOO_LONG_example-button-disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf/);
+  });
+
+  it('should fail to create device, invalid capability label (button)', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter')
+        .setManufacturer('NEEO')
+        .addButton({ name: 'example-button', label: 'my button disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf' })
+        .addButtonHandler(function(){})
+        .build('foo');
+    }).to.throw(/LABEL_TOO_LONG_my button disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf/);
+  });
+
+  it('should fail to create device, invalid capability name (textlabel)', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addTextLabel({ name: 'labelname disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf', label: 'label' }, function(){})
+        .build('foo');
+    }).to.throw(/NAME_TOO_LONG_labelname disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf/);
+  });
+
+  it('should fail to create device, invalid capability label (textlabel)', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addTextLabel({ name:'labelname', label: 'label disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf' }, function(){})
+        .build('foo');
+    }).to.throw(/LABEL_TOO_LONG_label disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf/);
+  });
+
+  it('should fail to create directory, invalid missing name', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addDirectory({  },
+          { getter: () => {}, action: () => {} })
+        .build('foo');
+    }).to.throw(/MISSING_ELEMENT_NAME/);
+  });
+
+  it('should fail to create directory, missing label', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addDirectory({ name: 'foo' },
+          { getter: () => {}, action: () => {} })
+        .build('foo');
+    }).to.throw(/MISSING_DIRECTORY_LABEL/);
+  });
+
+  it('should fail to create directory, invalid label', function() {
+    expect(function() {
+      new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addDirectory({ name: 'foo', label: 'erbfeirufbuierbfeirubfierubfiuerbfiuerbfiuerbfiuerbfiuerbfiuerbfieurbfiuerbfiuerbfbeirubfi' },
+          { getter: () => {}, action: () => {} })
+        .build('foo');
+    }).to.throw(/DIRECTORY_LABEL_TOO_LONG_erbfeirufbuierbfeirubfierubfiuerbfiuerbfiuerbfiuerbfiuerbfiuerbfieurbfiuerbfiuerbfbeirubfi/);
+  });
+
   it('should fail to create device, missing button controller', function() {
     expect(function() {
       new DeviceBuilder('example-adapter')
@@ -74,23 +159,117 @@ describe('./lib/device/devicebuilder.js', function() {
     }).to.throw(/DISCOVERHANLDER_ALREADY_DEFINED/);
   });
 
-  it('should fail to create device, multiple initialiseFunctions', function() {
-    expect(function() {
-      new DeviceBuilder('example-adapter')
-        .setManufacturer('NEEO')
-        .registerInitialiseFunction(function(){})
-        .registerInitialiseFunction(function(){});
-    }).to.throw(/INITIALISATION_FUNCTION_ALREADY_DEFINED/);
-  });
+  describe('enableRegistration', function() {
+    let device, registrationController;
+    const type = 'SECURITY_CODE';
+    const headerText = 'header text';
+    const description = 'some hints';
 
-  it('should fail to create device, multiple registerSubscriptionFunction', function() {
-    expect(function() {
-      new DeviceBuilder('example-adapter')
-        .setManufacturer('NEEO')
-        .registerSubscriptionFunction(function(){})
-        .registerSubscriptionFunction(function(){});
-    }).to.throw(/SUBSCRIPTIONHANDLER_ALREADY_DEFINED/);
-  });
+    beforeEach(function() {
+      device = new DeviceBuilder('example-adapter', 'unitTest')
+        .setManufacturer('NEEO');
+
+      registrationController = {
+        register: () => {},
+        isRegistered: () => {},
+      };
+    });
+
+    it('should fail to create device, invalid registration option', function() {
+      expect(function() {
+        device
+          .enableRegistration(undefined, registrationController);
+      }).to.throw(/INVALID_REGISTRATION/);
+    });
+
+    it('should catch invalid controller', function() {
+      expect(function() {
+        device
+          .enableRegistration({ headerText, description, type, }, 'notAFunction');
+      }).to.throw(/INVALID_REGISTRATION_CONTROLLER/);
+    });
+
+    it('should catch controller missing register function', function() {
+      // GIVEN
+      registrationController.register = undefined;
+
+      expect(function() {
+        device
+          .enableRegistration({ headerText, description, type, }, registrationController);
+      }).to.throw(/INVALID_REGISTRATION_CONTROLLER/);
+    });
+
+    it('should catch controller missing isRegistered function', function() {
+      // GIVEN
+      registrationController.isRegistered = undefined;
+
+      expect(function() {
+        device
+          .enableRegistration({ headerText, description, type, }, registrationController);
+      }).to.throw(/INVALID_REGISTRATION_CONTROLLER/);
+    });
+
+    it('should catch invalid type', function() {
+      expect(function() {
+        device
+          .enableRegistration({ headerText, description, type: 'IP_ADDRESS', }, registrationController);
+      }).to.throw(/INVALID_REGISTRATION_TYPE/);
+    });
+
+    it('should catch missing header', function() {
+      expect(function() {
+        device
+          .enableRegistration({ description, type, }, registrationController);
+      }).to.throw(/MISSING_REGISTRATION_HEADERTEXT_OR_DESCRIPTION/);
+    });
+
+    it('should catch missing description', function() {
+      expect(function() {
+        device
+          .enableRegistration({ headerText, type, }, registrationController);
+      }).to.throw(/MISSING_REGISTRATION_HEADERTEXT_OR_DESCRIPTION/);
+    });
+
+    it('should fail to create device, multiple enableRegistration', function() {
+      expect(function() {
+        device
+          .enableRegistration({ headerText, description, type, }, registrationController)
+          .enableRegistration({ headerText, description, type, }, registrationController);
+      }).to.throw(/REGISTERHANLDER_ALREADY_DEFINED/);
+    });
+
+    it('should build device with a slider and enabled registration - but misses the discovery step', function() {
+      expect(() => {
+        device
+          .setType('light')
+          .enableRegistration({ headerText, description, type, }, registrationController)
+          .addSlider({ name: 'example-slider', label: 'my slider', range: [0,200], unit: '@' },
+            { setter: function() {}, getter: function() {} })
+          .build('foo');
+      }).to.throw(/REGISTRATION_ENABLED_MISSING_DISCOVERY_STEP/);
+    });
+
+    it('should build device with a enabled registration and discovery', function() {
+      device
+        .setType('light')
+        .enableRegistration({ headerText, description, type, }, registrationController)
+        .enableDiscovery({ headerText, description, }, function(){})
+        .addSlider({ name: 'example-slider', label: 'my slider', range: [0,200], unit: '@' },
+          { setter: function() {}, getter: function() {} })
+        .build('foo');
+
+      expect(device.deviceCapabilities).to.deep.equal(['register-user-account']);
+      expect(device.setup).to.deep.equal({
+        'discovery': true,
+        'introheader': 'header text',
+        'introtext': 'some hints',
+        'registration': true,
+        'registrationHeader': 'header text',
+        'registrationText': 'some hints',
+        'registrationType': 'SECURITY_CODE',
+      });
+    });
+});
 
   it('should fail to create device, controller is not a function', function() {
     expect(function() {
@@ -318,21 +497,155 @@ describe('./lib/device/devicebuilder.js', function() {
     });
   });
 
-  it('should build device with a subscriptionFunction', function() {
-    let callback;
+  describe('registerSubscriptionFunction', function() {
+    it('should build device with a subscriptionFunction', function() {
+      // GIVEN
+      function callback() {}
 
-    function registerCallback(cb) {
-      callback = cb;
-    }
+      // WHEN
+      const device = new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addTextLabel({ name:'name', label: 'label' }, () => {})
+        .registerSubscriptionFunction(callback)
+        .build('foo');
 
-    const device = new DeviceBuilder('example-adapter', 'XXX')
-      .setManufacturer('NEEO')
-      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
-      .registerSubscriptionFunction(registerCallback)
-      .build('foo');
+      // THEN
+      expect(device.subscriptionFunction).to.deep.equal(callback);
+    });
 
-    expect(device.subscriptionFunction).to.deep.equal(registerCallback);
+    it('should fail to create device, multiple registerSubscriptionFunction', function() {
+      expect(() => {
+        new DeviceBuilder('example-adapter')
+          .setManufacturer('NEEO')
+          .registerSubscriptionFunction(function(){})
+          .registerSubscriptionFunction(function(){});
+      }).to.throw(/SUBSCRIPTIONHANDLER_ALREADY_DEFINED/);
+    });
+
+    it('should build device with a subscriptionFunction', function() {
+      // GIVEN
+      const registerCallback = 42;
+
+      // WHEN/THEN
+      expect(() => {
+        new DeviceBuilder('example-adapter', 'XXX')
+          .setManufacturer('NEEO')
+          .registerSubscriptionFunction(registerCallback);
+      }).to.throw(/INVALID_SUBSCRIPTIONHANDLER_FUNCTION/);
+    });
   });
+
+  describe('registerInitialiseFunction', function() {
+    it('should build device with an initialiseFunction', function() {
+      // GIVEN
+      function callback() {}
+
+      // WHEN
+      const device = new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addTextLabel({ name:'name', label: 'label' }, () => {})
+        .registerInitialiseFunction(callback)
+        .build('foo');
+
+      // THEN
+      expect(device.initialiseFunction).to.deep.equal(callback);
+    });
+
+    it('should fail to create device, multiple initialiseFunctions', function() {
+      expect(() => {
+        new DeviceBuilder('example-adapter')
+          .setManufacturer('NEEO')
+          .registerInitialiseFunction(() => {})
+          .registerInitialiseFunction(() => {});
+      }).to.throw(/INITIALISATION_FUNCTION_ALREADY_DEFINED/);
+    });
+
+    it('should build device with a initialiseFunction', function() {
+      // GIVEN
+      const registerCallback = 42;
+
+      // WHEN/THEN
+      expect(() => {
+        new DeviceBuilder('example-adapter', 'XXX')
+          .setManufacturer('NEEO')
+          .registerInitialiseFunction(registerCallback);
+      }).to.throw(/INVALID_INITIALISATION_FUNCTION/);
+    });
+  });
+
+  describe('registerDeviceSubscriptionHandler', function() {
+    let device;
+    const deviceAdded = () => {};
+    const deviceRemoved = () => {};
+    const initializeDeviceList = () => {};
+
+    beforeEach(function() {
+      device = new DeviceBuilder('example-adapter', 'unitTest')
+        .setManufacturer('NEEO')
+        .addTextLabel({ name:'name', label: 'label' }, () => {});
+    });
+
+    it('should reject multiple handlers', function() {
+      // GIVEN
+      const handler = { deviceAdded, deviceRemoved, initializeDeviceList };
+
+      // WHEN
+      expect(() => {
+        device.registerDeviceSubscriptionHandler(handler)
+          .registerDeviceSubscriptionHandler(handler);
+      }).to.throw(/DEVICESUBSCRIPTIONHANDLERS_ALREADY_DEFINED/);
+    });
+
+    it('should reject undefined handler', function() {
+      // WHEN
+      expect(() => {
+        device.registerDeviceSubscriptionHandler();
+      }).to.throw(/INVALID_SUBSCRIPTION_CONTROLLER_UNDEFINED/);
+    });
+
+    it('should reject handlers missing deviceAdded', function() {
+      // GIVEN
+      const handler = { deviceRemoved, initializeDeviceList };
+
+      // WHEN
+      expect(() => {
+        device.registerDeviceSubscriptionHandler(handler);
+      }).to.throw(/INVALID_SUBSCRIPTION_CONTROLLER missing/);
+    });
+
+    it('should reject handlers missing deviceRemoved', function() {
+      // GIVEN
+      const handler = { deviceAdded, initializeDeviceList };
+
+      // WHEN
+      expect(() => {
+        device.registerDeviceSubscriptionHandler(handler);
+      }).to.throw(/INVALID_SUBSCRIPTION_CONTROLLER missing/);
+    });
+
+    it('should reject handlers missing initializeDeviceList', function() {
+      // GIVEN
+      const handler = { deviceAdded, deviceRemoved };
+
+      // WHEN
+      expect(() => {
+        device.registerDeviceSubscriptionHandler(handler);
+      }).to.throw(/INVALID_SUBSCRIPTION_CONTROLLER missing/);
+    });
+
+    it('should build device with a subscriptionFunction', function() {
+      // GIVEN
+      const handler = { deviceAdded, deviceRemoved, initializeDeviceList };
+
+      // WHEN
+      device.registerDeviceSubscriptionHandler(handler)
+        .build('foo');
+
+      // THEN
+      expect(device.deviceSubscriptionHandlers).to.deep.equal(handler);
+    });
+  });
+
 
   it('should build device, use button group', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
@@ -381,9 +694,55 @@ describe('./lib/device/devicebuilder.js', function() {
           'type': 'textlabel',
           'name': 'labelname',
           'label': 'label',
+          isLabelVisible: undefined,
           'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
           'sensor': 'LABELNAME_SENSOR'
       }]
+    });
+  });
+
+  it('should build a device with a text label when isLabelVisible is set to false', function () {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addTextLabel({name: 'labelname', label: 'label', isLabelVisible: false}, function () {
+      })
+      .build('foo');
+
+    const handler = device.handler.get('LABELNAME_SENSOR');
+    expect(typeof handler.controller.getter).to.equal('function');
+
+    delete device.handler;
+    delete device.subscriptionFunction;
+    expect(device).to.deep.equal({
+      'adapterName': 'apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50',
+      'apiversion': '1.0',
+      'type': 'ACCESSOIRE',
+      'manufacturer': 'NEEO',
+      'setup': {},
+      'deviceCapabilities': [],
+      'devices': [
+        {
+          'name': 'example-adapter',
+          'tokens': [],
+        }
+      ],
+      'capabilities': [{
+        'type': 'sensor',
+        'name': 'LABELNAME_SENSOR',
+        'label': 'label',
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/LABELNAME_SENSOR',
+        'sensor': {
+          'type': 'custom',
+        }
+      },
+        {
+          'type': 'textlabel',
+          'name': 'labelname',
+          'label': 'label',
+          isLabelVisible: false,
+          'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
+          'sensor': 'LABELNAME_SENSOR'
+        }]
     });
   });
 
@@ -406,9 +765,8 @@ describe('./lib/device/devicebuilder.js', function() {
       'manufacturer': 'NEEO',
       'setup': {
         'discovery': true,
-        'registration': false,
         'introheader': 'header text',
-        'introtext': 'some hints'
+        'introtext': 'some hints',
       },
       'deviceCapabilities': [],
       'devices': [
@@ -590,6 +948,58 @@ describe('./lib/device/devicebuilder.js', function() {
 
     const supportsTiming = device.supportsTiming();
     expect(supportsTiming).to.equal(true);
+  });
+
+  it('should build device with a directory', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addDirectory({ name: 'example-directory', label: 'my directory' },
+        { getter: () => {}, action: () => {} })
+      .build('foo');
+
+    delete device.handler;
+    delete device.subscriptionFunction;
+
+    expect(device).to.deep.equal({
+      'adapterName': 'apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50',
+      'apiversion': '1.0',
+      'type': 'ACCESSOIRE',
+      'manufacturer': 'NEEO',
+      'setup': {},
+      'deviceCapabilities': [],
+      'devices': [
+        {
+          'name': 'example-adapter',
+          'tokens': [],
+        }
+      ],
+      'capabilities': [
+        {
+          'label': 'my directory',
+          'name': 'example-directory',
+          'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-directory',
+          'type': 'directory'
+        }
+      ]
+    });
+  });
+
+  it('should fail to add directory without controller action', function() {
+    expect(() => {
+      new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addDirectory({ name: 'example-directory', label: 'my directory' },
+          { getter: () => {} });
+    }).to.throw(/INVALID_DIRECTORY_CONTROLLER_ACTION_NOT_A_FUNCTION/);
+  });
+
+  it('should fail to add directory without controller getter', function() {
+    expect(() => {
+      new DeviceBuilder('example-adapter', 'XXX')
+        .setManufacturer('NEEO')
+        .addDirectory({ name: 'example-directory', label: 'my directory' },
+          { action: () => {} });
+    }).to.throw(/INVALID_DIRECTORY_CONTROLLER_GETTER_NOT_A_FUNCTION/);
   });
 
 });

@@ -47,79 +47,265 @@ describe('./lib/device/handler/index.js', function() {
     expect(db.getDevice).to.have.been.calledWith(id);
   });
 
-  it('should fail to call discover without controller', function() {
-    return requestHandler.discover()
-      .catch((error) => {
-        expect(error.message).to.equal('INVALID_DISCOVER_PARAMETER');
-      });
+  describe('discover()', function() {
+    it('should fail without controller', function() {
+      return requestHandler.discover()
+        .catch((error) => {
+          expect(error.message).to.equal('INVALID_DISCOVER_PARAMETER');
+        });
+    });
+
+    it('should fail with invalid controller', function() {
+      return requestHandler.discover({ controller: 123 })
+        .catch((error) => {
+          expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
+        });
+    });
+
+    it('should forward data to register handler', function() {
+      const handler = {
+        controller: sinon.stub().resolves([]),
+      };
+
+      return requestHandler.discover(handler)
+        .then(() => {
+          expect(handler.controller).to.have.been.calledOnce;
+        });
+    });
   });
 
-  it('should fail to call discover with invalid controller', function() {
-    return requestHandler.discover({ controller: 123 })
-      .catch((error) => {
-        expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
-      });
-  });
+  describe('isRegistered()', function() {
+    it('should fail with invalid controller', function() {
+      return requestHandler.isRegistered({})
+        .catch((error) => {
+          expect(error.message).to.equal('INVALID_REGISTERED_PARAMETER');
+        });
+    });
 
-  it('should fail to call handleGet without parameter', function() {
-    return requestHandler.handleGet()
-      .catch((error) => {
-        expect(error.message).to.equal('INVALID_GET_PARAMETER');
-      });
-  });
+    it('should fail with non function controller', function() {
+      return requestHandler.isRegistered({ controller: 123 })
+        .catch((error) => {
+          expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
+        });
+    });
 
-  it('should fail to call handleGet with invalid componenttype', function() {
-    return requestHandler.handleGet({
-        handler: {
-          componenttype: 'foo',
-          controller: {}
+    it('should forward data to register handler', function() {
+      const handler = {
+        controller: {
+          isRegistered: sinon.stub(),
         },
-      })
-      .catch((error) => {
-        expect(error.message).to.equal('INVALID_GET_COMPONENT');
-      });
+      };
+
+      return requestHandler.isRegistered(handler)
+        .then(() => {
+          expect(handler.controller.isRegistered).to.have.been.calledOnce;
+        });
+    });
   });
 
-  it('should fail to call handleGet without controller', function() {
-    return requestHandler.handleGet({
-        handler: {
-          componenttype: 'switch',
-          controller: {}
+  describe('register()', function() {
+    it('should fail with invalid controller', function() {
+      return requestHandler.register({})
+        .catch((error) => {
+          expect(error.message).to.equal('INVALID_REGISTER_PARAMETER');
+        });
+    });
+
+    it('should fail with non function controller', function() {
+      return requestHandler.register({ controller: 123 })
+        .catch((error) => {
+          expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
+        });
+    });
+
+    it('should forward data to register handler', function() {
+      const handler = {
+        controller: {
+          register: sinon.stub(),
         },
-      })
-      .catch((error) => {
-        expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
-      });
+      };
+      const userData = { securityCode: 'unit test' };
+      return requestHandler.register(handler, userData)
+        .then(() => {
+          expect(handler.controller.register).to.have.been.calledWith(userData);
+        });
+    });
   });
 
-  it('should fail to call handleSet without parameter', function() {
-    return requestHandler.handleSet()
-      .catch((error) => {
-        expect(error.message).to.equal('INVALID_SET_PARAMETER');
-      });
-  });
+  describe('subscribe()', function() {
+    it('should skip device without controller', function() {
+      return requestHandler.subscribe({})
+        .then((response) => {
+          expect(response.success).to.equal(true);
+        });
+    });
 
-  it('should fail to call handleSet without controller', function() {
-    return requestHandler.handleSet({
-        handler: {
-          componenttype: 'switch'
+    it('should fail with non function deviceAdded', function() {
+      return requestHandler.subscribe({ controller: {} })
+        .catch((error) => {
+          expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
+        });
+    });
+
+    it('should forward data to deviceAdded handler', function() {
+      const handler = {
+        controller: {
+          deviceAdded: sinon.stub(),
         },
-      })
-      .catch((error) => {
-        expect(error.message).to.equal('INVALID_SET_PARAMETER');
-      });
+      };
+      const deviceId = '41';
+      return requestHandler.subscribe(handler, deviceId)
+        .then(() => {
+          expect(handler.controller.deviceAdded).to.have.been.calledWith(deviceId);
+        });
+    });
   });
 
-  it('should fail to call handleSet without controller', function() {
-    return requestHandler.handleSet({
-        handler: {
-          componenttype: 'switch',
-          controller: {}
+  describe('unsubscribe()', function() {
+    it('should skip device without controller', function() {
+      return requestHandler.unsubscribe({})
+        .then((response) => {
+          expect(response.success).to.equal(true);
+        });
+    });
+
+    it('should fail with non function deviceRemoved', function() {
+      return requestHandler.unsubscribe({ controller: {} })
+        .catch((error) => {
+          expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
+        });
+    });
+
+    it('should forward data to deviceRemoved handler', function() {
+      const handler = {
+        controller: {
+          deviceRemoved: sinon.stub(),
         },
-      })
-      .catch((error) => {
-        expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
-      });
+      };
+      const deviceId = '41';
+      return requestHandler.unsubscribe(handler, deviceId)
+        .then(() => {
+          expect(handler.controller.deviceRemoved).to.have.been.calledWith(deviceId);
+        });
+    });
+  });
+
+  describe('handleGet()', function() {
+    it('should fail without parameter', function() {
+      return requestHandler.handleGet()
+        .catch((error) => {
+          expect(error.message).to.equal('INVALID_GET_PARAMETER');
+        });
+    });
+
+    it('should fail with invalid componenttype', function() {
+      return requestHandler.handleGet({
+          handler: {
+            componenttype: 'foo',
+            controller: {}
+          },
+        })
+        .catch((error) => {
+          expect(error.message).to.equal('INVALID_GET_COMPONENT');
+        });
+    });
+
+    it('should fail without controller', function() {
+      return requestHandler.handleGet({
+          handler: {
+            componenttype: 'switch',
+            controller: {}
+          },
+        })
+        .catch((error) => {
+          expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
+        });
+    });
+  });
+
+  describe('handleAction()', function() {
+    it('should fail without parameter', function() {
+      return requestHandler.handleAction()
+        .catch((error) => {
+          expect(error.message).to.equal('INVALID_ACTION_PARAMETER');
+        });
+    });
+
+    it('should fail with invalid componenttype', function() {
+      return requestHandler.handleAction({
+          handler: {
+            componenttype: 'foo',
+            controller: {}
+          },
+        })
+        .catch((error) => {
+          expect(error.message).to.equal('INVALID_ACTION_COMPONENT: foo');
+        });
+    });
+
+    it('should fail without controller', function() {
+      return requestHandler.handleAction({
+          handler: {
+            componenttype: 'directory',
+            controller: {}
+          },
+        })
+        .catch((error) => {
+          expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
+        });
+    });
+  });
+
+  describe('handleSet()', function() {
+    it('should fail without parameter', function() {
+      return requestHandler.handleSet()
+        .catch((error) => {
+          expect(error.message).to.equal('INVALID_SET_PARAMETER');
+        });
+    });
+
+    it('should failwithout controller', function() {
+      return requestHandler.handleSet({
+          handler: {
+            componenttype: 'switch'
+          },
+        })
+        .catch((error) => {
+          expect(error.message).to.equal('INVALID_SET_PARAMETER');
+        });
+    });
+
+    it('should failwithout controller', function() {
+      return requestHandler.handleSet({
+          handler: {
+            componenttype: 'switch',
+            controller: {}
+          },
+        })
+        .catch((error) => {
+          expect(error.message).to.equal('CONTROLLER_IS_NOT_A_FUNCTION');
+        });
+    });
+
+    it('should call controller setter with boolean for switch components', function() {
+      let switchState;
+      const controller = {
+        setter: (_, newValue) => (switchState = newValue),
+        getter: () => {},
+      };
+
+      return requestHandler
+        .handleSet({
+          handler: {
+            componenttype: 'switch',
+            controller,
+          },
+          value: 'true',
+        })
+        .then(() => {
+          expect(switchState).to.equal(true);
+        });
+    });
   });
 
 });

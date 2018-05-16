@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.49.2 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.50.3 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
@@ -163,7 +163,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.49.2</small>
+            <small>0.50.3</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -221,6 +221,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
                         <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-enableregistration" title="enableRegistration">enableRegistration</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-supportstiming" title="supportsTiming">supportsTiming</a>
                         </li>
 
@@ -237,6 +242,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-registerinitialisefunction" title="registerInitialiseFunction">registerInitialiseFunction</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-registerdevicesubscriptionhandler" title="registerDeviceSubscriptionHandler">registerDeviceSubscriptionHandler</a>
                         </li>
 
 
@@ -286,6 +296,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
                         <li class="method-link scope-public">
+                            <a href="#lib-device-devicebuilder.js-adddirectory" title="addDirectory">addDirectory</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
                             <a href="#lib-device-devicebuilder.js-addcapability" title="addCapability">addCapability</a>
                         </li>
 
@@ -302,6 +317,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-device-implementationservices-devicestate.js-adddevice" title="addDevice">addDevice</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-implementationservices-devicestate.js-registerstateupdate" title="registerStateUpdate">registerStateUpdate</a>
                         </li>
 
 
@@ -327,6 +347,41 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-device-implementationservices-devicestate.js-buildinstance" title="buildInstance">buildInstance</a>
+                        </li>
+
+
+                        </ul>
+
+                    </li>
+
+
+                    <li>
+                        <a href="#lib/device/lists/listBuilder.js" class="file"><b>lib/device/lists/listBuilder.js</b></a>
+                        <ul>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-lists-listbuilder.js-addlistitem" title="addListItem">addListItem</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-lists-listbuilder.js-addlistheader" title="addListHeader">addListHeader</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-lists-listbuilder.js-addlisttiles" title="addListTiles">addListTiles</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-lists-listbuilder.js-addlistinfoitem" title="addListInfoItem">addListInfoItem</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-device-lists-listbuilder.js-addlistbuttons" title="addListButtons">addListButtons</a>
                         </li>
 
 
@@ -362,6 +417,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#lib-index.js-module.exports.builddevicestate" title="buildDeviceState">buildDeviceState</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#lib-index.js-module.exports.buildbrowselist" title="buildBrowseList">buildBrowseList</a>
                         </li>
 
 
@@ -613,7 +673,7 @@ input[type="search"]::-webkit-search-cancel-button {
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.setIcon(<span class="hljs-string">'sonos'</span>)</code></pre>
+                                <pre><code class="hljs javascript">.setIcon(<span class="hljs-string">'tv'</span>)</code></pre>
 
 
                         </section>
@@ -648,7 +708,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <div class="description lead">
 
-
+                            
 
                         </div>
 
@@ -852,7 +912,7 @@ input[type="search"]::-webkit-search-cancel-button {
                                         <td>
                                             <code>function</code>
                                         </td>
-                                        <td><p>Callback function which will be called when the NEEO brain search your device. This function should return an array of found devices, each object with an <strong>id</strong> attribute (unique device identifier, for example mac address), <strong>name</strong> the display name and the optional <strong>reachable</strong> attribute (true: device is reachable, false: device is not reachable)</p>
+                                        <td><p>Callback function which will be called when the NEEO Brain search your device. This function should return an array of found devices, each object with an <strong>id</strong> attribute (unique device identifier, for example mac address), <strong>name</strong> the display name and the optional <strong>reachable</strong> attribute (true: device is reachable, false: device is not reachable)</p>
 </td>
                                         <td>
                                         </td>
@@ -889,6 +949,162 @@ input[type="search"]::-webkit-search-cancel-button {
        <span class="hljs-attr">reachable</span>: <span class="hljs-literal">false</span>
      }
    ];
+  }
+)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-enableregistration">
+                            <a href="#lib-device-devicebuilder.js-enableregistration" class="permalink">#</a>
+                            <span class="method-name" title="enableRegistration(options, controller)">enableRegistration(options, controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Enable a registration or pairing step before discovery your device, for example if the device you want support needs to a pairing code to work. This function can be only defined once per device definition.
+enableRegistration can only be used when enableDiscovery is also used - for the user registration takes place before discovery
+<strong>NOTE</strong>: This function is experimental and should not be used in production.
+It is subject to change, currently account login is not supported the data is transfer is not yet encrypted!</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>options</td>
+                                        <td>
+                                            <code>object</code>
+                                        </td>
+                                        <td><p>An object which contains</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>options.type</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>defines the type of registration, currently only SECURITY_CODE pairing registrations are supported.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>options.headerText</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>this header will be displayed when the user starts the register process</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>options.description</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>Text displayed during registration, should guide the user through how to find and enter the credentials needed.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>Controller callbacks Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller.register</td>
+                                        <td>
+                                            <code>function</code>
+                                        </td>
+                                        <td><p>Callback function which will be called when the user starts the registration, eg. the user entries will be passed to your code. The callback has one parameter: <strong>credentials</strong>: will be populated with user provided value, eg. the security code.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller.isRegistered</td>
+                                        <td>
+                                            <code>function</code>
+                                        </td>
+                                        <td><p>callback that must resolve true if valid credentials already exists, so the user does not need to register again. Note: if you always return false, the user can provide credentials each time a new device is added.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.enableRegistration(
+  {
+    <span class="hljs-attr">type</span>: <span class="hljs-string">'SECURITY_CODE'</span>,
+    <span class="hljs-attr">headerText</span>: <span class="hljs-string">'DEVICE REGISTRATION'</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">'Please enter the pairing code of your device'</span>,
+  },
+  {
+    <span class="hljs-attr">register</span>: <span class="hljs-function">(<span class="hljs-params">credentials</span>) =&gt;</span> myCredentials = credentials,
+    <span class="hljs-attr">isRegistered</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> booleanIfValidCredentialsAlreadyExists,
   }
 )</code></pre>
 
@@ -968,7 +1184,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <h2 id="lib-device-devicebuilder.js-definetiming">
                             <a href="#lib-device-devicebuilder.js-definetiming" class="permalink">#</a>
-                            <span class="method-name" title="defineTiming(param)">defineTiming(param)</span>
+                            <span class="method-name" title="defineTiming(configuration)">defineTiming(configuration)</span>
                         </h2>
 
                         <div class="description lead">
@@ -997,16 +1213,41 @@ input[type="search"]::-webkit-search-cancel-button {
 
                                     <tbody>
                                     <tr>
-                                        <td>param</td>
+                                        <td>configuration</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
-                                        <td><p>An object which contains at least one of the following attributes:</p>
-<ul>
-<li><strong>powerOnDelayMs</strong>, how long does it take (in ms) until the device is powered on and is ready to accept new commands</li>
-<li><strong>sourceSwitchDelayMs</strong>,: how long does it take (in ms) until the device switched input and is ready to accept new commands</li>
-<li><strong>shutdownDelayMs</strong>: how long does it take (in ms) until the device is powered off and is ready to accept new commands</li>
-</ul>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.powerOnDelayMs</td>
+                                        <td>
+                                            <code>Number</code>
+                                        </td>
+                                        <td><p>how long does it take (in ms) until the device is powered on and is ready to accept new commands</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.sourceSwitchDelayMs</td>
+                                        <td>
+                                            <code>Number</code>
+                                        </td>
+                                        <td><p>how long does it take (in ms) until the device switched input and is ready to accept new commands</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.shutdownDelayMs</td>
+                                        <td>
+                                            <code>Number</code>
+                                        </td>
+                                        <td><p>how long does it take (in ms) until the device is powered off and is ready to accept new commands</p>
 </td>
                                         <td>
                                         </td>
@@ -1192,7 +1433,7 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function">(<span cl
                                         <td>
                                             <code>function</code>
                                         </td>
-                                        <td><p>Callback function which will be called when the device should be initialised. Controller must return a value or a promise object.</p>
+                                        <td><p>Callback function which will be called when the device should be initialised.</p>
 </td>
                                         <td>
                                         </td>
@@ -1214,7 +1455,6 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function">(<span cl
 
                                 <pre><code class="hljs javascript">
 .registerInitialiseFunction(controller.initialise)
-
 
 <span class="hljs-comment">// Example code in the controller:</span>
 <span class="hljs-built_in">module</span>.exports.initialise = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -1249,9 +1489,134 @@ deviceBuilder.registerSubscriptionFunction(<span class="hljs-function">(<span cl
 
                     <div class="method scope-public">
 
+                        <h2 id="lib-device-devicebuilder.js-registerdevicesubscriptionhandler">
+                            <a href="#lib-device-devicebuilder.js-registerdevicesubscriptionhandler" class="permalink">#</a>
+                            <span class="method-name" title="registerDeviceSubscriptionHandler(controller)">registerDeviceSubscriptionHandler(controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This allows tracking which devices are currently used on the Brain, it can be used to avoid sending Brain notifications for devices not added on the Brain,
+to remove registration credentials when the last device is removed,
+or to free up resources if no devices are used by the Brain.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>Controller callbacks Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller.deviceAdded</td>
+                                        <td>
+                                            <code>function</code>
+                                        </td>
+                                        <td><p>Callback function used when a device from this SDK is added on the Brain. Can be used to start listening to updates for that device. The callback has one parameter:
+<strong>deviceId</strong>: string identifying the device.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller.deviceRemoved</td>
+                                        <td>
+                                            <code>function</code>
+                                        </td>
+                                        <td><p>Callback function used when a device from this SDK is removed on the Brain. Can be used to stop listening to updates for that device. The callback has one parameter:
+<strong>deviceId</strong>: string identifying the device.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller.initializeDeviceList</td>
+                                        <td>
+                                            <code>function</code>
+                                        </td>
+                                        <td><p>Callback function used on startup once the SDK can reach the Brain, this is called on startup with the current subscriptions removing the need to save them in the SDK.
+The callback has one parameter:
+<strong>deviceIds</strong>: Array of deviceId string for all devices of this SDK currently on the Brain.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.registerDeviceSubscriptionHandler(
+  {
+    <span class="hljs-attr">deviceAdded</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> debug(<span class="hljs-string">'device added'</span>, deviceId),
+    <span class="hljs-attr">deviceRemoved</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> debug(<span class="hljs-string">'device removed'</span>, deviceId),
+    <span class="hljs-attr">initializeDeviceList</span>: <span class="hljs-function">(<span class="hljs-params">deviceIds</span>) =&gt;</span> debug(<span class="hljs-string">'existing devices'</span>, deviceIds),
+  }
+)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
                         <h2 id="lib-device-devicebuilder.js-addbutton">
                             <a href="#lib-device-devicebuilder.js-addbutton" class="permalink">#</a>
-                            <span class="method-name" title="addButton(param)">addButton(param)</span>
+                            <span class="method-name" title="addButton(configuration)">addButton(configuration)</span>
                         </h2>
 
                         <div class="description lead">
@@ -1282,11 +1647,31 @@ Recipes.</p>
 
                                     <tbody>
                                     <tr>
-                                        <td>param</td>
+                                        <td>configuration</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote)</p>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.name</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>identifier of this element</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.label</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, visible label in the mobile app or on the NEEO Remote</p>
 </td>
                                         <td>
                                         </td>
@@ -1371,9 +1756,9 @@ Recipes.</p>
                                     <tr>
                                         <td>name</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>String</code>
                                         </td>
-                                        <td><p>A button name group</p>
+                                        <td><p>A button name group, see validation/buttongroup.js for valid options</p>
 </td>
                                         <td>
                                         </td>
@@ -1515,7 +1900,7 @@ Recipes.</p>
 
                         <h2 id="lib-device-devicebuilder.js-addslider">
                             <a href="#lib-device-devicebuilder.js-addslider" class="permalink">#</a>
-                            <span class="method-name" title="addSlider(param, controller)">addSlider(param, controller)</span>
+                            <span class="method-name" title="addSlider(configuration, controller)">addSlider(configuration, controller)</span>
                         </h2>
 
                         <div class="description lead">
@@ -1544,11 +1929,51 @@ Recipes.</p>
 
                                     <tbody>
                                     <tr>
-                                        <td>param</td>
+                                        <td>configuration</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote), <strong>range</strong> (optional, custom range of slider, default 0..100), <strong>unit</strong> (optional user readable label, default %)</p>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.name</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>identifier of this element</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.label</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, visible label in the mobile app or on the NEEO Remote</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.range</td>
+                                        <td>
+                                            <code>Array</code>
+                                        </td>
+                                        <td><p>optional, custom range of slider, default 0..100</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.unit</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, user readable label, default %</p>
 </td>
                                         <td>
                                         </td>
@@ -1556,7 +1981,7 @@ Recipes.</p>
                                     <tr>
                                         <td>controller</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
                                         <td><p>An object which contains a getter and setter callback function.</p>
 </td>
@@ -1578,7 +2003,8 @@ Recipes.</p>
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.addSlider(   { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-slider'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my slider'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
+                                <pre><code class="hljs javascript">.addSlider(
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-slider'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my slider'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
   { <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">newValue</span>) =&gt;</span> sensorValue = newValue, <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
 )</code></pre>
 
@@ -1610,12 +2036,12 @@ Recipes.</p>
 
                         <h2 id="lib-device-devicebuilder.js-addsensor">
                             <a href="#lib-device-devicebuilder.js-addsensor" class="permalink">#</a>
-                            <span class="method-name" title="addSensor(param, controller)">addSensor(param, controller)</span>
+                            <span class="method-name" title="addSensor(configuration, controller)">addSensor(configuration, controller)</span>
                         </h2>
 
                         <div class="description lead">
 
-                            <p>Add a (range/binary) sensor to your custom device</p>
+                            <p>Add a range/binary sensor to your custom device</p>
 
 
                         </div>
@@ -1639,11 +2065,61 @@ Recipes.</p>
 
                                     <tbody>
                                     <tr>
-                                        <td>param</td>
+                                        <td>configuration</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote), <strong>type</strong> (optional, can be range, binary, default range) <strong>range</strong> (optional, custom range of sensor, default 0..100), <strong>unit</strong> (optional user readable label, default %)</p>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.name</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>identifier of this element</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.label</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, visible label in the mobile app or on the NEEO Remote</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.type</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, can be range or binary, default range</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.range</td>
+                                        <td>
+                                            <code>Array</code>
+                                        </td>
+                                        <td><p>optional, custom range of sensor, default 0..100</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.unit</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, user readable label, default %</p>
 </td>
                                         <td>
                                         </td>
@@ -1673,7 +2149,8 @@ Recipes.</p>
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.addSensor(   { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-sensor'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my sensor'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'range'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
+                                <pre><code class="hljs javascript">.addSensor(
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-sensor'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my sensor'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'range'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
   { <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
 )</code></pre>
 
@@ -1758,7 +2235,8 @@ Recipes.</p>
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.addPowerStateSensor(   { <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
+                                <pre><code class="hljs javascript">.addPowerStateSensor(
+  { <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
 )</code></pre>
 
 
@@ -1789,7 +2267,7 @@ Recipes.</p>
 
                         <h2 id="lib-device-devicebuilder.js-addswitch">
                             <a href="#lib-device-devicebuilder.js-addswitch" class="permalink">#</a>
-                            <span class="method-name" title="addSwitch(param, controller)">addSwitch(param, controller)</span>
+                            <span class="method-name" title="addSwitch(configuration, controller)">addSwitch(configuration, controller)</span>
                         </h2>
 
                         <div class="description lead">
@@ -1818,11 +2296,31 @@ Recipes.</p>
 
                                     <tbody>
                                     <tr>
-                                        <td>param</td>
+                                        <td>configuration</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, visible label in the mobile app or on the NEEO Remote)</p>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.name</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>identifier of this element</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.label</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, visible label in the mobile app or on the NEEO Remote</p>
 </td>
                                         <td>
                                         </td>
@@ -1830,7 +2328,7 @@ Recipes.</p>
                                     <tr>
                                         <td>controller</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
                                         <td><p>An object which contains a getter and setter callback function.</p>
 </td>
@@ -1885,7 +2383,7 @@ Recipes.</p>
 
                         <h2 id="lib-device-devicebuilder.js-addtextlabel">
                             <a href="#lib-device-devicebuilder.js-addtextlabel" class="permalink">#</a>
-                            <span class="method-name" title="addTextLabel(param, controller)">addTextLabel(param, controller)</span>
+                            <span class="method-name" title="addTextLabel(configuration, controller)">addTextLabel(configuration, controller)</span>
                         </h2>
 
                         <div class="description lead">
@@ -1914,11 +2412,41 @@ Recipes.</p>
 
                                     <tbody>
                                     <tr>
-                                        <td>param</td>
+                                        <td>configuration</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (text label content)</p>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.name</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>identifier of this element</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.label</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, visible label in the mobile app or on the NEEO Remote</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.isLabelVisible</td>
+                                        <td>
+                                            <code>Boolean</code>
+                                        </td>
+                                        <td><p>should the label be visible</p>
 </td>
                                         <td>
                                         </td>
@@ -1949,7 +2477,7 @@ Recipes.</p>
 
 
                                 <pre><code class="hljs javascript">.addTextLabel(
-  { <span class="hljs-attr">name</span>: <span class="hljs-string">'artistname'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Artist name'</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'artistname'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Artist name'</span>, <span class="hljs-attr">isLabelVisible</span>: <span class="hljs-literal">false</span> },
   controller.getArtist
  )</code></pre>
 
@@ -1981,7 +2509,7 @@ Recipes.</p>
 
                         <h2 id="lib-device-devicebuilder.js-addimageurl">
                             <a href="#lib-device-devicebuilder.js-addimageurl" class="permalink">#</a>
-                            <span class="method-name" title="addImageUrl(param, controller)">addImageUrl(param, controller)</span>
+                            <span class="method-name" title="addImageUrl(configuration, controller)">addImageUrl(configuration, controller)</span>
                         </h2>
 
                         <div class="description lead">
@@ -2010,11 +2538,51 @@ Recipes.</p>
 
                                     <tbody>
                                     <tr>
-                                        <td>param</td>
+                                        <td>configuration</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
-                                        <td><p>An object which contains <strong>name</strong> (identifier of this element), <strong>label</strong> (optional, alternative image text), <strong>uri</strong> (address pointing to an image resource), <strong>size</strong> (image size in the ui, either 'small' or 'large'). The small image has the size of a button while the large image is a square image using full width of the client. JPG and PNG images are supported.</p>
+                                        <td><p>JSON Configuration Object.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.name</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>identifier of this element.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.label</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, visible label in the mobile app or on the NEEO Remote.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.uri</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>HTTP URI pointing to an image resource. JPG and PNG images are supported.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.size</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>image size in the ui, either 'small' or 'large'. The small image has the size of a button while the large image is a square image using full width of the client.</p>
 </td>
                                         <td>
                                         </td>
@@ -2022,7 +2590,7 @@ Recipes.</p>
                                     <tr>
                                         <td>controller</td>
                                         <td>
-                                            <code>object</code>
+                                            <code>Object</code>
                                         </td>
                                         <td><p>An object which returns the address to the current image.</p>
 </td>
@@ -2060,7 +2628,144 @@ Recipes.</p>
 
 
                                     <p>
-                                            <code>object</code>
+                                            <code>Object</code>
+                                    </p>
+
+                                    <p>DeviceBuilder</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-devicebuilder.js-adddirectory">
+                            <a href="#lib-device-devicebuilder.js-adddirectory" class="permalink">#</a>
+                            <span class="method-name" title="addDirectory(configuration, controller)">addDirectory(configuration, controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Define additional device directories which can be browsed on the device</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>configuration</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>JSON Configuration Object.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.name</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>identifier of this element.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.label</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, visible label in the mobile app or on the NEEO Remote.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.isQueue</td>
+                                        <td>
+                                            <code>Boolean</code>
+                                        </td>
+                                        <td><p>optional, name of the directory to be used for the queue - mediaplayer only</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.isRoot</td>
+                                        <td>
+                                            <code>Boolean</code>
+                                        </td>
+                                        <td><p>optional, name of the directory that will be the 'root' level of your list</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>An object which contains a getter callback function. This getter callback should return a list built by listBuilder so the App/TR2 can display the browse result as a list. If the getter callback encounters an error, you can build a list with a 'ListInfoItem' to inform the user about the error. The action callback will be called when an item is clicked.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.addDirectory({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'DEVICE_PLAY_QUEUE_DIRECTORY'</span>,
+  <span class="hljs-attr">label</span>: <span class="hljs-string">'Queue'</span>,
+  <span class="hljs-attr">isQueue</span>: <span class="hljs-literal">true</span>,
+}, controller.handleDirectory)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>Object</code>
                                     </p>
 
                                     <p>DeviceBuilder</p>
@@ -2082,7 +2787,10 @@ Recipes.</p>
 
                         <div class="description lead">
 
-                            <p>Define additional device capabilities, currently supported capabilities (case sensitive): - &quot;alwaysOn&quot; - the device does not need to be powered on to be useable. You don't need to specify 'POWER ON' and 'POWER OFF' buttons and the device is not identified as &quot;Stupid device&quot;</p>
+                            <p>Define additional device capabilities, currently supported capabilities (case sensitive): - &quot;alwaysOn&quot; - the device does not need to be powered on to be useable. You don't need to specify 'POWER ON' and 'POWER OFF' buttons and the device is not identified as &quot;Not so smart device&quot;</p>
+<ul>
+<li>&quot;bridgeDevice&quot; - A bridge device is for example Philips Hue - the discovered device (Gateway) supports multiple devices (Lamps). This capability is used after you add a new device, then you have the option to select &quot;Add more from this bridge&quot;</li>
+</ul>
 
 
                         </div>
@@ -2260,6 +2968,84 @@ Recipes.</p>
 
                     <div class="method scope-public">
 
+                        <h2 id="lib-device-implementationservices-devicestate.js-registerstateupdate">
+                            <a href="#lib-device-implementationservices-devicestate.js-registerstateupdate" class="permalink">#</a>
+                            <span class="method-name" title="registerStateUpdate(callback)">registerStateUpdate(callback)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>register callback function, that will be called with parameter id, clientObject when clientObject changed</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>callback</td>
+                                        <td>
+                                            <code>function</code>
+                                        </td>
+                                        <td><p>function</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">  deviceState.registerStateUpdate(<span class="hljs-function">(<span class="hljs-params">id, clientObject</span>) =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'state update for'</span>, id, clientObject);
+  });</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+                            <p><code>Void</code></p>
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
                         <h2 id="lib-device-implementationservices-devicestate.js-getalldevices">
                             <a href="#lib-device-implementationservices-devicestate.js-getalldevices" class="permalink">#</a>
                             <span class="method-name" title="getAllDevices()">getAllDevices()</span>
@@ -2267,7 +3053,7 @@ Recipes.</p>
 
                         <div class="description lead">
 
-
+                            
 
                         </div>
 
@@ -2658,6 +3444,598 @@ Recipes.</p>
                                     </p>
 
                                     <p>DeviceState object.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+
+                <a id="lib/device/lists/listBuilder.js"></a>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-lists-listbuilder.js-addlistitem">
+                            <a href="#lib-device-lists-listbuilder.js-addlistitem" class="permalink">#</a>
+                            <span class="method-name" title="addListItem(configuration)">addListItem(configuration)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This function adds an item to the list.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>configuration</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.title</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>title that will be shown on the list item entry</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.label</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, additional label</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.thumbnailUri</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, URL that points to an image that will be displayed on the list item</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.browseIdentifier</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, identifier that is passed with a browse request to identify which &quot;path&quot; should be browsed</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.actionIdentifier</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, string passed back to handling function when item is clicked</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">   .addListItem({
+     <span class="hljs-attr">title</span>: <span class="hljs-string">'First List Item'</span>,
+     <span class="hljs-attr">thumbnailUri</span>: <span class="hljs-string">'https://www.image.com/image.jpg'</span>
+   })</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>ListBuilder</code>
+                                    </p>
+
+                                    <p>ListBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-lists-listbuilder.js-addlistheader">
+                            <a href="#lib-device-lists-listbuilder.js-addlistheader" class="permalink">#</a>
+                            <span class="method-name" title="addListHeader(configuration)">addListHeader(configuration)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This function adds a header to the list, which can be used as a visual separator. A ListHeader is a pure visual informational object.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>configuration</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.title</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>title that will be shown on the list item entry</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">   .addListHeader({
+     <span class="hljs-attr">title</span>: <span class="hljs-string">'My Header'</span>,
+   })</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>ListBuilder</code>
+                                    </p>
+
+                                    <p>ListBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-lists-listbuilder.js-addlisttiles">
+                            <a href="#lib-device-lists-listbuilder.js-addlisttiles" class="permalink">#</a>
+                            <span class="method-name" title="addListTiles(configuration)">addListTiles(configuration)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This function adds a row of tiles to the list. It takes an array of up to two tiles. A ListTile shows a large thumbnail and the defined action will be executed when the ListTile element is selected.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>configuration</td>
+                                        <td>
+                                            <code>Array</code>
+                                        </td>
+                                        <td><p>Configuration Array</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.thumbnailUri</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, URL that points to an image that will be displayed on the list item</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.actionIdentifier</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, string passed back to handling function when item is clicked</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">   .addListTile([{
+     <span class="hljs-attr">thumbnailUri</span>: <span class="hljs-string">'https://www.image.com/image.jpg'</span>,
+   }])</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>ListBuilder</code>
+                                    </p>
+
+                                    <p>ListBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-lists-listbuilder.js-addlistinfoitem">
+                            <a href="#lib-device-lists-listbuilder.js-addlistinfoitem" class="permalink">#</a>
+                            <span class="method-name" title="addListInfoItem(configuration)">addListInfoItem(configuration)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This function adds an info item to the list. Pressing this element will open a popup with the defined text.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>configuration</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.title</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>title that will be shown on the list item entry</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.text</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>text that will be shown in the resulting popup. This is the only text that will be shown on the NEEO remote.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.affirmativeButtonText</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, will be shown on the OK popup button</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.negativeButtonText</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, will be shown on the CANCEL popup button</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.actionIdentifier</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, passed back to handling function when item is clicked</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">   .addListInfoItem({
+     <span class="hljs-attr">title</span>: <span class="hljs-string">'This is only an information and I will open a popup'</span>,
+     <span class="hljs-attr">text</span>: <span class="hljs-string">'I am the popup text'</span>,
+     <span class="hljs-attr">affirmativeButtonText</span>: <span class="hljs-string">'OK'</span>,
+     <span class="hljs-attr">negativeButtonText</span>: <span class="hljs-string">'Cancel'</span>,
+     <span class="hljs-attr">actionIdentifier</span>: <span class="hljs-string">'OK_CLICKED'</span>,
+   })</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>ListBuilder</code>
+                                    </p>
+
+                                    <p>ListBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="lib-device-lists-listbuilder.js-addlistbuttons">
+                            <a href="#lib-device-lists-listbuilder.js-addlistbuttons" class="permalink">#</a>
+                            <span class="method-name" title="addListButtons(configuration)">addListButtons(configuration)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This function adds a row of buttons to the list. It takes an array of up to three buttons. The defined action will be executed when the button is pressed.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>configuration</td>
+                                        <td>
+                                            <code>Array</code>
+                                        </td>
+                                        <td><p>Configuration Array</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.title</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>title that will be shown on the list item entry</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.actionIdentifier</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, string passed back to handling function when button is clicked</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">   .addListButtons([{
+     <span class="hljs-attr">title</span>: <span class="hljs-string">'Shuffle'</span>,
+     <span class="hljs-attr">actionIdentifier</span>: <span class="hljs-string">'ROW1_BUTTON1'</span>,
+   }])
+   .addListButtons([{
+     <span class="hljs-attr">title</span>: <span class="hljs-string">'Repeat'</span>,
+     <span class="hljs-attr">actionIdentifier</span>: <span class="hljs-string">'ROW2_BUTTON1'</span>,
+   }, {
+     <span class="hljs-attr">title</span>: <span class="hljs-string">'Play All'</span>,
+     <span class="hljs-attr">actionIdentifier</span>: <span class="hljs-string">'ROW2_BUTTON1'</span>,
+   }])</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>ListBuilder</code>
+                                    </p>
+
+                                    <p>ListBuilder for chaining.</p>
 
 
 
@@ -3093,6 +4471,149 @@ Recipes.</p>
 
                     <div class="method scope-public">
 
+                        <h2 id="lib-index.js-module.exports.buildbrowselist">
+                            <a href="#lib-index.js-module.exports.buildbrowselist" class="permalink">#</a>
+                            <span class="method-name" title="buildBrowseList(configuration)">buildBrowseList(configuration)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>Create new list factory, builds a browsable list which can be used for a specific device, for example to browse a playlist</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>configuration</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.title</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>title of the list</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.totalMatchingItems</td>
+                                        <td>
+                                            <code>Number</code>
+                                        </td>
+                                        <td><p>how many results the query included in total (used for pagination)</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.limit</td>
+                                        <td>
+                                            <code>Number</code>
+                                        </td>
+                                        <td><p>optional, how many items should be queried per page (used for pagination). The default and maximum is 64.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.offset</td>
+                                        <td>
+                                            <code>Number</code>
+                                        </td>
+                                        <td><p>optional, default starting offset (used for pagination)</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.browseIdentifier</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>optional, identifier that is passed with a browse request to identify which &quot;path&quot; should be browsed</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript"> neeoapi.buildBrowseList({
+     <span class="hljs-attr">title</span>: <span class="hljs-string">'list title'</span>,
+     <span class="hljs-attr">totalMatchingItems</span>: <span class="hljs-number">100</span>,
+     <span class="hljs-attr">limit</span>: <span class="hljs-number">20</span>,
+     <span class="hljs-attr">offset</span>: <span class="hljs-number">0</span>,
+     <span class="hljs-attr">browseIdentifier</span>: <span class="hljs-string">'browseEverything'</span>
+   })
+   .addListHeader(<span class="hljs-string">'NEEO Header'</span>)
+   .addListItem({
+     <span class="hljs-attr">title</span>: <span class="hljs-string">'foo'</span>
+   })</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>ListBuilder</code>
+                                    </p>
+
+                                    <p>factory methods to build list</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
                         <h2 id="lib-index.js-module.exports.startserver">
                             <a href="#lib-index.js-module.exports.startserver" class="permalink">#</a>
                             <span class="method-name" title="startServer(configuration)">startServer(configuration)</span>
@@ -3128,9 +4649,47 @@ Recipes.</p>
                                         <td>
                                             <code>Object</code>
                                         </td>
-                                        <td><ul>
-<li>Configuration Object with <strong>brain</strong> (NEEOBrain object), <strong>port</strong> (listening port), device <strong>name</strong> and all associated <strong>devices</strong>. Optionally you can add <strong>baseurl</strong> to define the listening ip - handy if you have multiple IP's or running in a docker container.</li>
-</ul>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.brain</td>
+                                        <td>
+                                            <code>NEEOBrain</code>
+                                        </td>
+                                        <td><p>NEEOBrain object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.port</td>
+                                        <td>
+                                            <code>Number</code>
+                                        </td>
+                                        <td><p>listening port</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.name</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>device name</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.devices</td>
+                                        <td>
+                                            <code>Array</code>
+                                        </td>
+                                        <td><p>all associated devices for this driver Optionally you can add <strong>baseurl</strong> to define the listening ip - handy if you have multiple IP's or running in a docker container.</p>
 </td>
                                         <td>
                                         </td>
@@ -3185,7 +4744,7 @@ Recipes.</p>
 
                         <h2 id="lib-index.js-module.exports.stopserver">
                             <a href="#lib-index.js-module.exports.stopserver" class="permalink">#</a>
-                            <span class="method-name" title="stopServer(JSON)">stopServer(JSON)</span>
+                            <span class="method-name" title="stopServer(configuration)">stopServer(configuration)</span>
                         </h2>
 
                         <div class="description lead">
@@ -3214,11 +4773,31 @@ Recipes.</p>
 
                                     <tbody>
                                     <tr>
-                                        <td>JSON</td>
+                                        <td>configuration</td>
                                         <td>
                                             <code>Object</code>
                                         </td>
-                                        <td><p>Object with <strong>brain</strong> Object and <strong>adapter name</strong></p>
+                                        <td><p>JSON Configuration Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.brain</td>
+                                        <td>
+                                            <code>NEEOBrain</code>
+                                        </td>
+                                        <td><p>NEEOBrain object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>configuration.name</td>
+                                        <td>
+                                            <code>String</code>
+                                        </td>
+                                        <td><p>device name</p>
 </td>
                                         <td>
                                         </td>

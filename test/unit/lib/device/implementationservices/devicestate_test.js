@@ -89,6 +89,39 @@ describe('./lib/device/implementationservices/devicestate.js', function() {
       });
   });
 
+  it('should registerStateUpdate', function() {
+    const ID = '123';
+    const CLIENT = { foo: 'bar' };
+    const result = {};
+    deviceState.registerStateUpdate((deviceId, clientObject) => {
+      result.deviceId = deviceId;
+      result.clientObject = clientObject;
+    });
+    deviceState.addDevice(ID, CLIENT);
+    expect(result.deviceId).to.equal(ID);
+    expect(result.clientObject).to.equal(CLIENT);
+  });
+
+  it('should fail if registerStateUpdate is already registered', function() {
+    const result = {};
+    deviceState.registerStateUpdate((deviceId, clientObject) => {
+      result.deviceId = deviceId;
+      result.clientObject = clientObject;
+    });
+    expect(() => {
+      deviceState.registerStateUpdate((deviceId, clientObject) => {
+        result.deviceId = deviceId;
+        result.clientObject = clientObject;
+      });
+    }).to.throw(/ONLY_ONE_CALLBACK_ALLOWED/);
+  });
+
+  it('should fail if registerStateUpdate is not a function', function() {
+    expect(() => {
+      deviceState.registerStateUpdate(3);
+    }).to.throw(/CALLBACK_IS_NOT_A_FUNCTION/);
+  });
+
   it('should cache getCachePromise call', function() {
     const ID = 111;
     const CLIENTOBJECT = { foo: 111 };
@@ -105,7 +138,7 @@ describe('./lib/device/implementationservices/devicestate.js', function() {
     deviceState
       .getCachePromise(ID)
       .getValue(getState);
-      
+
     return deviceState
       .getCachePromise(ID)
       .getValue(getState)
