@@ -78,8 +78,8 @@ const lifx = neeoapi.buildDevice('Smart Light')
 -    process.exit(1);
 -  });
 
-+ module.exports = {
-+   devices = [lifx]
++module.exports = {
++  devices: [lifx]
 +}
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "neeo-sdk",
-  "version": "0.50.3",
+  "version": "0.50.5",
   "description": "NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.",
   "repository": "https://github.com/NEEOInc/neeo-sdk",
   "license": "MIT",
