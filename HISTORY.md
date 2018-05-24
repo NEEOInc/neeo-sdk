@@ -1,4 +1,4 @@
-## 0.50.3 (05/14/2018)
+## 0.50.5 (05/14/2018)
 - added new device type MUSICPLAYER
 - added flag to hide the label for a textlabel
 - added support for lists for SDK devices
