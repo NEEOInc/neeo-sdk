@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "ipAddress": {
+      "description": "The address of your thing",
+      "type": "string"
+    },
+    "credentials": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "description": "Please provide your username",
+          "type": "string"
+        },
+        "password": {
+          "description": "Please provide your password",
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ]
+    }
+  }
+}
