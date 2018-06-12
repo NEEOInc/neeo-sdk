@@ -1,7 +1,15 @@
 #!/usr/bin/env node
 'use strict';
 
-const packageFile = require(process.cwd() + '/package.json');
+const debug = require('debug')('neeo:cli:index');
+
+let packageFile = {};
+try {
+  packageFile = require(process.cwd() + '/package.json');
+} catch(err) {
+  debug('USING_DEFAULT_CONFIG', err.message);
+}
+
 const sdkOptions = packageFile.neeoSdkOptions || {};
 const deviceController = require('./devicecontroller');
 

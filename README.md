@@ -10,7 +10,10 @@ If you're looking for examples, take a look at the example repository at https:/
   - [Prerequisite](#prerequisite)
     - [Windows OS](#windows-os)
   - [NEEO-SDK CLI](#neeo-sdk-cli)
-    - [Install / expose a third party driver](#install-expose-a-third-party-driver)
+    - [Using the CLI for your own project](#using-the-cli-for-your-own-project)
+    - [Using the CLI to run Third Party drivers](#using-the-cli-to-run-third-party-drivers)
+      - [Get driver ready to be used by others](#get-driver-ready-to-be-used-by-others)
+      - [Installing and running](#installing-and-running)
   - [SDK Documentation](#sdk-documentation)
 - [NEEO Macro Names](#neeo-macro-names)
   - [Power Control Capability](#power-control-capability)
@@ -24,6 +27,7 @@ If you're looking for examples, take a look at the example repository at https:/
   - [Transport Capability](#transport-capability)
   - [Record Capability](#record-capability)
   - [Input Capability](#input-capability)
+- [Other SDK implementations](#other-sdk-implementations)
 
 
 ## Prerequisite
@@ -38,7 +42,8 @@ If you're looking for examples, take a look at the example repository at https:/
 
 The SDK is bundled with a CLI tool allowing to start a SDK instance and load device drivers automatically. :rocket: This makes it very easy to run multiple SDK drivers. Check the `npm start` command in the neeo-sdk-examples repository.
 
-To use it, either update the NPM script:
+### Using the CLI for your own project
+To use it for your own driver, either update the NPM script:
 
 ```
 "scripts": {
@@ -70,7 +75,7 @@ It's important to note that the CLI doesn't search the directories recursively i
 
 It's also possible to explicitly exclude directories from the devices search, by adding them to the `NEEO_DEVICES_EXCLUDED_DIRECTORIES` environment variable, for instance: `NEEO_DEVICES_EXCLUDED_DIRECTORIES=["lifx-cloud"]`
 
-by default, the CLI will connect to the first discovered brain within the network. You can change this behaviour by creating a `"neeoSdkOptions"` property in your project's `package.json`, and set the "brainHost" property to the Brain IP address. Following parameters are available:
+By default, the CLI will connect to the first discovered brain within the network. You can change this behaviour by creating a `"neeoSdkOptions"` property in your project's `package.json`, and set the "brainHost" property to the Brain IP address. Following parameters are available:
 
 ```
 "neeoSdkOptions": {
@@ -81,16 +86,28 @@ by default, the CLI will connect to the first discovered brain within the networ
 }
 ```
 
+The Brain lookup uses a default timeout of 5000ms. To change this behaviour, change the environment variable `NEEO_BRAIN_LOOKUP_DURATION_MS`
+
 To migrate a driver to the new CLI, follow:
 [Driver migration guide to 0.50.0](./MIGRATION-0-50-0.md). Note: We have updated the example code too, take a look there if something is unclear.
 
-### Install / expose a third party driver
+If you need to run the CLI directly through a node process (for process management or to attach a debugger) you can run it via `node ./node_modules/neeo-sdk/cli/index.js start`
 
-The CLI is also able to run third-party devices, along with locally developed ones.
+### Using the CLI to run Third Party drivers
 
-The exposed devices just need to be exported in an index file in the devices/ directory, the same way as documented above. Note that in order to be detected during the start of an SDK instance, your driver needs to be named with a 'neeo-' or 'neeo_' prefix. For instance: 'neeo-simple-accessory'.
+The CLI is also able to run third-party devices. This can either be only third-party devices or a mix of third-party devices and your own drivers in the same project.
 
-The installation of a third-party driver is done through a simple npm install.
+#### Get driver ready to be used by others
+The exposed devices need to be exported in an index file in the devices/ directory, the same way as documented above. Note that in order to be detected during the start of an SDK instance, your driver needs to be named with a 'neeo-' or 'neeo_' prefix. For instance: 'neeo-simple-accessory'.
+
+#### Installing and running
+
+The installation of a third-party driver is done through a simple ```npm install```. This can either be from the official npm registry or GitHub. Then you can run the third-party drivers with:
+
+```
+npm install neeo-sdk
+./node_modules/.bin/neeo-sdk start
+```
 
 ## SDK Documentation
 
@@ -211,3 +228,10 @@ If you add support for a devicetype `TV`, `PROJECTOR` or `AVRECIEVER` you should
 * `INPUT HDMI 2`
 * `INPUT VGA 1`
 * `INPUT SCART 1`
+
+# Other SDK implementations
+
+Thanks to the contributors for porting the SDK to other platforms.
+
+- C# implementation by Christian Riedl: https://github.com/ChristianRiedl/NeeoApi
+- ESP8266 implementation by grumpyengineer https://github.com/grumpyengineer/ESP8266NeeoSDK

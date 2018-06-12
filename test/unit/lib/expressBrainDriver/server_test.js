@@ -10,7 +10,7 @@ const routeDevice = require('../../../../lib/expressBrainDriver/routes/devicerou
 const routeDatabase = require('../../../../lib/expressBrainDriver/routes/db');
 
 describe('./lib/expressBrainDriver/server.js', function() {
-  const sandbox = sinon.sandbox.create();
+  const sandbox = sinon.createSandbox();
   let ExpressServer, mockServer;
 
   before(function() {

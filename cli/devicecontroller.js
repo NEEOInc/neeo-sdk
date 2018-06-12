@@ -1,9 +1,7 @@
 'use strict';
 
 const BluePromise = require('bluebird');
-
 const deviceLoader = require('./deviceloader');
-
 const sdk = require('../lib');
 
 let serverConfiguration;
@@ -17,43 +15,62 @@ function stopDevices() {
   if (!serverConfiguration) {
     return;
   }
-  sdk.stopServer(serverConfiguration);
+  sdk.stopServer(serverConfiguration)
+    .catch((error) => {
+      console.error('ERROR!', error.message);
+      process.exit(1);
+    });
 }
 
 function startDevices(sdkOptions) {
-  checkDevicesDefined();
-
-  return getBrain(sdkOptions)
-    .then((brain) => {
-      console.info('- Start server');
-      storeSdkServerConfiguration(brain, sdkOptions);
+  return BluePromise.all([
+      loadDevices(),
+      getBrain(sdkOptions),
+    ])
+    .then((results) => {
+      const [devices, brain] = results;
+      console.info('- Start server, connect to NEEO Brain:', {
+        brain: brain.name || 'unknown',
+        host: brain.host,
+        port: brain.port
+      });
+      storeSdkServerConfiguration(brain, sdkOptions, devices);
       return sdk.startServer(serverConfiguration);
     })
     .then(() => {
       console.info('# Your devices are now ready to use in the NEEO app!');
     })
-    .catch((err) => {
-      console.error('ERROR!', err);
+    .catch((error) => {
+      console.error('ERROR!', error);
       process.exit(1);
     });
 }
 
-function storeSdkServerConfiguration(brain, sdkOptions) {
+function storeSdkServerConfiguration(brain, sdkOptions, devices) {
   const { serverPort, serverName } = sdkOptions;
   serverConfiguration = {
     brain,
     port: serverPort || 6336,
     name: serverName || 'default',
-    devices: deviceLoader.loadDevices(),
+    devices,
   };
 }
 
-function checkDevicesDefined() {
-  if (deviceLoader.loadDevices().length === 0) {
-    throw new Error(
-      'No devices found! Make sure you expose some devices in the devices directory.'
-    );
-  }
+function loadDevices() {
+  return new BluePromise((resolve, reject) => {
+    const devices = deviceLoader.loadDevices();
+
+    const noDevicesDefined = devices.length === 0;
+
+    if (noDevicesDefined) {
+      return reject(new Error(
+        'No devices found! Make sure you expose devices in the "devices" directory ' +
+        'or install external drivers through npm.'
+      ));
+    }
+
+    resolve(devices);
+  });
 }
 
 function getBrain(sdkOptions) {
@@ -62,13 +79,13 @@ function getBrain(sdkOptions) {
 
 function isBrainDefinedIn(sdkOptions) {
   const { brainHost } = sdkOptions;
-  return brainHost && brainHost !== '';
+  return (brainHost && brainHost !== '') || process.env.BRAINIP;
 }
 
 function getBrainFrom(sdkOptions) {
   const { brainHost, brainPort } = sdkOptions;
   return BluePromise.resolve({
-    host: brainHost,
+    host: brainHost || process.env.BRAINIP,
     port: brainPort || 3000,
   });
 }

@@ -1,4 +1,10 @@
-## 0.50.5 (05/14/2018)
+## 0.51.3 (05/14/2018)
+- improve brain discovery, ignore outdated NEEO Brains instead failing
+- fix sdk shutdown issue when no NEEO Brain was found
+- fix registration
+- update and fixed documentation
+
+## 0.50.5 (05/23/2018)
 - added new device type MUSICPLAYER
 - added flag to hide the label for a textlabel
 - added support for lists for SDK devices
