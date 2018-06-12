@@ -1,4 +1,4 @@
-## 0.51.3 (05/14/2018)
+## 0.51.3 (06/12/2018)
 - improve brain discovery, ignore outdated NEEO Brains instead failing
 - fix sdk shutdown issue when no NEEO Brain was found
 - fix registration
