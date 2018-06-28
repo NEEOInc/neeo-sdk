@@ -71,6 +71,7 @@ function loadDevicesFrom({ rootPath, directory, filter }) {
         console.error(
           `could not load devices in file ${file}: ${error.message}`
         );
+        console.error('DRIVER LOAD FAILED STACKTRACE:\n', error.stack);
       }
     })
     .reduce((acc, val) => acc.concat(val), [])

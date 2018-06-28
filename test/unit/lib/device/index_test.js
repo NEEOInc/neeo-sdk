@@ -105,6 +105,21 @@ describe('./lib/device/index.js', function() {
       });
     });
 
+    context('when the provided devices are invalid', function() {
+      it('throw an error', function() {
+        nockScope
+          .get('/systeminfo')
+          .reply(200, { firmwareVersion: '0.49.0' });
+
+        const conf = buildInvalidConf();
+
+        return expect(Device.startServer(conf, brainDriver)).rejectedWith(
+          /Invalid device detected! Check the .+ driver device exports\./
+        );
+      });
+    });
+
+
     context('when a device uses subscriptions', function() {
       it('should fetch the subscriptions for that device', function() {
         const device = buildValidCustomDevice()
@@ -269,7 +284,6 @@ describe('./lib/device/index.js', function() {
     if (!device) {
       device = buildValidCustomDevice();
     }
-
     return {
       port: BRAINPORT,
       brain: BRAINADDR,
@@ -277,4 +291,15 @@ describe('./lib/device/index.js', function() {
       devices: [device],
     };
   }
+
+  function buildInvalidConf() {
+    const device = [ buildValidCustomDevice() ];
+    return {
+      port: BRAINPORT,
+      brain: BRAINADDR,
+      name: CONFNAME,
+      devices: [device],
+    };
+  }
+
 });

@@ -13,7 +13,7 @@ describe('./lib/device/lists/listItem.js', function() {
       thumbnailUri: 'someURI',
       browseIdentifier: 'browse',
       actionIdentifier: 'action',
-      isQueueable: true
+      isQueueable: true,
     };
 
     // WHEN
@@ -24,10 +24,8 @@ describe('./lib/device/lists/listItem.js', function() {
   });
 
   it('should throw if there is no title', function() {
-    // WHEN
-    expect(() => {
-      new ListItem({});
-    }).to.throw(/ERROR_LIST_TITLE_EMPTY/);
+    const result = new ListItem();
+    expect(result.title).to.deep.equal('');
   });
 
 });

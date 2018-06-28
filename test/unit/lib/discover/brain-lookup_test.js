@@ -20,7 +20,7 @@ describe('./lib/brain-lookup.js', function() {
   const port = 3000;
   const service = { addresses: [address], host, port, txt: 'txt' };
 
-  const sandbox = sinon.sandbox.create();
+  const sandbox = sinon.createSandbox();
 
   beforeEach(function() {
     config.brainVersionSatisfaction = '>=0.50.0';

@@ -1,3 +1,10 @@
+## 0.51.4 (06/28/2018)
+- added sanity check to validate the devices array
+- added setListTitle function to list builder
+- added addListItems function to list builder
+- added setTotalMatchingItems function to list builder
+- added addRootDirectory and addQueueDirectory functions, deprecated addDirectory function
+
 ## 0.51.3 (06/12/2018)
 - improve brain discovery, ignore outdated NEEO Brains instead failing
 - fix sdk shutdown issue when no NEEO Brain was found
