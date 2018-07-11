@@ -45,7 +45,7 @@ describe('./lib/device/brain/index.js', function() {
   it('should successfully detect invalid notification messages, using brain object', function() {
     const brain = {
       host: 'brainUrl',
-      port: 3333
+      port: 3333,
     };
     const adapterName = 'adapter0';
     const url = 'http://foo.bar';
@@ -64,7 +64,7 @@ describe('./lib/device/brain/index.js', function() {
   it('should successfully send notification to brain (value 50)', function() {
     const serverReply = [
       { name: 'slider001', type: 'range', label: 'my slider', eventKey: '6241612146438832128:EXAMPLE-SLIDER_SENSOR' },
-      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' }
+      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' },
     ];
     const notificationAnswer = 'hey123';
     const brain = 'brainUrl';
@@ -88,13 +88,13 @@ describe('./lib/device/brain/index.js', function() {
         nockNotification = nock(brainUrl)
           .post('/v1/notifications', {
             type: '6241612146438832128:EXAMPLE-SLIDER_SENSOR',
-            data: 50
+            data: 50,
           })
           .reply(200, notificationAnswer);
         return Index.sendNotification({ uniqueDeviceId, component:componentName, value:50 }, deviceId);
       })
       .then((answer) => {
-        expect(answer).to.equal(notificationAnswer);
+        expect(answer[0]).to.equal(notificationAnswer);
         expect(nockNotification.isDone()).to.equal(true);
       });
   });
@@ -102,7 +102,7 @@ describe('./lib/device/brain/index.js', function() {
   it('should successfully send notification to brain (value false)', function() {
     const serverReply = [
       { name: 'slider001', type: 'range', label: 'my slider', eventKey: '6241612146438832128:EXAMPLE-SLIDER_SENSOR' },
-      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' }
+      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' },
     ];
     const notificationAnswer = 'hey123';
     const brain = 'brainUrl';
@@ -126,13 +126,13 @@ describe('./lib/device/brain/index.js', function() {
         nockNotification = nock(brainUrl)
           .post('/v1/notifications', {
             type: '6241612146438832128:EXAMPLE-SLIDER_SENSOR',
-            data: false
+            data: false,
           })
           .reply(200, notificationAnswer);
         return Index.sendNotification({ uniqueDeviceId, component:componentName, value:false }, deviceId);
       })
       .then((answer) => {
-        expect(answer).to.equal(notificationAnswer);
+        expect(answer[0]).to.equal(notificationAnswer);
         expect(nockNotification.isDone()).to.equal(true);
       });
   });
@@ -140,7 +140,7 @@ describe('./lib/device/brain/index.js', function() {
   it('should successfully send sensor update notification to brain', function() {
     const serverReply = [
       { name: 'slider001', type: 'range', label: 'my slider', eventKey: '6241612146438832128:EXAMPLE-SLIDER_SENSOR' },
-      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' }
+      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' },
     ];
     const brain = 'brainUrl';
     const brainUrl = 'http://brainUrl:3000';
@@ -169,7 +169,7 @@ describe('./lib/device/brain/index.js', function() {
             data: {
               sensorEventKey: '6241612146438832128:EXAMPLE-SLIDER_SENSOR',
               sensorValue: 50,
-            }
+            },
           })
           .reply(200);
         return Index.sendSensorNotification(msg, deviceId);

@@ -5,6 +5,15 @@ const ComponentFactory = require('../../../../lib/device/componentfactory');
 
 describe('./lib/device/componentfactory.js', function() {
 
+  describe('getPathPrefix', function() {
+    it('should return a path prefix', function() {
+      const deviceidentifier = 'deviceidentifier';
+      const pathPrefix = ComponentFactory.getPathPrefix(deviceidentifier);
+
+      expect(pathPrefix).to.equal(`/device/${deviceidentifier}/`);
+    });
+  });
+
   describe('buildButton()', function() {
     it('should set default label', function() {
       const param = { name: 'buttonname'};
@@ -13,7 +22,7 @@ describe('./lib/device/componentfactory.js', function() {
         type: 'button',
         name: 'buttonname',
         label: 'buttonname',
-        path: 'PREFIX/buttonname'
+        path: 'PREFIX/buttonname',
       });
     });
 
@@ -24,7 +33,7 @@ describe('./lib/device/componentfactory.js', function() {
         type: 'button',
         name: 'buttonname',
         label: 'a button',
-        path: 'PREFIX/buttonname'
+        path: 'PREFIX/buttonname',
       });
     });
 
@@ -60,8 +69,8 @@ describe('./lib/device/componentfactory.js', function() {
           type: 'range',
           sensor: 'SLIDERNAME_SENSOR',
           range: [ 0, 100 ],
-          unit: '%'
-        }
+          unit: '%',
+        },
       });
     });
 
@@ -77,8 +86,8 @@ describe('./lib/device/componentfactory.js', function() {
           type: 'range',
           sensor: 'SLIDERNAME%20%E2%9C%98%E2%9C%98%20%2F%2F%5C%3CSCRIPT%3E_SENSOR',
           range: [ 0, 100 ],
-          unit: '%'
-        }
+          unit: '%',
+        },
       });
     });
 
@@ -94,8 +103,8 @@ describe('./lib/device/componentfactory.js', function() {
           type: 'range',
           sensor: 'SLIDERNAME_SENSOR',
           range: [ 0, 10 ],
-          unit: 'BAR'
-        }
+          unit: 'BAR',
+        },
       });
     });
 
@@ -129,49 +138,248 @@ describe('./lib/device/componentfactory.js', function() {
   });
 
   describe('buildSensor()', function() {
-    it('should build a minimal range sensor', function() {
-      const param = { name: 'aRangeSensor' };
-      const sensor = ComponentFactory.buildSensor('PREFIX/', param);
-      expect(sensor).to.deep.equal({
-        type: 'sensor',
-        name: 'aRangeSensor',
-        label: 'aRangeSensor',
-        path: 'PREFIX/aRangeSensor',
-        sensor: {
-          range: [0,100],
-          type: 'range',
-          unit: '%'
-        }
+    context('type range (default fallback)', function() {
+      // TODO fix legacy build sensor functions without _SENSOR and lower case.
+      it('should build a minimal range sensor if type not specified', function() {
+        const param = { name: 'aRangeSensor' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor).to.deep.equal({
+          type: 'sensor',
+          name: 'aRangeSensor',
+          label: 'aRangeSensor',
+          path: 'PREFIX/aRangeSensor',
+          sensor: {
+            range: [0,100],
+            type: 'range',
+            unit: '%',
+          },
+        });
+      });
+
+      // TODO fix legacy build sensor functions without _SENSOR and lower case.
+      it('should build a advanced range sensor', function() {
+        const param = { name: 'aRangeSensor', label: 'foo', unit: '"', range: [5, 12] };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor).to.deep.equal({
+          type: 'sensor',
+          name: 'aRangeSensor',
+          label: 'foo',
+          path: 'PREFIX/aRangeSensor',
+          sensor: {
+            range: [5,12],
+            type: 'range',
+            unit: '%22',
+          },
+        });
+      });
+
+      it('should use component label if set', function() {
+        const param = { type: 'range', name: 'range', label: 'Range' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Range');
+      });
+
+      it('should use component sensorlabel if set', function() {
+        const param = { type: 'range', name: 'range', sensorlabel: 'Range sensor', label: 'Range' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Range sensor');
       });
     });
 
-    it('should build a advanced range sensor', function() {
-      const param = { name: 'aRangeSensor', label: 'foo', unit: '"', range: [5, 12] };
-      const sensor = ComponentFactory.buildSensor('PREFIX/', param);
-      expect(sensor).to.deep.equal({
-        type: 'sensor',
-        name: 'aRangeSensor',
-        label: 'foo',
-        path: 'PREFIX/aRangeSensor',
-        sensor: {
-          range: [5,12],
-          type: 'range',
-          unit: '%22'
-        }
+    context('type range', function() {
+      it('should slider sensor, using default fallbacks', function() {
+        const param = { type: 'range', name: 'slider' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor).to.deep.equal({
+          type: 'sensor',
+          name: 'SLIDER_SENSOR',
+          label: 'slider',
+          path: 'PREFIX/SLIDER_SENSOR',
+          sensor: {
+            type: 'range',
+            range: [0, 100],
+            unit: '%',
+          },
+        });
+      });
+
+      it('should use component unit if set', function() {
+        const param = { type: 'range', name: 'slider', unit: 'mm' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.sensor.unit).to.equal('mm');
+      });
+
+      it('should use component range if set', function() {
+        const param = { type: 'range', name: 'slider', range: [180,360] };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.sensor.range).to.deep.equal([180,360]);
+      });
+
+      it('should fail for invalid range type', function() {
+        const param = { type: 'range', name: 'slider', range: '1 to 10' };
+        expect(() => {
+          ComponentFactory.buildSensor('PREFIX/', param);
+        }).to.throw(/INVALID_SLIDER_RANGE/);
+      });
+
+      it('should fail for invalid range values', function() {
+        const param = { type: 'range', name: 'slider', range: ['a','z'] };
+        expect(() => {
+          ComponentFactory.buildSensor('PREFIX/', param);
+        }).to.throw(/INVALID_SLIDER_RANGE/);
+      });
+
+      it('should use component label if set', function() {
+        const param = { type: 'range', name: 'slider', label: 'Slider' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Slider');
+      });
+
+      it('should prioritize sensorlabel if set', function() {
+        const param = { type: 'range', name: 'slider', sensorlabel: 'Slider sensor', label: 'Slider' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Slider sensor');
       });
     });
 
-    it('should build a power sensor', function() {
-      const param = { name: 'aPowerSensor', label: 'foo', type: 'power' };
-      const sensor = ComponentFactory.buildSensor('PREFIX/', param);
-      expect(sensor).to.deep.equal({
-        type: 'sensor',
-        name: 'aPowerSensor',
-        label: 'foo',
-        path: 'PREFIX/aPowerSensor',
-        sensor: {
-          type: 'power',
-        }
+    context('type power', function() {
+      // TODO fix legacy build sensor functions without _SENSOR and lower case.
+      it('should build a power sensor', function() {
+        const param = { name: 'aPowerSensor', type: 'power' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor).to.deep.equal({
+          type: 'sensor',
+          name: 'aPowerSensor',
+          label: 'aPowerSensor',
+          path: 'PREFIX/aPowerSensor',
+          sensor: {
+            type: 'power',
+          },
+        });
+      });
+
+      it('should use component label if set', function() {
+        const param = { type: 'power', name: 'power', label: 'Power' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Power');
+      });
+
+      it('should use sensorlabel if set', function() {
+        const param = { type: 'power', name: 'power', sensorlabel: 'Power sensor', label: 'Power' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Power sensor');
+      });
+    });
+
+    context('type binary', function() {
+      it('should build sensor, using name as label fallback', function() {
+        const param = { type: 'binary', name: 'binary' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor).to.deep.equal({
+          type: 'sensor',
+          name: 'BINARY_SENSOR',
+          label: 'binary',
+          path: 'PREFIX/BINARY_SENSOR',
+          sensor: {
+            type: 'binary',
+          },
+        });
+      });
+
+      it('should use component label if set', function() {
+        const param = { type: 'binary', name: 'binary', label: 'Binary' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Binary');
+      });
+
+      it('should prioritize sensorlabel if set', function() {
+        const param = { type: 'binary', name: 'binary', sensorlabel: 'Binary sensor', label: 'Binary' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Binary sensor');
+      });
+    });
+
+    context('type custom', function() {
+      it('should build custom sensor, using name as label fallback', function() {
+        const param = { type: 'custom', name: 'custom' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor).to.deep.equal({
+          type: 'sensor',
+          name: 'CUSTOM_SENSOR',
+          label: 'custom',
+          path: 'PREFIX/CUSTOM_SENSOR',
+          sensor: {
+            type: 'custom',
+          },
+        });
+      });
+
+      it('should use component label if set', function() {
+        const param = { type: 'custom', name: 'custom', label: 'Custom' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Custom');
+      });
+
+      it('should prioritize sensorlabel if set', function() {
+        const param = { type: 'custom', name: 'custom', sensorlabel: 'Custom sensor', label: 'Custom' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Custom sensor');
+      });
+    });
+
+    context('type string', function() {
+      it('should build string sensor, using name as label fallback', function() {
+        const param = { type: 'string', name: 'string' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor).to.deep.equal({
+          type: 'sensor',
+          name: 'STRING_SENSOR',
+          label: 'string',
+          path: 'PREFIX/STRING_SENSOR',
+          sensor: {
+            type: 'string',
+          },
+        });
+      });
+
+      it('should use component label if set', function() {
+        const param = { type: 'string', name: 'string', label: 'String' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('String');
+      });
+
+      it('should prioritize sensorlabel if set', function() {
+        const param = { type: 'string', name: 'string', sensorlabel: 'String sensor', label: 'String' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('String sensor');
+      });
+    });
+
+    context('type array', function() {
+      it('should switch sensor, using name as label fallback', function() {
+        const param = { type: 'array', name: 'array' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor).to.deep.equal({
+          type: 'sensor',
+          name: 'ARRAY_SENSOR',
+          label: 'array',
+          path: 'PREFIX/ARRAY_SENSOR',
+          sensor: {
+            type: 'array',
+          },
+        });
+      });
+
+      it('should use component label if set', function() {
+        const param = { type: 'array', name: 'array', label: 'Array' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Array');
+      });
+
+      it('should prioritize sensorlabel if set', function() {
+        const param = { type: 'array', name: 'array', sensorlabel: 'Array sensor', label: 'Array' };
+        const sensor = ComponentFactory.buildSensor('PREFIX/', param);
+        expect(sensor.label).to.equal('Array sensor');
       });
     });
   });
@@ -186,7 +394,7 @@ describe('./lib/device/componentfactory.js', function() {
         label: 'textlabel',
         isLabelVisible: undefined,
         path: 'PREFIX/textlabel',
-        sensor: 'TEXTLABEL_SENSOR'
+        sensor: 'TEXTLABEL_SENSOR',
       });
     });
 
@@ -199,7 +407,7 @@ describe('./lib/device/componentfactory.js', function() {
         label: 'textlabel',
         isLabelVisible: false,
         path: 'PREFIX/textlabel',
-        sensor: 'TEXTLABEL_SENSOR'
+        sensor: 'TEXTLABEL_SENSOR',
       });
     });
 
@@ -212,7 +420,7 @@ describe('./lib/device/componentfactory.js', function() {
         label: 'textlabel',
         isLabelVisible: true,
         path: 'PREFIX/textlabel',
-        sensor: 'TEXTLABEL_SENSOR'
+        sensor: 'TEXTLABEL_SENSOR',
       });
     });
 
@@ -246,7 +454,7 @@ describe('./lib/device/componentfactory.js', function() {
         size: 'large',
         path: 'PREFIX/imageurl',
         imageUri: null,
-        sensor: 'IMAGEURL_SENSOR'
+        sensor: 'IMAGEURL_SENSOR',
       });
     });
 
@@ -265,7 +473,7 @@ describe('./lib/device/componentfactory.js', function() {
         name: 'directoryname',
         label: 'somelabel',
         path: 'PREFIX/directoryname',
-        type: 'directory'
+        type: 'directory',
       });
     });
 
@@ -276,7 +484,7 @@ describe('./lib/device/componentfactory.js', function() {
         name: 'directoryname',
         label: 'somelabel',
         path: 'PREFIX/directoryname',
-        type: 'directory'
+        type: 'directory',
       });
     });
 
@@ -306,7 +514,7 @@ describe('./lib/device/componentfactory.js', function() {
       expect(result).to.deep.equal({
         name: 'discover',
         path: PREFIX + 'discover',
-        type: 'discover'
+        type: 'discover',
       });
     });
   });
@@ -324,7 +532,7 @@ describe('./lib/device/componentfactory.js', function() {
       expect(result).to.deep.equal({
         name: 'register',
         path: PREFIX + 'register',
-        type: 'register'
+        type: 'register',
       });
     });
   });

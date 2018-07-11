@@ -15,6 +15,7 @@ If you're looking for examples, take a look at the example repository at https:/
       - [Get driver ready to be used by others](#get-driver-ready-to-be-used-by-others)
       - [Installing and running](#installing-and-running)
   - [SDK Documentation](#sdk-documentation)
+- [Hints](#hints)
 - [NEEO Macro Names](#neeo-macro-names)
   - [Power Control Capability](#power-control-capability)
   - [Volume Control Capability](#volume-control-capability)
@@ -112,6 +113,16 @@ npm install neeo-sdk
 ## SDK Documentation
 
 See https://neeoinc.github.io/neeo-sdk/
+
+# Hints
+
+A collection of hints if you create a device driver.
+
+* If possible provide a device discovery to find a device to support (`.enableDiscovery`) - this is the most user friendly way for the user to add a device.
+* Make sure that your driver handles if the device reboots. It's possible that the device IP changed after the reboot.
+* Make sure to handle the case when the user deleted the device from the NEEO Brain, so the driver won't send notifications anymore and shut down any running services (`registerDeviceSubscriptionHandler`).
+* Make sure your driver allocate resources only if needed - use the `registerInitialiseFunction` to initialise your driver.
+* List the minimal firmware version of the device you use - this might help if a driver does not work as expected.
 
 # NEEO Macro Names
 

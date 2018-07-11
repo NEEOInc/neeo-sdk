@@ -687,7 +687,7 @@ describe('./lib/device/devicebuilder.js', function() {
         'label': 'label',
         'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/LABELNAME_SENSOR',
         'sensor': {
-          'type': 'custom',
+          'type': 'string',
         },
       },
         {
@@ -732,7 +732,7 @@ describe('./lib/device/devicebuilder.js', function() {
         'label': 'label',
         'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/LABELNAME_SENSOR',
         'sensor': {
-          'type': 'custom',
+          'type': 'string',
         },
       },
         {

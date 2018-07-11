@@ -36,7 +36,7 @@ describe('./lib/device/brain/notificationMapping.js', function() {
     netMock = nock(url)
       .get('/v1/api/notificationkey/' + adapterName + '/' + deviceId + '/' + uniqueDeviceId).reply(200, 'reply');
 
-    brainNotificationMapping.getNotificationKey(uniqueDeviceId, deviceId, componentName)
+    brainNotificationMapping.getNotificationKeys(uniqueDeviceId, deviceId, componentName)
       .catch((error) => {
         expect(error.message).to.equal('INVALID_SERVER_RESPONSE');
         done();
@@ -47,7 +47,7 @@ describe('./lib/device/brain/notificationMapping.js', function() {
   it('should fail to find component', function(done) {
     const serverReply = [
       { name: 'EXAMPLE-SLIDER_SENSOR', type: 'range', label: 'my slider', eventKey: '6241612146438832128:EXAMPLE-SLIDER_SENSOR' },
-      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' }
+      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' },
     ];
     const adapterName = 'adapter0';
     const url = 'http://foo.bar';
@@ -59,7 +59,7 @@ describe('./lib/device/brain/notificationMapping.js', function() {
     netMock = nock(url)
       .get('/v1/api/notificationkey/' + adapterName + '/' + deviceId + '/' + uniqueDeviceId).reply(200, serverReply);
 
-    brainNotificationMapping.getNotificationKey(uniqueDeviceId, deviceId, componentName)
+    brainNotificationMapping.getNotificationKeys(uniqueDeviceId, deviceId, componentName)
       .catch((error) => {
         expect(error.message).to.equal('COMPONENTNAME_NOT_FOUND button');
         done();
@@ -70,7 +70,7 @@ describe('./lib/device/brain/notificationMapping.js', function() {
   it('should successfully find notification key by name', function(done) {
     const serverReply = [
       { name: 'slider001', type: 'range', label: 'my slider', eventKey: '6241612146438832128:EXAMPLE-SLIDER_SENSOR' },
-      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' }
+      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' },
     ];
     const adapterName = 'adapter0';
     const url = 'http://foo.bar';
@@ -82,9 +82,9 @@ describe('./lib/device/brain/notificationMapping.js', function() {
     netMock = nock(url)
       .get('/v1/api/notificationkey/' + adapterName + '/' + deviceId + '/' + uniqueDeviceId).reply(200, serverReply);
 
-    brainNotificationMapping.getNotificationKey(uniqueDeviceId, deviceId, componentName)
+    brainNotificationMapping.getNotificationKeys(uniqueDeviceId, deviceId, componentName)
       .then((result) => {
-        expect(result).to.equal('6241612146438832128:EXAMPLE-SLIDER_SENSOR');
+        expect(result[0]).to.equal('6241612146438832128:EXAMPLE-SLIDER_SENSOR');
         expect(netMock.isDone()).to.equal(true);
         done();
       })
@@ -96,7 +96,7 @@ describe('./lib/device/brain/notificationMapping.js', function() {
   it('should successfully find notification key by label', function(done) {
     const serverReply = [
       { name: 'slider001', type: 'range', label: 'my slider', eventKey: '6241612146438832128:EXAMPLE-SLIDER_SENSOR' },
-      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' }
+      { name: 'EXAMPLE-SWITCH_SENSOR', type: 'binary', label: 'my switch', eventKey: '6241612146438832128:EXAMPLE-SWITCH_SENSOR' },
     ];
     const adapterName = 'adapter0';
     const url = 'http://foo.bar';
@@ -108,9 +108,9 @@ describe('./lib/device/brain/notificationMapping.js', function() {
     netMock = nock(url)
       .get('/v1/api/notificationkey/' + adapterName + '/' + deviceId + '/' + uniqueDeviceId).reply(200, serverReply);
 
-    brainNotificationMapping.getNotificationKey(uniqueDeviceId, deviceId, componentName)
+    brainNotificationMapping.getNotificationKeys(uniqueDeviceId, deviceId, componentName)
       .then((result) => {
-        expect(result).to.equal('6241612146438832128:EXAMPLE-SLIDER_SENSOR');
+        expect(result[0]).to.equal('6241612146438832128:EXAMPLE-SLIDER_SENSOR');
         expect(netMock.isDone()).to.equal(true);
         done();
       })

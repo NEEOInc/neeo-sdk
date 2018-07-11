@@ -32,7 +32,7 @@ function startDevices(sdkOptions) {
       console.info('- Start server, connect to NEEO Brain:', {
         brain: brain.name || 'unknown',
         host: brain.host,
-        port: brain.port
+        port: brain.port,
       });
       storeSdkServerConfiguration(brain, sdkOptions, devices);
       return sdk.startServer(serverConfiguration);

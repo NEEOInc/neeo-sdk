@@ -47,8 +47,8 @@ function getExternalDevices() {
 }
 
 function isNeeoDriver(driverPath, file) {
-  const isNeeoPrefixed = (file) =>
-    file.startsWith('neeo-') || file.startsWith('neeo_');
+  const isNeeoPrefixed = (_file) =>
+    _file.startsWith('neeo-') || _file.startsWith('neeo_');
   const devicesIndexPath = path.join(driverPath, file, 'devices', 'index.js');
 
   return isNeeoPrefixed(file) && fs.existsSync(devicesIndexPath);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.51.4 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.51.7 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
@@ -163,7 +163,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.51.4</small>
+            <small>0.51.7</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -1006,9 +1006,7 @@ input[type="search"]::-webkit-search-cancel-button {
                         <div class="description lead">
 
                             <p>Enable a registration or pairing step before discovery your device, for example if the device you want support needs to a pairing code to work. This function can be only defined once per device definition.
-enableRegistration can only be used when enableDiscovery is also used - for the user registration takes place before discovery
-<strong>NOTE</strong>: This function is experimental and should not be used in production.
-It is subject to change, currently account login is not supported the data is transfer is not yet encrypted!</p>
+enableRegistration can only be used when enableDiscovery is also used - for the user registration takes place before discovery</p>
 
 
                         </div>
@@ -1046,7 +1044,7 @@ It is subject to change, currently account login is not supported the data is tr
                                         <td>
                                             <code>String</code>
                                         </td>
-                                        <td><p>defines the type of registration, currently only SECURITY_CODE pairing registrations are supported.</p>
+                                        <td><p>Defines the type of registration, currently only SECURITY_CODE pairing registrations are supported.</p>
 </td>
                                         <td>
                                         </td>
@@ -1056,7 +1054,7 @@ It is subject to change, currently account login is not supported the data is tr
                                         <td>
                                             <code>String</code>
                                         </td>
-                                        <td><p>this header will be displayed when the user starts the register process</p>
+                                        <td><p>This header will be displayed when the user starts the register process</p>
 </td>
                                         <td>
                                         </td>
@@ -1096,7 +1094,7 @@ It is subject to change, currently account login is not supported the data is tr
                                         <td>
                                             <code>Function</code>
                                         </td>
-                                        <td><p>callback that must resolve true if valid credentials already exists, so the user does not need to register again. Note: if you always return false, the user can provide credentials each time a new device is added.</p>
+                                        <td><p>Callback function that must resolve true if valid credentials already exists, so the user does not need to register again. Note: if you always return false, the user can provide credentials each time a new device is added.</p>
 </td>
                                         <td>
                                         </td>
@@ -2140,7 +2138,7 @@ Recipes.</p>
                                         <td>
                                             <code>String</code>
                                         </td>
-                                        <td><p>Optional, can be range or binary, default range</p>
+                                        <td><p>Type of sensor, the available types are binary, range, power (should be done using addPowerStateSensor), string, array</p>
 </td>
                                         <td>
                                         </td>
@@ -3171,9 +3169,10 @@ the getter function is called with (deviceId, params) parameter. params contains
 
                         <div class="description lead">
 
-                            <p>Define additional device capabilities, currently supported capabilities (case sensitive): - &quot;alwaysOn&quot; - the device does not need to be powered on to be useable. You don't need to specify 'POWER ON' and 'POWER OFF' buttons and the device is not identified as &quot;Not so smart device&quot;</p>
+                            <p>Define additional device capabilities, currently supported capabilities (case sensitive): - &quot;alwaysOn&quot; – the device does not need to be powered on to be useable. You don't need to specify 'POWER ON' and 'POWER OFF' buttons and the device is not identified as &quot;Not so smart device&quot;</p>
 <ul>
-<li>&quot;bridgeDevice&quot; - A bridge device is for example Philips Hue - the discovered device (Gateway) supports multiple devices (Lamps). This capability is used after you add a new device, then you have the option to select &quot;Add more from this bridge&quot;</li>
+<li>&quot;bridgeDevice&quot; – This capability is used after you add a new device, then you have the option to select &quot;Add more from this bridge&quot;. For example Philips Hue - the discovered device (Gateway) supports multiple devices (Lamps).</li>
+<li>&quot;addAnotherDevice&quot; - This capability is used after you add a new device that uses discovery. It gives the option to select &quot;Add another ${device name}&quot;</li>
 </ul>
 
 

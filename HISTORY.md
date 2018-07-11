@@ -1,9 +1,16 @@
+## UNRELEASED
+- improve sensor label fallbacks
+- fixes addSensor() not properly handling all different sensor types
+- fixed multiroom notifications - when a device was added in several rooms, only the first room was updated with new values
+- added new addAnotherDevice capability, like bridgeDevice, but for non bridge devices to show correct text.
+
 ## 0.51.4 (06/28/2018)
 - added sanity check to validate the devices array
 - added setListTitle function to list builder
 - added addListItems function to list builder
 - added setTotalMatchingItems function to list builder
 - added addRootDirectory and addQueueDirectory functions, deprecated addDirectory function
+- added icon buttons
 
 ## 0.51.3 (06/12/2018)
 - improve brain discovery, ignore outdated NEEO Brains instead failing
