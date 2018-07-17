@@ -8,7 +8,8 @@ import {
   startServer as startDeviceServer,
   stopServer,
   buildCustomDevice as buildDevice,
-  buildDeviceState
+  buildDeviceState,
+  buildBrowseList
 } from './device';
 
 /**
@@ -28,7 +29,7 @@ export function startServer(configuration: StartServerConfig) {
   return startDeviceServer(configuration, expressBrainDriver);
 }
 
-export { buildDeviceState, buildDevice, stopServer };
+export { buildDeviceState, buildDevice, stopServer, buildBrowseList };
 export {
   getAllRecipes as getRecipes,
   getRecipePowerState as getRecipesPowerState

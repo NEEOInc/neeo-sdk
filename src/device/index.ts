@@ -10,6 +10,7 @@ import { ExpressBrainDriver } from '../expressBrainDriver';
 import DeviceBuilder from './deviceBuilder';
 import DeviceState from './implementationServices/deviceState';
 import buildBrainUrl from './brain/urlBuilder';
+import ListBuilder from './lists/listBuilder';
 import config from '../config';
 
 const MAXIMAL_CONNECTION_ATTEMPTS_TO_BRAIN = 8;
@@ -33,6 +34,29 @@ export function buildCustomDevice(
     throw new Error('MISSING_ADAPTERNAME');
   }
   return new DeviceBuilder(adapterName, uniqueString);
+}
+
+/**
+ * Create new list factory, builds a browsable list which can be used for a specific device, for example to browse a playlist.
+ * @param options JSON Configuration Object.
+ * @return ListBuilder - factory methods to build list.
+ * @example
+ *  neeoapi.buildBrowseList({
+ *      title: 'list title',
+ *      totalMatchingItems: 100,
+ *      limit: 20,
+ *      offset: 0,
+ *      browseIdentifier: 'browseEverything'
+ *    })
+ *    .addListHeader('NEEO Header')
+ *    .addListItem({
+ *      title: 'foo'
+ *    })
+ */
+export function buildBrowseList(
+  options: Models.ListBuilder.Parameters
+): Models.ListBuilder {
+  return new ListBuilder(options);
 }
 
 export function buildDeviceState(): Models.DeviceState {
@@ -221,7 +245,7 @@ function fetchDeviceSubscriptionsIfNeeded(
   const promises = devices.reduce(
     (output, device) => {
       const deviceHandlers = device.deviceSubscriptionHandlers;
-      if (!!deviceHandlers) {
+      if (deviceHandlers) {
         debug('Initializing device subscriptions for %s', device.deviceName);
         output.push(
           Brain.getSubscriptions(device.deviceIdentifier).then(

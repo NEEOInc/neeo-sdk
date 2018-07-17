@@ -5,7 +5,9 @@ export namespace Registration {
     description: string;
   }
 
-  export type RegisterFunction<TCredentials = any,TResult = any> = (credentials: any) => TResult | PromiseLike<TResult>;
+  export type RegisterFunction<TCredentials = any, TResult = any> = (
+    credentials: any
+  ) => TResult | PromiseLike<TResult>;
 
   export type IsRegisteredFunction = () => boolean | PromiseLike<boolean>;
 
