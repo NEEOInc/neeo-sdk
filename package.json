@@ -1,6 +1,6 @@
 {
   "name": "neeo-sdk",
-  "version": "0.51.8",
+  "version": "0.51.9",
   "description": "NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.",
   "repository": "https://github.com/NEEOInc/neeo-sdk",
   "license": "MIT",
@@ -39,10 +39,7 @@
     "jshint": "jshint --show-non-errors --verbose lib/**/ test/**/",
     "clean": "rm -rf ./dist && mkdir -p ./dist/docs",
     "coverage:report": "nyc report text",
-    "doc": "npm run clean && doxdox 'lib/**/*.js' --title \"NEEO SDK\" --layout bootstrap --output ./dist/docs/index.html",
-    "release": "npm run test && npm run doc && npm run release:copy && npm run release:listtodos",
-    "release:copy": "cp -r ./lib ./cli ./test ./dist && cp *.md .jshintrc .gitignore index.js .editorconfig .npmignore .travis.yml package.json License ./dist",
-    "release:listtodos": "grep -R --exclude='./node_modules/*' 'TODO' ./dist"
+    "doc": "npm run clean && doxdox 'lib/**/*.js' --title \"NEEO SDK\" --layout bootstrap --output ./dist/docs/index.html"
   },
   "nyc": {
     "check-coverage": true,
