@@ -40,7 +40,7 @@ If you're looking for examples, take a look at the example repository at https:/
 
 ### Windows OS
 
-* If you use the SDK on Windows we suggest to install Apple iTunes (or the Bonjour SDK for Windows, available from the https://developer.apple.com site). Windows versions < 10 seems to miss multicast DNS support (aka. Bonjour/Zeroconf). This means the Brain discovery find's a NEEO Brain but you cannot connect to the NEEO Brain (as the discovery fails). You can test if multicast DNS works on your machine when you try to `ping NEEO-xxxxxxxx.local` (replace xxxxxxxx with the unique hostname of your NEEO Brain).
+* If you use the SDK on Windows we suggest to install Apple iTunes (or the Bonjour SDK for Windows, available from the https://developer.apple.com/bonjour/ site). Windows versions < 10 seems to miss multicast DNS support (aka. Bonjour/Zeroconf). This means the Brain discovery find's a NEEO Brain but you cannot connect to the NEEO Brain (as the discovery fails). You can test if multicast DNS works on your machine when you try to `ping NEEO-xxxxxxxx.local` (replace xxxxxxxx with the unique hostname of your NEEO Brain).
 
 ## NEEO-CLI
 
