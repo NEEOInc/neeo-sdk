@@ -27,21 +27,21 @@ describe('./lib/device/lists/listBuilder.js', function () {
         new ListBuilder({
           title: 'Foo',
           limit: 50000
-        }); 
+        });
       }).to.throw(/ERROR_LIST_LIMIT_MAXIMUM_EXCEEDED/);
     });
 
     it('should fail to initialize without title', function () {
       // WHEN
       expect(() => {
-        new ListBuilder({}); 
+        new ListBuilder({});
       }).to.throw(/ERROR_LIST_TITLE_EMPTY/);
     });
 
     it('should fail to initialize without params', function () {
       // WHEN
       expect(() => {
-        new ListBuilder(); 
+        new ListBuilder();
       }).to.throw(/ERROR_LIST_NO_OPTIONS_PROVIDED/);
     });
   });
