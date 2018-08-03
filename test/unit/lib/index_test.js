@@ -31,8 +31,8 @@ describe('./lib/index.js - neeoapi', function() {
       expect(neeoapi.getRecipes).to.equal(recipes.getAllRecipes);
     });
 
-    it('should expose getRecipesPowerState', function() {
-      expect(neeoapi.getRecipesPowerState).to.equal(recipes.getRecipePowerState);
+    it('should expose getActiveRecipes', function() {
+      expect(neeoapi.getActiveRecipes).to.equal(recipes.getActiveRecipes);
     });
 
     it('should expose discoverOneBrain', function() {
@@ -94,7 +94,7 @@ describe('./lib/index.js - neeoapi', function() {
       const device = neeoapi.buildDevice('FOO')
         .setManufacturer('NEEO')
         .addButtonGroup('volume')
-        .addButtonHander(function(){})
+        .addButtonHander(function() { })
         .registerSubscriptionFunction(callbackFunction);
 
       const conf = {
@@ -103,7 +103,7 @@ describe('./lib/index.js - neeoapi', function() {
         port: 1234,
         name: 'UNIT',
         baseurl: `http://127.0.0.1:1234/neeodeviceadapter`,
-        devices: [ device ],
+        devices: [device],
         maxConnectionAttempts: 1,
       };
       return neeoapi.startServer(conf, mockedBrainDriver)
@@ -123,7 +123,7 @@ describe('./lib/index.js - neeoapi', function() {
       }
       const device = neeoapi.buildDevice('FOO')
         .setManufacturer('NEEO')
-        .addPowerStateSensor({ getter: function() {}})
+        .addPowerStateSensor({ getter: function() { } })
         .registerSubscriptionFunction(callbackFunction);
 
       nockScope = nock('http://foo:3333')
@@ -138,7 +138,7 @@ describe('./lib/index.js - neeoapi', function() {
         port: 3000,
         name: 'UNIT',
         baseurl: `http://127.0.0.1:1234/neeodeviceadapter`,
-        devices: [ device ],
+        devices: [device],
         maxConnectionAttempts: 1,
       };
       return neeoapi.startServer(conf, mockedBrainDriver)

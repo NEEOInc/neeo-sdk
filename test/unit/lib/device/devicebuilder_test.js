@@ -48,7 +48,7 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
         .addButton({ name: 'example-button-disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf', label: 'my button' })
-        .addButtonHandler(function(){})
+        .addButtonHandler(function() { })
         .build('foo');
     }).to.throw(/NAME_TOO_LONG_example-button-disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf/);
   });
@@ -58,7 +58,7 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
         .addButton({ name: 'example-button', label: 'my button disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf' })
-        .addButtonHandler(function(){})
+        .addButtonHandler(function() { })
         .build('foo');
     }).to.throw(/LABEL_TOO_LONG_my button disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf/);
   });
@@ -67,7 +67,7 @@ describe('./lib/device/devicebuilder.js', function() {
     expect(function() {
       new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
-        .addTextLabel({ name: 'labelname disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf', label: 'label' }, function(){})
+        .addTextLabel({ name: 'labelname disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf', label: 'label' }, function() { })
         .build('foo');
     }).to.throw(/NAME_TOO_LONG_labelname disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf/);
   });
@@ -76,7 +76,7 @@ describe('./lib/device/devicebuilder.js', function() {
     expect(function() {
       new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
-        .addTextLabel({ name:'labelname', label: 'label disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf' }, function(){})
+        .addTextLabel({ name: 'labelname', label: 'label disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf' }, function() { })
         .build('foo');
     }).to.throw(/LABEL_TOO_LONG_label disubfiubdsfbisudfbsduifbsdiufbsdiufbsdiufbisdubfisdubfisudbisdubf/);
   });
@@ -85,7 +85,7 @@ describe('./lib/device/devicebuilder.js', function() {
     expect(function() {
       new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
-        .addDirectory({  },
+        .addDirectory({},
           { getter: () => {}, action: () => {} })
         .build('foo');
     }).to.throw(/MISSING_ELEMENT_NAME/);
@@ -127,7 +127,7 @@ describe('./lib/device/devicebuilder.js', function() {
         .setManufacturer('NEEO')
         .addButton({ name: 'example-button', label: 'my button' })
         .addButton({ name: 'example-button', label: 'my button' })
-        .addButtonHandler(function(){})
+        .addButtonHandler(function() { })
         .build('foo');
     }).to.throw(/DUPLICATE_PATH_DETECTED/);
   });
@@ -137,8 +137,8 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
         .addButton({ name: 'example-button', label: 'my button' })
-        .addButtonHandler(function(){})
-        .addButtonHandler(function(){});
+        .addButtonHandler(function() { })
+        .addButtonHandler(function() { });
     }).to.throw(/BUTTONHANDLER_ALREADY_DEFINED/);
   });
 
@@ -146,7 +146,7 @@ describe('./lib/device/devicebuilder.js', function() {
     expect(function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
-        .enableDiscovery({ headerText:'', description:'' }, function(){});
+        .enableDiscovery({ headerText: '', description: '' }, function() { });
     }).to.throw(/INVALID_DISCOVERY_PARAMETER/);
   });
 
@@ -154,8 +154,8 @@ describe('./lib/device/devicebuilder.js', function() {
     expect(function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
-        .enableDiscovery({ headerText:'x', description:'x' }, function(){})
-        .enableDiscovery({ headerText:'x', description:'x' }, function(){});
+        .enableDiscovery({ headerText: 'x', description: 'x' }, function() { })
+        .enableDiscovery({ headerText: 'x', description: 'x' }, function() { });
     }).to.throw(/DISCOVERHANLDER_ALREADY_DEFINED/);
   });
 
@@ -243,8 +243,8 @@ describe('./lib/device/devicebuilder.js', function() {
         device
           .setType('light')
           .enableRegistration({ headerText, description, type, }, registrationController)
-          .addSlider({ name: 'example-slider', label: 'my slider', range: [0,200], unit: '@' },
-            { setter: function() {}, getter: function() {} })
+          .addSlider({ name: 'example-slider', label: 'my slider', range: [0, 200], unit: '@' },
+            { setter: function() { }, getter: function() { } })
           .build('foo');
       }).to.throw(/REGISTRATION_ENABLED_MISSING_DISCOVERY_STEP/);
     });
@@ -253,9 +253,9 @@ describe('./lib/device/devicebuilder.js', function() {
       device
         .setType('light')
         .enableRegistration({ headerText, description, type, }, registrationController)
-        .enableDiscovery({ headerText, description, }, function(){})
-        .addSlider({ name: 'example-slider', label: 'my slider', range: [0,200], unit: '@' },
-          { setter: function() {}, getter: function() {} })
+        .enableDiscovery({ headerText, description, }, function() { })
+        .addSlider({ name: 'example-slider', label: 'my slider', range: [0, 200], unit: '@' },
+          { setter: function() { }, getter: function() { } })
         .build('foo');
 
       expect(device.deviceCapabilities).to.deep.equal(['register-user-account']);
@@ -269,7 +269,7 @@ describe('./lib/device/devicebuilder.js', function() {
         'registrationType': 'SECURITY_CODE',
       });
     });
-});
+  });
 
   it('should fail to create device, controller is not a function', function() {
     expect(function() {
@@ -286,9 +286,9 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
         .addButton({ name: 'example-foo', label: 'my button' })
-        .addButtonHandler(function(){})
-        .addSlider({ name: 'example-foo', label: 'my slider', range: [0,200], unit: '@' },
-          { setter: function() {}, getter: function() {} })
+        .addButtonHandler(function() { })
+        .addSlider({ name: 'example-foo', label: 'my slider', range: [0, 200], unit: '@' },
+          { setter: function() { }, getter: function() { } })
         .build('foo');
     }).to.throw(/DUPLICATE_PATH_DETECTED/);
   });
@@ -297,8 +297,8 @@ describe('./lib/device/devicebuilder.js', function() {
     expect(function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
-        .addSlider({ label: 'my slider', range: [0,200], unit: '@' },
-          { setter: function() {}, getter: function() {} })
+        .addSlider({ label: 'my slider', range: [0, 200], unit: '@' },
+          { setter: function() { }, getter: function() { } })
         .build('foo');
     }).to.throw(/MISSING_ELEMENT_NAME/);
   });
@@ -357,8 +357,8 @@ describe('./lib/device/devicebuilder.js', function() {
     expect(function() {
       new DeviceBuilder('example-adapter')
         .setManufacturer('NEEO')
-        .addPowerStateSensor({ getter: function() {} })
-        .addPowerStateSensor({ getter: function() {} })
+        .addPowerStateSensor({ getter: function() { } })
+        .addPowerStateSensor({ getter: function() { } })
         .build('foo');
     }).to.throw(/DUPLICATE_PATH_DETECTED/);
   });
@@ -367,12 +367,12 @@ describe('./lib/device/devicebuilder.js', function() {
     const Device1 = new DeviceBuilder('example-adapter', 'XXX');
     const device1 = Device1
       .addButton({ name: 'example-button', label: 'my button' })
-      .addButtonHandler(function(){})
+      .addButtonHandler(function() { })
       .build('foo');
     const Device2 = new DeviceBuilder('example-adapter', 'XXX');
     const device2 = Device2
       .addButton({ name: 'example-button', label: 'my button' })
-      .addButtonHandler(function(){})
+      .addButtonHandler(function() { })
       .build('foo');
     expect(device1.adapterName).to.deep.equal(device2.adapterName);
   });
@@ -384,7 +384,7 @@ describe('./lib/device/devicebuilder.js', function() {
       .addAdditionalSearchToken('bar')
       .setType('light')
       .addButton({ name: 'example-button', label: 'my button' })
-      .addButtonHandler(function(){})
+      .addButtonHandler(function() { })
       .build('foo');
 
     delete device.handler;
@@ -423,7 +423,7 @@ describe('./lib/device/devicebuilder.js', function() {
       .setType('mediaplayer')
       .setIcon('sonos')
       .addButton({ name: 'example-button', label: 'my button' })
-      .addButtonHandler(function(){})
+      .addButtonHandler(function() { })
       .build('foo');
 
     delete device.handler;
@@ -464,7 +464,7 @@ describe('./lib/device/devicebuilder.js', function() {
       .setIcon('sonos')
       .setSpecificName('VERY SPECIFIC')
       .addButton({ name: 'example-button', label: 'my button' })
-      .addButtonHandler(function(){})
+      .addButtonHandler(function() { })
       .build('foo');
 
     delete device.handler;
@@ -500,12 +500,12 @@ describe('./lib/device/devicebuilder.js', function() {
   describe('registerSubscriptionFunction', function() {
     it('should build device with a subscriptionFunction', function() {
       // GIVEN
-      function callback() {}
+      function callback() { }
 
       // WHEN
       const device = new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
-        .addTextLabel({ name:'name', label: 'label' }, () => {})
+        .addTextLabel({ name: 'name', label: 'label' }, () => {})
         .registerSubscriptionFunction(callback)
         .build('foo');
 
@@ -517,8 +517,8 @@ describe('./lib/device/devicebuilder.js', function() {
       expect(() => {
         new DeviceBuilder('example-adapter')
           .setManufacturer('NEEO')
-          .registerSubscriptionFunction(function(){})
-          .registerSubscriptionFunction(function(){});
+          .registerSubscriptionFunction(function() { })
+          .registerSubscriptionFunction(function() { });
       }).to.throw(/SUBSCRIPTIONHANDLER_ALREADY_DEFINED/);
     });
 
@@ -538,12 +538,12 @@ describe('./lib/device/devicebuilder.js', function() {
   describe('registerInitialiseFunction', function() {
     it('should build device with an initialiseFunction', function() {
       // GIVEN
-      function callback() {}
+      function callback() { }
 
       // WHEN
       const device = new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
-        .addTextLabel({ name:'name', label: 'label' }, () => {})
+        .addTextLabel({ name: 'name', label: 'label' }, () => {})
         .registerInitialiseFunction(callback)
         .build('foo');
 
@@ -582,7 +582,7 @@ describe('./lib/device/devicebuilder.js', function() {
     beforeEach(function() {
       device = new DeviceBuilder('example-adapter', 'unitTest')
         .setManufacturer('NEEO')
-        .addTextLabel({ name:'name', label: 'label' }, () => {});
+        .addTextLabel({ name: 'name', label: 'label' }, () => {});
     });
 
     it('should reject multiple handlers', function() {
@@ -651,7 +651,7 @@ describe('./lib/device/devicebuilder.js', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
       .addButtonGroup('volume')
-      .addButtonHandler(function(){})
+      .addButtonHandler(function() { })
       .build('foo');
     expect(device.capabilities.length).to.equal(3);
   });
@@ -690,21 +690,21 @@ describe('./lib/device/devicebuilder.js', function() {
           'type': 'custom',
         }
       },
-        {
-          'type': 'textlabel',
-          'name': 'labelname',
-          'label': 'label',
-          isLabelVisible: undefined,
-          'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
-          'sensor': 'LABELNAME_SENSOR'
+      {
+        'type': 'textlabel',
+        'name': 'labelname',
+        'label': 'label',
+        isLabelVisible: undefined,
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
+        'sensor': 'LABELNAME_SENSOR'
       }]
     });
   });
 
-  it('should build a device with a text label when isLabelVisible is set to false', function () {
+  it('should build a device with a text label when isLabelVisible is set to false', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
-      .addTextLabel({name: 'labelname', label: 'label', isLabelVisible: false}, function () {
+      .addTextLabel({ name: 'labelname', label: 'label', isLabelVisible: false }, function() {
       })
       .build('foo');
 
@@ -735,14 +735,14 @@ describe('./lib/device/devicebuilder.js', function() {
           'type': 'custom',
         }
       },
-        {
-          'type': 'textlabel',
-          'name': 'labelname',
-          'label': 'label',
-          isLabelVisible: false,
-          'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
-          'sensor': 'LABELNAME_SENSOR'
-        }]
+      {
+        'type': 'textlabel',
+        'name': 'labelname',
+        'label': 'label',
+        isLabelVisible: false,
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
+        'sensor': 'LABELNAME_SENSOR'
+      }]
     });
   });
 
@@ -750,9 +750,9 @@ describe('./lib/device/devicebuilder.js', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
       .setType('light')
-      .enableDiscovery({ headerText:'header text', description:'some hints' }, function(){})
-      .addSlider({ name: 'example-slider', label: 'my slider', range: [0,200], unit: '@' },
-        { setter: function() {}, getter: function() {} })
+      .enableDiscovery({ headerText: 'header text', description: 'some hints' }, function() { })
+      .addSlider({ name: 'example-slider', label: 'my slider', range: [0, 200], unit: '@' },
+        { setter: function() { }, getter: function() { } })
       .build('foo');
 
     delete device.handler;
@@ -810,10 +810,10 @@ describe('./lib/device/devicebuilder.js', function() {
   });
 
   it('should build device with a initialise function', function() {
-    function initFunction() {}
+    function initFunction() { }
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
-      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .addTextLabel({ name: 'labelname', label: 'label' }, function() { })
       .registerInitialiseFunction(initFunction)
       .build('foo');
     expect(device.initialiseFunction).to.equal(initFunction);
@@ -825,7 +825,7 @@ describe('./lib/device/devicebuilder.js', function() {
     const shutdownDelayMs = 3333;
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
-      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .addTextLabel({ name: 'labelname', label: 'label' }, function() { })
       .setType('VOD')
       .defineTiming({
         powerOnDelayMs,
@@ -842,7 +842,7 @@ describe('./lib/device/devicebuilder.js', function() {
     const powerOnDelayMs = 1111;
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
-      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .addTextLabel({ name: 'labelname', label: 'label' }, function() { })
       .setType('VOD')
       .defineTiming({
         powerOnDelayMs
@@ -856,7 +856,7 @@ describe('./lib/device/devicebuilder.js', function() {
   it('should build device with alwayOn capability', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
-      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .addTextLabel({ name: 'labelname', label: 'label' }, function() { })
       .setType('VOD')
       .addCapability('alwaysOn')
       .build('foo');
@@ -867,7 +867,7 @@ describe('./lib/device/devicebuilder.js', function() {
     expect(function() {
       new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
-        .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+        .addTextLabel({ name: 'labelname', label: 'label' }, function() { })
         .setType('LIGHT')
         .addCapability('invalid');
     }).to.throw(/INVALID_CAPABILITY/);
@@ -876,7 +876,7 @@ describe('./lib/device/devicebuilder.js', function() {
   it('should build device with powerstate sensor', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
-      .addPowerStateSensor({ getter: function() {}})
+      .addPowerStateSensor({ getter: function() { } })
       .build('foo');
 
     expect(device.capabilities.length).to.equal(1);
@@ -890,7 +890,7 @@ describe('./lib/device/devicebuilder.js', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
       .addSwitch({ name: 'example-switch', label: 'my switch' },
-        { setter: function() {}, getter: function() {} })
+        { setter: function() { }, getter: function() { } })
       .build('foo');
 
     delete device.handler;
@@ -933,7 +933,7 @@ describe('./lib/device/devicebuilder.js', function() {
   it('should report if device supports timing - false', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
-      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .addTextLabel({ name: 'labelname', label: 'label' }, function() { })
       .setType('ACCESSOIRE');
 
     const supportsTiming = device.supportsTiming();
@@ -943,7 +943,7 @@ describe('./lib/device/devicebuilder.js', function() {
   it('should report if device supports timing - true', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
-      .addTextLabel({ name:'labelname', label: 'label' }, function(){})
+      .addTextLabel({ name: 'labelname', label: 'label' }, function() { })
       .setType('GAMECONSOLE');
 
     const supportsTiming = device.supportsTiming();

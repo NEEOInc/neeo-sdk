@@ -11,7 +11,7 @@ describe('./lib/recipe/factory.js', function() {
   });
 
   it('should filter invalid entries', function() {
-    const result = factory.buildRecipesModel([{ foo:'bar' }]);
+    const result = factory.buildRecipesModel([{ foo: 'bar' }]);
     expect(result).to.deep.equal([]);
   });
 
@@ -44,17 +44,17 @@ describe('./lib/recipe/factory.js', function() {
   });
 
   it('should validate power state answer, undefined parameter', function() {
-    const result = factory.validatePowerStateAnswer();
+    const result = factory.validateActiveRecipesAnswer();
     expect(result).to.equal(false);
   });
 
   it('should validate power state answer, json data', function() {
-    const result = factory.validatePowerStateAnswer({ foo: 'bar' });
+    const result = factory.validateActiveRecipesAnswer({ foo: 'bar' });
     expect(result).to.equal(false);
   });
 
   it('should validate power state answer, array', function() {
-    const result = factory.validatePowerStateAnswer([1,2,3]);
+    const result = factory.validateActiveRecipesAnswer([1, 2, 3]);
     expect(result).to.equal(true);
   });
 

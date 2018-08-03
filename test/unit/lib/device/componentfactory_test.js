@@ -7,7 +7,7 @@ describe('./lib/device/componentfactory.js', function() {
 
   describe('buildButton()', function() {
     it('should set default label', function() {
-      const param = { name: 'buttonname'};
+      const param = { name: 'buttonname' };
       const button = ComponentFactory.buildButton('PREFIX/', param);
       expect(button).to.deep.equal({
         type: 'button',
@@ -18,7 +18,7 @@ describe('./lib/device/componentfactory.js', function() {
     });
 
     it('should use optional label', function() {
-      const param = { name: 'buttonname', label: 'a button'};
+      const param = { name: 'buttonname', label: 'a button' };
       const button = ComponentFactory.buildButton('PREFIX/', param);
       expect(button).to.deep.equal({
         type: 'button',
@@ -49,7 +49,7 @@ describe('./lib/device/componentfactory.js', function() {
 
   describe('buildRangeSlider', function() {
     it('should build a slider', function() {
-      const param = { name: 'slidername'};
+      const param = { name: 'slidername' };
       const slider = ComponentFactory.buildRangeSlider('PREFIX/', param);
       expect(slider).to.deep.equal({
         type: 'slider',
@@ -59,14 +59,14 @@ describe('./lib/device/componentfactory.js', function() {
         slider: {
           type: 'range',
           sensor: 'SLIDERNAME_SENSOR',
-          range: [ 0, 100 ],
+          range: [0, 100],
           unit: '%'
         }
       });
     });
 
     it('should properly encode special characters in name', function() {
-      const param = { name: 'slidername ✘✘ //\\<script>'};
+      const param = { name: 'slidername ✘✘ //\\<script>' };
       const slider = ComponentFactory.buildRangeSlider('PREFIX/', param);
       expect(slider).to.deep.equal({
         type: 'slider',
@@ -76,14 +76,14 @@ describe('./lib/device/componentfactory.js', function() {
         slider: {
           type: 'range',
           sensor: 'SLIDERNAME%20%E2%9C%98%E2%9C%98%20%2F%2F%5C%3CSCRIPT%3E_SENSOR',
-          range: [ 0, 100 ],
+          range: [0, 100],
           unit: '%'
         }
       });
     });
 
     it('should respect optional parameters', function() {
-      const param = { name: 'slidername', label: 'sliderfoo', range: [0,10], unit: 'BAR'};
+      const param = { name: 'slidername', label: 'sliderfoo', range: [0, 10], unit: 'BAR' };
       const slider = ComponentFactory.buildRangeSlider('PREFIX/', param);
       expect(slider).to.deep.equal({
         type: 'slider',
@@ -93,7 +93,7 @@ describe('./lib/device/componentfactory.js', function() {
         slider: {
           type: 'range',
           sensor: 'SLIDERNAME_SENSOR',
-          range: [ 0, 10 ],
+          range: [0, 10],
           unit: 'BAR'
         }
       });
@@ -101,14 +101,14 @@ describe('./lib/device/componentfactory.js', function() {
 
     it('should fail with invalid range type', function() {
       expect(function() {
-        const param = { name: 'slidername', label: 'sliderfoo', range: 'lala', unit: 'BAR'};
+        const param = { name: 'slidername', label: 'sliderfoo', range: 'lala', unit: 'BAR' };
         ComponentFactory.buildRangeSlider('PREFIX/', param);
       }).to.throw(/INVALID_SLIDER_RANGE/);
     });
 
     it('should fail with invalid range values', function() {
       expect(function() {
-        const param = { name: 'slidername', label: 'sliderfoo', range: ['lala', 'land'], unit: 'BAR'};
+        const param = { name: 'slidername', label: 'sliderfoo', range: ['lala', 'land'], unit: 'BAR' };
         ComponentFactory.buildRangeSlider('PREFIX/', param);
       }).to.throw(/INVALID_SLIDER_RANGE/);
     });
@@ -138,7 +138,7 @@ describe('./lib/device/componentfactory.js', function() {
         label: 'aRangeSensor',
         path: 'PREFIX/aRangeSensor',
         sensor: {
-          range: [0,100],
+          range: [0, 100],
           type: 'range',
           unit: '%'
         }
@@ -154,7 +154,7 @@ describe('./lib/device/componentfactory.js', function() {
         label: 'foo',
         path: 'PREFIX/aRangeSensor',
         sensor: {
-          range: [5,12],
+          range: [5, 12],
           type: 'range',
           unit: '%22'
         }
@@ -203,7 +203,7 @@ describe('./lib/device/componentfactory.js', function() {
       });
     });
 
-    it('should allow enabling the label', function () {
+    it('should allow enabling the label', function() {
       const param = { name: 'textlabel', isLabelVisible: true };
       const textlabel = ComponentFactory.buildTextLabel('PREFIX/', param);
       expect(textlabel).to.deep.equal({
@@ -237,7 +237,7 @@ describe('./lib/device/componentfactory.js', function() {
     });
 
     it('should build an imageurl, without label', function() {
-      const param = { name: 'imageurl'};
+      const param = { name: 'imageurl' };
       const image = ComponentFactory.buildImageUrl('PREFIX/', param);
       expect(image).to.deep.equal({
         type: 'imageurl',

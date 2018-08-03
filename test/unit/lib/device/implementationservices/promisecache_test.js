@@ -17,11 +17,11 @@ describe('./lib/device/implementationservices/promisecache.js', function() {
   });
 
   function delayPromise(durationMs) {
-		return new Promise((resolve) => {
-			setTimeout(() => {
-				resolve();
-			}, durationMs);
-		});
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, durationMs);
+    });
   }
 
   it('should callback only once', function() {
@@ -32,7 +32,7 @@ describe('./lib/device/implementationservices/promisecache.js', function() {
       callbackcount++;
       return Promise.resolve();
     };
-    for (let i=0; i<8; i++) {
+    for (let i = 0; i < 8; i++) {
       cache.getValue(callback);
     }
     expect(callbackcount).to.equal(1);
@@ -46,7 +46,7 @@ describe('./lib/device/implementationservices/promisecache.js', function() {
       callbackcount++;
       return Promise.resolve();
     };
-    for (let i=0; i<8; i++) {
+    for (let i = 0; i < 8; i++) {
       cache.getValue(callback);
     }
     const cacheExpireOld = cache.cacheExpire;
@@ -56,7 +56,7 @@ describe('./lib/device/implementationservices/promisecache.js', function() {
     expect(callbackcount).to.equal(1);
   });
 
-  it('invalid function parameter', function () {
+  it('invalid function parameter', function() {
     const cache = new PromiseCache();
     expect(() => {
       cache.getValue();
@@ -76,7 +76,7 @@ describe('./lib/device/implementationservices/promisecache.js', function() {
     }
 
     //WHEN
-    for (let i=0; i<8; i++) {
+    for (let i = 0; i < 8; i++) {
       cache.getValue(slowFunction);
       clock.tick(1000);
     }
