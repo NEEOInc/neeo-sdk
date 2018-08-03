@@ -86,7 +86,7 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
         .addDirectory({},
-          { getter: () => { }, action: () => { } })
+          { getter: () => {}, action: () => {} })
         .build('foo');
     }).to.throw(/MISSING_ELEMENT_NAME/);
   });
@@ -96,7 +96,7 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
         .addDirectory({ name: 'foo' },
-          { getter: () => { }, action: () => { } })
+          { getter: () => {}, action: () => {} })
         .build('foo');
     }).to.throw(/MISSING_DIRECTORY_LABEL/);
   });
@@ -106,7 +106,7 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
         .addDirectory({ name: 'foo', label: 'erbfeirufbuierbfeirubfierubfiuerbfiuerbfiuerbfiuerbfiuerbfiuerbfieurbfiuerbfiuerbfbeirubfi' },
-          { getter: () => { }, action: () => { } })
+          { getter: () => {}, action: () => {} })
         .build('foo');
     }).to.throw(/DIRECTORY_LABEL_TOO_LONG_erbfeirufbuierbfeirubfierubfiuerbfiuerbfiuerbfiuerbfiuerbfiuerbfieurbfiuerbfiuerbfbeirubfi/);
   });
@@ -170,8 +170,8 @@ describe('./lib/device/devicebuilder.js', function() {
         .setManufacturer('NEEO');
 
       registrationController = {
-        register: () => { },
-        isRegistered: () => { },
+        register: () => {},
+        isRegistered: () => {},
       };
     });
 
@@ -505,7 +505,7 @@ describe('./lib/device/devicebuilder.js', function() {
       // WHEN
       const device = new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
-        .addTextLabel({ name: 'name', label: 'label' }, () => { })
+        .addTextLabel({ name: 'name', label: 'label' }, () => {})
         .registerSubscriptionFunction(callback)
         .build('foo');
 
@@ -543,7 +543,7 @@ describe('./lib/device/devicebuilder.js', function() {
       // WHEN
       const device = new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
-        .addTextLabel({ name: 'name', label: 'label' }, () => { })
+        .addTextLabel({ name: 'name', label: 'label' }, () => {})
         .registerInitialiseFunction(callback)
         .build('foo');
 
@@ -555,8 +555,8 @@ describe('./lib/device/devicebuilder.js', function() {
       expect(() => {
         new DeviceBuilder('example-adapter')
           .setManufacturer('NEEO')
-          .registerInitialiseFunction(() => { })
-          .registerInitialiseFunction(() => { });
+          .registerInitialiseFunction(() => {})
+          .registerInitialiseFunction(() => {});
       }).to.throw(/INITIALISATION_FUNCTION_ALREADY_DEFINED/);
     });
 
@@ -575,14 +575,14 @@ describe('./lib/device/devicebuilder.js', function() {
 
   describe('registerDeviceSubscriptionHandler', function() {
     let device;
-    const deviceAdded = () => { };
-    const deviceRemoved = () => { };
-    const initializeDeviceList = () => { };
+    const deviceAdded = () => {};
+    const deviceRemoved = () => {};
+    const initializeDeviceList = () => {};
 
     beforeEach(function() {
       device = new DeviceBuilder('example-adapter', 'unitTest')
         .setManufacturer('NEEO')
-        .addTextLabel({ name: 'name', label: 'label' }, () => { });
+        .addTextLabel({ name: 'name', label: 'label' }, () => {});
     });
 
     it('should reject multiple handlers', function() {
@@ -954,7 +954,7 @@ describe('./lib/device/devicebuilder.js', function() {
     const device = new DeviceBuilder('example-adapter', 'XXX')
       .setManufacturer('NEEO')
       .addDirectory({ name: 'example-directory', label: 'my directory' },
-        { getter: () => { }, action: () => { } })
+        { getter: () => {}, action: () => {} })
       .build('foo');
 
     delete device.handler;
@@ -989,7 +989,7 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
         .addDirectory({ name: 'example-directory', label: 'my directory' },
-          { getter: () => { } });
+          { getter: () => {} });
     }).to.throw(/INVALID_DIRECTORY_CONTROLLER_ACTION_NOT_A_FUNCTION/);
   });
 
@@ -998,7 +998,7 @@ describe('./lib/device/devicebuilder.js', function() {
       new DeviceBuilder('example-adapter', 'XXX')
         .setManufacturer('NEEO')
         .addDirectory({ name: 'example-directory', label: 'my directory' },
-          { action: () => { } });
+          { action: () => {} });
     }).to.throw(/INVALID_DIRECTORY_CONTROLLER_GETTER_NOT_A_FUNCTION/);
   });
 

@@ -58,8 +58,8 @@ describe('./lib/index.js - neeoapi', function() {
 
   describe('enhanced checks', function() {
     const mockedBrainDriver = {
-      start: () => { },
-      stop: () => { },
+      start: () => {},
+      stop: () => {},
     };
 
     let nockScope;
