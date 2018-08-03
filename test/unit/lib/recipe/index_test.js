@@ -4,16 +4,16 @@ const expect = require('chai').expect;
 const recipe = require('../../../../lib/recipe/index');
 const nock = require('nock');
 
-describe('./lib/recipe/index.js', function () {
+describe('./lib/recipe/index.js', function() {
 
   let netMock;
 
-  beforeEach(function () {
+  beforeEach(function() {
     netMock = null;
     nock.cleanAll();
   });
 
-  afterEach(function () {
+  afterEach(function() {
     if (netMock) {
       expect(netMock.isDone()).to.equal(true);
     }

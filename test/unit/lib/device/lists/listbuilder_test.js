@@ -3,10 +3,10 @@
 const expect = require('chai').expect;
 const ListBuilder = require('../../../../../lib/device/lists/listBuilder');
 
-describe('./lib/device/lists/listBuilder.js', function () {
+describe('./lib/device/lists/listBuilder.js', function() {
 
-  describe('initialization', function () {
-    it('should correctly set default values', function () {
+  describe('initialization', function() {
+    it('should correctly set default values', function() {
       // WHEN
       const builder = new ListBuilder({
         title: 'title',
@@ -21,7 +21,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(builder._meta.totalMatchingItems).to.equal(0);
     });
 
-    it('should fail to initialize with too big limit (64 max)', function () {
+    it('should fail to initialize with too big limit (64 max)', function() {
       // WHEN
       expect(() => {
         new ListBuilder({
@@ -31,14 +31,14 @@ describe('./lib/device/lists/listBuilder.js', function () {
       }).to.throw(/ERROR_LIST_LIMIT_MAXIMUM_EXCEEDED/);
     });
 
-    it('should fail to initialize without title', function () {
+    it('should fail to initialize without title', function() {
       // WHEN
       expect(() => {
         new ListBuilder({});
       }).to.throw(/ERROR_LIST_TITLE_EMPTY/);
     });
 
-    it('should fail to initialize without params', function () {
+    it('should fail to initialize without params', function() {
       // WHEN
       expect(() => {
         new ListBuilder();
@@ -46,7 +46,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
     });
   });
 
-  it('should build correct metadata for empty list', function () {
+  it('should build correct metadata for empty list', function() {
     // GIVEN
     const expectedMetaData = {
       current: {
@@ -76,7 +76,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
     expect(listBuilder._meta).to.deep.equal(expectedMetaData);
   });
 
-  it('should build correct metadata for list with real items', function () {
+  it('should build correct metadata for list with real items', function() {
     // GIVEN
     const listBuilder = new ListBuilder({
       title: 'title',
@@ -118,7 +118,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
     expect(listBuilder._meta).to.deep.equal(expectedMetaData);
   });
 
-  it('should build correct metadata for list with real items - second page', function () {
+  it('should build correct metadata for list with real items - second page', function() {
     // GIVEN
     const listBuilder = new ListBuilder({
       title: 'title',
@@ -165,17 +165,17 @@ describe('./lib/device/lists/listBuilder.js', function () {
     expect(listBuilder._meta).to.deep.equal(expectedMetaData);
   });
 
-  describe('adding elements', function () {
+  describe('adding elements', function() {
     let listBuilder;
 
-    beforeEach(function () {
+    beforeEach(function() {
       listBuilder = new ListBuilder({
         title: 'title',
         browseIdentifier: 'foo',
       });
     });
 
-    it('should add list item', function () {
+    it('should add list item', function() {
       // GIVEN
       const params = {
         title: 'foo',
@@ -190,7 +190,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(1);
     });
 
-    it('should fail to add list item without params', function () {
+    it('should fail to add list item without params', function() {
       // WHEN
       expect(() => {
         listBuilder.addListItem();
@@ -198,7 +198,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(0);
     });
 
-    it('should add list header', function () {
+    it('should add list header', function() {
       // GIVEN
       const title = 'headertitle';
 
@@ -209,7 +209,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(1);
     });
 
-    it('should fail to add list header without params', function () {
+    it('should fail to add list header without params', function() {
       // WHEN
       expect(() => {
         listBuilder.addListHeader();
@@ -217,7 +217,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(0);
     });
 
-    it('should add list tile', function () {
+    it('should add list tile', function() {
       // GIVEN
       const params = [{
         thumbnailUri: 'http://www.image.com/image.jpg'
@@ -230,7 +230,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(1);
     });
 
-    it('should fail to add list tile without thumbnail param', function () {
+    it('should fail to add list tile without thumbnail param', function() {
       // WHEN
       expect(() => {
         listBuilder.addListTiles([{ actionIdentifier: 'foo' }]);
@@ -238,7 +238,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(0);
     });
 
-    it('should add list info item', function () {
+    it('should add list info item', function() {
       // GIVEN
       const params = {
         title: 'foo',
@@ -254,7 +254,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items[0].isInfoItem).to.equal(true);
     });
 
-    it('should fail to add list info item without title', function () {
+    it('should fail to add list info item without title', function() {
       // GIVEN
       const params = {};
 
@@ -265,7 +265,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(0);
     });
 
-    it('should add list button', function () {
+    it('should add list button', function() {
       // GIVEN
       const params = [{
         title: 'some title',
@@ -281,7 +281,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items[0].buttons[0].actionIdentifier).to.equal(params[0].actionIdentifier);
     });
 
-    it('should add two list buttons', function () {
+    it('should add two list buttons', function() {
       // GIVEN
       const buttons = [{
         title: 'some title',
@@ -300,7 +300,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items[0].buttons[1].isButton).to.equal(true);
     });
 
-    it('should fail to add list button without title param', function () {
+    it('should fail to add list button without title param', function() {
       // WHEN
       expect(() => {
         listBuilder.addListButtons([{ actionIdentifier: 'foo' }]);

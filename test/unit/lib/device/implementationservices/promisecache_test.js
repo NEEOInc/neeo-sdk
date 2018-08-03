@@ -4,15 +4,15 @@ const expect = require('chai').expect;
 const PromiseCache = require('../../../../../lib/device/implementationservices/promisecache');
 const sinon = require('sinon');
 
-describe('./lib/device/implementationservices/promisecache.js', function () {
+describe('./lib/device/implementationservices/promisecache.js', function() {
 
   let clock;
 
-  beforeEach(function () {
+  beforeEach(function() {
     clock = sinon.useFakeTimers();
   });
 
-  afterEach(function () {
+  afterEach(function() {
     clock.restore();
   });
 
@@ -24,11 +24,11 @@ describe('./lib/device/implementationservices/promisecache.js', function () {
     });
   }
 
-  it('should callback only once', function () {
+  it('should callback only once', function() {
     const cache = new PromiseCache();
     let callbackcount = 0;
 
-    const callback = function () {
+    const callback = function() {
       callbackcount++;
       return Promise.resolve();
     };
@@ -38,11 +38,11 @@ describe('./lib/device/implementationservices/promisecache.js', function () {
     expect(callbackcount).to.equal(1);
   });
 
-  it('should invalidate cache', function () {
+  it('should invalidate cache', function() {
     const cache = new PromiseCache();
     let callbackcount = 0;
 
-    const callback = function () {
+    const callback = function() {
       callbackcount++;
       return Promise.resolve();
     };
@@ -56,14 +56,14 @@ describe('./lib/device/implementationservices/promisecache.js', function () {
     expect(callbackcount).to.equal(1);
   });
 
-  it('invalid function parameter', function () {
+  it('invalid function parameter', function() {
     const cache = new PromiseCache();
     expect(() => {
       cache.getValue();
     }).to.throw(/NO_CALLBACK_FUNCTION_DEFINED/);
   });
 
-  it('should not execute callback mutliple times (NEST issue)', function () {
+  it('should not execute callback mutliple times (NEST issue)', function() {
     //GIVEN
     const cache = new PromiseCache();
     let runCount = 0;
