@@ -43,18 +43,18 @@ describe('./lib/recipe/factory.js', function() {
     expect(typeof result[0].action.powerOff).to.equal('function');
   });
 
-  it('should validate power state answer, undefined parameter', function() {
-    const result = factory.validatePowerStateAnswer();
+  it('should validate active recipe answer, undefined parameter', function() {
+    const result = factory.validateActiveRecipesAnswer();
     expect(result).to.equal(false);
   });
 
-  it('should validate power state answer, json data', function() {
-    const result = factory.validatePowerStateAnswer({ foo: 'bar' });
+  it('should validate active recipe answer, json data', function() {
+    const result = factory.validateActiveRecipesAnswer({ foo: 'bar' });
     expect(result).to.equal(false);
   });
 
-  it('should validate power state answer, array', function() {
-    const result = factory.validatePowerStateAnswer([1,2,3]);
+  it('should validate active recipe answer, array', function() {
+    const result = factory.validateActiveRecipesAnswer([1,2,3]);
     expect(result).to.equal(true);
   });
 

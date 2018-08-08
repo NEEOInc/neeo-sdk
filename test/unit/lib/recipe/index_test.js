@@ -19,38 +19,38 @@ describe('./lib/recipe/index.js', function() {
     }
   });
 
-  it('should get power state of recipes, but fail due missing parameter', function(done) {
-    const promise = recipe.getRecipePowerState();
+  it('should get active recipes, but fail due missing parameter', function(done) {
+    const promise = recipe.getActiveRecipes();
     promise.catch((error) => {
       expect(error.message).to.equal('MISSING_BRAIN_PARAMETER');
       done();
     });
   });
 
-  it('should get power state of recipes, valid response', function(done) {
+  it('should get active recipes, valid response', function(done) {
     netMock = nock('http://192.168.1.1:3000')
       .get('/v1/api/activeRecipes').reply(200, [1,2,3] );
-    const promise = recipe.getRecipePowerState('192.168.1.1');
+    const promise = recipe.getActiveRecipes('192.168.1.1');
     promise.then((result) => {
       expect(result).to.deep.equal([1,2,3]);
       done();
     });
   });
 
-  it('should get power state of recipes, invalid response', function(done) {
+  it('should get active recipes, invalid response', function(done) {
     netMock = nock('http://192.168.1.1:3000')
       .get('/v1/api/activeRecipes').reply(200, { foo: 'bar'} );
-    const promise = recipe.getRecipePowerState('192.168.1.1');
+    const promise = recipe.getActiveRecipes('192.168.1.1');
     promise.then((result) => {
       expect(result).to.deep.equal([]);
       done();
     });
   });
 
-  it('should get power state of recipes, server replies with error 500', function(done) {
+  it('should get active recipes, server replies with error 500', function(done) {
     netMock = nock('http://192.168.1.1:3000')
       .get('/v1/api/activeRecipes').reply(500);
-    const promise = recipe.getRecipePowerState('192.168.1.1');
+    const promise = recipe.getActiveRecipes('192.168.1.1');
     promise.catch((error) => {
       expect(error.response.status).to.equal(500);
       done();
