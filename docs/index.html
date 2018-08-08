@@ -426,7 +426,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
                         <li class="method-link scope-public">
-                            <a href="#lib-index.js-module.exports.getrecipespowerstate" title="getRecipesPowerState">getRecipesPowerState</a>
+                            <a href="#lib-index.js-module.exports.getactiverecipes" title="getActiveRecipes">getActiveRecipes</a>
                         </li>
 
 
@@ -2592,7 +2592,18 @@ Recipes.</p>
 
                         <div class="description lead">
 
-                            <p>Add an image to your custom element (for example to display the album cover of the current track)</p>
+                            <p>Add an image to your custom element (for example to display the album cover of the current track). To avoid downloading and resizing large images on the Brain use these general guidelines:</p>
+<ul>
+<li>Large images: 480 x 480</li>
+<li>Small: 100 x 100
+If you want to optimize for a specific target:</li>
+<li>img url large: 454 x 454</li>
+<li>img url small: 100 x 100</li>
+<li>player: 480 x 480</li>
+<li>list images (and mini player): 80 x 80</li>
+<li>list tile images: 215 x 215
+<strong>Note</strong>: These are specifically for the remote, if you're also concerned about the mobile app images a little larger (maybe double) might offer a good compromise for mobile devices.</li>
+</ul>
 
 
                         </div>
@@ -4780,9 +4791,9 @@ the getter function is called with (deviceId, params) parameter. params contains
 
                     <div class="method scope-public">
 
-                        <h2 id="lib-index.js-module.exports.getrecipespowerstate">
-                            <a href="#lib-index.js-module.exports.getrecipespowerstate" class="permalink">#</a>
-                            <span class="method-name" title="getRecipesPowerState(NEEOBrain)">getRecipesPowerState(NEEOBrain)</span>
+                        <h2 id="lib-index.js-module.exports.getactiverecipes">
+                            <a href="#lib-index.js-module.exports.getactiverecipes" class="permalink">#</a>
+                            <span class="method-name" title="getActiveRecipes(NEEOBrain)">getActiveRecipes(NEEOBrain)</span>
                         </h2>
 
                         <div class="description lead">
