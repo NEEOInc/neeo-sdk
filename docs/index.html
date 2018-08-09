@@ -2594,16 +2594,18 @@ Recipes.</p>
 
                             <p>Add an image to your custom element (for example to display the album cover of the current track). To avoid downloading and resizing large images on the Brain use these general guidelines:</p>
 <ul>
-<li>Large images: 480 x 480</li>
-<li>Small: 100 x 100
-If you want to optimize for a specific target:</li>
-<li>img url large: 454 x 454</li>
-<li>img url small: 100 x 100</li>
-<li>player: 480 x 480</li>
-<li>list images (and mini player): 80 x 80</li>
-<li>list tile images: 215 x 215
-<strong>Note</strong>: These are specifically for the remote, if you're also concerned about the mobile app images a little larger (maybe double) might offer a good compromise for mobile devices.</li>
+<li>Large images: 480x480px</li>
+<li>Small: 100x100px</li>
 </ul>
+<p>If you want to optimize for a specific target:</p>
+<ul>
+<li>img url large: 454x454px</li>
+<li>img url small: 100x100px</li>
+<li>player: 480x480px</li>
+<li>Mini player: 80x80px</li>
+<li>list tile images: 215 x 215</li>
+</ul>
+<p>These guidelines are specifically for the remote, a larger (maybe double) resolution might offer a good compromise for mobile devices.</p>
 
 
                         </div>
@@ -4026,7 +4028,8 @@ the getter function is called with (deviceId, params) parameter. params contains
 
                         <div class="description lead">
 
-                            <p>This function adds an item to the list.</p>
+                            <p>This function adds an item to the list. To avoid downloading and resizing large images on the Brain you should provide an image of 80x80px.
+These guidelines are specifically for the remote, a larger (maybe double) resolution might offer a good compromise for mobile devices.</p>
 
 
                         </div>
@@ -4257,7 +4260,8 @@ the getter function is called with (deviceId, params) parameter. params contains
 
                         <div class="description lead">
 
-                            <p>This function adds a row of tiles to the list. It takes an array of up to two tiles. A ListTile shows a large thumbnail and the defined action will be executed when the ListTile element is selected.</p>
+                            <p>This function adds a row of tiles to the list. It takes an array of up to two tiles. A ListTile shows a large thumbnail and the defined action will be executed when the ListTile element is selected. To avoid downloading and resizing large images on the Brain you should provide an image of 215x215px.
+These guidelines are specifically for the remote, a larger (maybe double) resolution might offer a good compromise for mobile devices.</p>
 
 
                         </div>
