@@ -426,7 +426,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
                         <li class="method-link scope-public">
-                            <a href="#lib-index.js-module.exports.getrecipespowerstate" title="getRecipesPowerState">getRecipesPowerState</a>
+                            <a href="#lib-index.js-module.exports.getactiverecipes" title="getActiveRecipes">getActiveRecipes</a>
                         </li>
 
 
@@ -2592,7 +2592,20 @@ Recipes.</p>
 
                         <div class="description lead">
 
-                            <p>Add an image to your custom element (for example to display the album cover of the current track)</p>
+                            <p>Add an image to your custom element (for example to display the album cover of the current track). To avoid downloading and resizing large images on the Brain use these general guidelines:</p>
+<ul>
+<li>Large images: 480x480px</li>
+<li>Small: 100x100px</li>
+</ul>
+<p>If you want to optimize for a specific target:</p>
+<ul>
+<li>img url large: 454x454px</li>
+<li>img url small: 100x100px</li>
+<li>player: 480x480px</li>
+<li>Mini player: 80x80px</li>
+<li>list tile images: 215 x 215</li>
+</ul>
+<p>These guidelines are specifically for the remote, a larger (maybe double) resolution might offer a good compromise for mobile devices.</p>
 
 
                         </div>
@@ -4015,7 +4028,8 @@ the getter function is called with (deviceId, params) parameter. params contains
 
                         <div class="description lead">
 
-                            <p>This function adds an item to the list.</p>
+                            <p>This function adds an item to the list. To avoid downloading and resizing large images on the Brain you should provide an image of 80x80px.
+These guidelines are specifically for the remote, a larger (maybe double) resolution might offer a good compromise for mobile devices.</p>
 
 
                         </div>
@@ -4246,7 +4260,8 @@ the getter function is called with (deviceId, params) parameter. params contains
 
                         <div class="description lead">
 
-                            <p>This function adds a row of tiles to the list. It takes an array of up to two tiles. A ListTile shows a large thumbnail and the defined action will be executed when the ListTile element is selected.</p>
+                            <p>This function adds a row of tiles to the list. It takes an array of up to two tiles. A ListTile shows a large thumbnail and the defined action will be executed when the ListTile element is selected. To avoid downloading and resizing large images on the Brain you should provide an image of 215x215px.
+These guidelines are specifically for the remote, a larger (maybe double) resolution might offer a good compromise for mobile devices.</p>
 
 
                         </div>
@@ -4780,9 +4795,9 @@ the getter function is called with (deviceId, params) parameter. params contains
 
                     <div class="method scope-public">
 
-                        <h2 id="lib-index.js-module.exports.getrecipespowerstate">
-                            <a href="#lib-index.js-module.exports.getrecipespowerstate" class="permalink">#</a>
-                            <span class="method-name" title="getRecipesPowerState(NEEOBrain)">getRecipesPowerState(NEEOBrain)</span>
+                        <h2 id="lib-index.js-module.exports.getactiverecipes">
+                            <a href="#lib-index.js-module.exports.getactiverecipes" class="permalink">#</a>
+                            <span class="method-name" title="getActiveRecipes(NEEOBrain)">getActiveRecipes(NEEOBrain)</span>
                         </h2>
 
                         <div class="description lead">

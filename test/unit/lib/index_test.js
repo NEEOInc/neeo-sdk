@@ -31,8 +31,8 @@ describe('./lib/index.js - neeoapi', function() {
       expect(neeoapi.getRecipes).to.equal(recipes.getAllRecipes);
     });
 
-    it('should expose getRecipesPowerState', function() {
-      expect(neeoapi.getRecipesPowerState).to.equal(recipes.getRecipePowerState);
+    it('should expose getActiveRecipes', function() {
+      expect(neeoapi.getRecipesPowerState).to.equal(recipes.getActiveRecipes);
     });
 
     it('should expose discoverOneBrain', function() {
