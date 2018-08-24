@@ -2,11 +2,12 @@
 
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const mdns = require('../../../../lib/discover/mdns.js');
+const brainLookup = require('../../../../lib/discover/brain-lookup.js');
 const should = chai.should;
 const sinon = require('sinon');
 const Discover = require('../../../../lib/discover/index.js');
-const BluePromise = require('bluebird');
+
+const { from } = require('rxjs');
 
 describe('./lib/discover - successful discover', function() {
   chai.use(chaiAsPromised);
@@ -38,12 +39,12 @@ describe('./lib/discover - successful discover', function() {
   };
 
   before(function() {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   beforeEach(function() {
-    sandbox.stub(mdns, 'findFirstNeeoBrain')
-      .returns(BluePromise.resolve(mdnsReply));
+    sandbox.stub(brainLookup, 'findFirstBrain')
+      .returns(from([mdnsReply]));
   });
 
   afterEach(function() {
@@ -60,27 +61,4 @@ describe('./lib/discover - successful discover', function() {
       iparray: ['192.168.111.32']
     });
   });
-});
-
-
-describe('./lib/discover - failed discover', function() {
-  let sandbox;
-
-  before(function() {
-    sandbox = sinon.sandbox.create();
-  });
-
-  beforeEach(function() {
-    sandbox.stub(mdns, 'findFirstNeeoBrain')
-      .returns(BluePromise.reject(new Error('INVALID_SERVICE_FOUND')));
-  });
-
-  afterEach(function() {
-    sandbox.restore();
-  });
-
-  it('should discover invalid brain', function() {
-    return Discover.discoverOneBrain().should.be.rejectedWith(Error, 'INVALID_SERVICE_FOUND');
-  });
-
 });

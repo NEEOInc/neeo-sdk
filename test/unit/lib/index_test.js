@@ -13,7 +13,7 @@ const expressBrainDriver = require('../../../lib/expressBrainDriver');
 const config = require('../../../lib/config');
 
 describe('./lib/index.js - neeoapi', function() {
-  const sandbox = sinon.sandbox.create();
+  const sandbox = sinon.createSandbox();
   const configStub = sandbox.stub(config);
 
   configStub.brainVersionSatisfaction = '0.49.0 - 0.50.0';
@@ -89,7 +89,7 @@ describe('./lib/index.js - neeoapi', function() {
         .post('/v1/api/registerSdkDeviceAdapter')
         .reply(200)
         .get('/systeminfo')
-        .reply(200, { firmwareVersion: '0.49.0' });
+        .reply(200, { firmwareVersion: '0.51.0' });
 
       const device = neeoapi.buildDevice('FOO')
         .setManufacturer('NEEO')
@@ -130,7 +130,7 @@ describe('./lib/index.js - neeoapi', function() {
         .post('/v1/api/registerSdkDeviceAdapter')
         .reply(200)
         .get('/systeminfo')
-        .reply(200, { firmwareVersion: '0.49.0' });
+        .reply(200, { firmwareVersion: '0.51.0' });
 
       const conf = {
         brain: 'foo',

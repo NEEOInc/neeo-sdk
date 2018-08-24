@@ -1,30 +1,30 @@
 #!/usr/bin/env node
 'use strict';
 
-const packageFile = require(process.cwd() + '/package.json');
-const sdkOptions = packageFile.neeoSdkOptions || {};
-const deviceController = require('./devicecontroller');
+const debug = require('debug')('neeo:cli:index');
+const commander = require('commander');
+const version = require('../package.json').version;
 
-const argv = require('yargs')
-  .usage('Usage: neeo-sdk <command>')
-  .command('start', 'start the SDK instance')
-  .help('h')
-  .alias('h', 'help').argv;
+let packageFile = {};
+try {
+  packageFile = require(process.cwd() + '/package.json');
+} catch(err) {
+  debug('USING_DEFAULT_CONFIG', err.message);
+}
 
 process.on('SIGINT', () => process.exit());
 process.on('exit', () => deviceController.stopDevices());
 
-execute(argv._);
+const sdkOptions = packageFile.neeoSdkOptions || {};
+const deviceController = require('./devicecontroller');
 
-function execute(options) {
-  const command = options[0];
+commander
+  .version(version)
+  .option('-s, start', 'Start the SDK instance')
+  .parse(process.argv);
 
-  switch (command) {
-    case 'start':
-      deviceController.startDevices(sdkOptions);
-      return;
-  }
-
-  console.warn('Unknown command:', command);
-  process.exit();
+if (!commander.start) {
+  commander.help();
+  process.exit(1);
 }
+deviceController.startDevices(sdkOptions);

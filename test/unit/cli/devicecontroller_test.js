@@ -9,11 +9,11 @@ const DeviceBuilder = require('../../../lib/device/devicebuilder');
 const sdk = require('../../../lib');
 
 describe('./cli/devicecontroller.js', function() {
-  let sandbox;
+  let sandbox = sinon.createSandbox();
 
   beforeEach(function() {
-    sandbox = sinon.sandbox.create();
     sandbox.stub(sdk);
+    sdk.stopServer.resolves();
   });
 
   afterEach(function() {
@@ -45,10 +45,17 @@ describe('./cli/devicecontroller.js', function() {
 
   describe('startDevices', function() {
     context('when no devices are found', function() {
-      it('should throw an error', function() {
+      it('should exit process', function() {
+        const sdkOptions = {
+          brainHost: '10.0.0.1',
+        };
         sandbox.stub(deviceLoader, 'loadDevices').returns([]);
+        sandbox.stub(process, 'exit').returns();
 
-        expect(startDevices).to.throw('No devices found!');
+        return startDevices(sdkOptions)
+          .then(() => {
+            expect(process.exit).to.have.been.calledOnce;
+          });
       });
     });
 

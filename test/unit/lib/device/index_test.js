@@ -10,7 +10,7 @@ const Device = require('../../../../lib/device/index');
 const config = require('../../../../lib/config');
 
 describe('./lib/device/index.js', function() {
-  const sandbox = sinon.sandbox.create();
+  const sandbox = sinon.createSandbox();
   const BRAINADDR = '10.0.0.2';
   const CONFNAME = 'NEEO';
   const BRAINPORT = '3000';
@@ -105,6 +105,21 @@ describe('./lib/device/index.js', function() {
       });
     });
 
+    context('when the provided devices are invalid', function() {
+      it('throw an error', function() {
+        nockScope
+          .get('/systeminfo')
+          .reply(200, { firmwareVersion: '0.49.0' });
+
+        const conf = buildInvalidConf();
+
+        return expect(Device.startServer(conf, brainDriver)).rejectedWith(
+          /Invalid device detected! Check the .+ driver device exports\./
+        );
+      });
+    });
+
+
     context('when a device uses subscriptions', function() {
       it('should fetch the subscriptions for that device', function() {
         const device = buildValidCustomDevice()
@@ -182,6 +197,80 @@ describe('./lib/device/index.js', function() {
     });
   });
 
+  it('should register device subscription', function() {
+    const BRAINADDR = 'foofoo';
+    const NAME = 'bar';
+    const DEVICENAME = 'updateDevice';
+    let callbackConf, callbackRequesthandler, callbackStop;
+    const mockBrainDriver = {
+      start: function(_conf, _requestHandler) {
+        callbackConf = _conf;
+        callbackRequesthandler = _requestHandler;
+      },
+      stop: function(_conf) {
+        callbackStop = _conf;
+      }
+    };
+    const brainNotifiationKeys = [
+      { name: 'albumcover', eventKey: '6241612146438832128:IMAGEURL_SENSOR' },
+    ];
+    let notificationCallback;
+    const subscriptionHandler = (notificationFunction) => {
+      notificationCallback = notificationFunction;
+    };
+
+    const nockScope = nock('http://foofoo:3000')
+      .get('/systeminfo').reply(200, {
+        firmwareVersion: '0.49.0',
+      })
+      .post('/v1/api/registerSdkDeviceAdapter')
+      .reply(200)
+      .get(/v1\/api\/notificationkey\/[^/]*\/[^/]*\/0001/)
+      .reply(200, brainNotifiationKeys)
+      .post('/v1/notifications', {
+        type: config.sensorUpdateKey,
+        data: {
+          sensorEventKey: brainNotifiationKeys[0].eventKey,
+          sensorValue: 50,
+        }
+      })
+      .reply(200)
+      .post('/v1/api/unregisterSdkDeviceAdapter')
+      .reply(200);
+
+    const device = Device
+      .buildCustomDevice(DEVICENAME, '123')
+      .addImageUrl({ name: 'albumcover' }, () => { return 'foo'; })
+      .registerSubscriptionFunction(subscriptionHandler);
+
+
+    const notificationMsg = {
+      uniqueDeviceId: '0001',
+      component: 'albumcover',
+      value: 50,
+    };
+
+    const conf = {
+      port: 3000,
+      brain: BRAINADDR,
+      name: NAME,
+      devices: [ device ],
+    };
+
+    return Device.startServer(conf, mockBrainDriver)
+      .then(() => {
+        expect(notificationCallback).to.be.a('function');
+        // TODO call callback with some update and check notification is called...
+        return notificationCallback(notificationMsg);
+      })
+      .then(() => Device.stopServer(conf))
+      .then(() => {
+        nockScope.done();
+        expect(callbackStop.brain).to.equal(BRAINADDR);
+        expect(callbackStop.name).to.equal(NAME);
+      });
+  });
+
   function buildValidCustomDevice() {
     return Device
       .buildCustomDevice('myDevice', '123')
@@ -195,7 +284,6 @@ describe('./lib/device/index.js', function() {
     if (!device) {
       device = buildValidCustomDevice();
     }
-
     return {
       port: BRAINPORT,
       brain: BRAINADDR,
@@ -203,4 +291,15 @@ describe('./lib/device/index.js', function() {
       devices: [device],
     };
   }
+
+  function buildInvalidConf() {
+    const device = [ buildValidCustomDevice() ];
+    return {
+      port: BRAINPORT,
+      brain: BRAINADDR,
+      name: CONFNAME,
+      devices: [device],
+    };
+  }
+
 });

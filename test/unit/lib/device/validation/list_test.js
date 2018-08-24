@@ -6,22 +6,21 @@ const listValidation = require('../../../../../lib/device/validation/list');
 
 describe('./lib/device/validation/list.js', function() {
 
-  it('should validate title - positive', function() {
-    // GIVEN
+  it('should validate valid title', function() {
     const input = 'foo';
-
-    // WHEN
     const validatedTitle = listValidation.validateTitle(input);
-
-    // THEN
     expect(validatedTitle).to.equal(input);
   });
 
-  it('should validate title - negative', function() {
-    // WHEN
-    expect(function() {
-      listValidation.validateTitle();
-    }).to.throw(/ERROR_LIST_TITLE_EMPTY/);
+  it('should validate empty title', function() {
+    const input = '';
+    const validatedTitle = listValidation.validateTitle(input);
+    expect(validatedTitle).to.equal(input);
+  });
+
+  it('should validate undefined title', function() {
+    const validatedTitle = listValidation.validateTitle();
+    expect(validatedTitle).to.equal('');
   });
 
   it('should validate thumbnail - positive', function() {
@@ -85,7 +84,7 @@ describe('./lib/device/validation/list.js', function() {
     // WHEN
     expect(function() {
       listValidation.validateButton();
-    }).to.throw(/ERROR_LIST_BUTTON_TITLE_EMPTY/);
+    }).to.throw(/ERROR_LIST_BUTTON_TITLE_OR_ICON_EMPTY/);
   });
 
   it('should validate button row params - no object', function() {
@@ -166,6 +165,40 @@ describe('./lib/device/validation/list.js', function() {
     }).to.throw(/ERROR_LIST_LIMIT_MAXIMUM_EXCEEDED/);
   });
 
+  it('should fail button icon validation with not allowed icon', function() {
+    // GIVEN
+    const iconName = 'foo';
+
+    // WHEN
+    expect(function() {
+      listValidation.validateButtonIcon(iconName);
+    }).to.throw(/INVALID_ICON_NAME: foo/);
+  });
+
+  it('should not fail button icon validation without icon name', function() {
+    // WHEN
+    expect(function() {
+      listValidation.validateButtonIcon();
+    }).to.not.throw;
+  });
+
+  it('should return allowed icon after validation', function() {
+    // GIVEN
+    const iconName = 'repeat';
+
+    // WHEN
+    const icon = listValidation.validateButtonIcon(iconName);
+
+    // THEN
+    expect(icon).to.equal('repeat');
+  });
+
+  it('should ignore invalid icon name', function() {
+    const iconName = 5;
+    const icon = listValidation.validateButtonIcon(iconName);
+    expect(icon).to.equal(undefined);
+  });
+
   describe('validate full list:', function() {
     let validList;
     beforeEach(function() {
@@ -195,19 +228,25 @@ describe('./lib/device/validation/list.js', function() {
       { name: 'missing "_meta.current" property', shouldFail: true,
         data: { _meta: { current: null } }, error: /Current can\'t be blank/ },
       { name: '"_meta.current.browseIdentifier" must be string', shouldFail: true,
-        data: { _meta: { current: { browseIdentifier: null } } }, error: /no string/ },
+        data: { _meta: { current: { browseIdentifier: 3 } } }, error: /no string/ },
+      { name: '"_meta.current.browseIdentifier" can be empty', shouldFail: false,
+        data: { _meta: { current: { browseIdentifier: null } } } },
       { name: '"_meta.current.offset" must be integer', shouldFail: true,
         data: { _meta: { current: { offset: null } } }, error: /no integer/ },
       { name: '"_meta.current.limit" must be integer', shouldFail: true,
         data: { _meta: { current: { limit: null } } }, error: /no integer/ },
       { name: '"_meta.previous.browseIdentifier" must be string', shouldFail: true,
-        data: { _meta: { previous: { browseIdentifier: null } } }, error: /no string/ },
+        data: { _meta: { previous: { browseIdentifier: 3 } } }, error: /no string/ },
+      { name: '"_meta.previous.browseIdentifier" can be empty', shouldFail: false,
+        data: { _meta: { current: { browseIdentifier: undefined } } } },
       { name: '"_meta.previous.offset" must be integer', shouldFail: true,
         data: { _meta: { previous: { offset: null } } }, error: /no integer/ },
       { name: '"_meta.previous.limit" must be integer', shouldFail: true,
         data: { _meta: { previous: { limit: null } } }, error: /no integer/ },
       { name: '"_meta.next.browseIdentifier" must be string', shouldFail: true,
-        data: { _meta: { next: { browseIdentifier: null } } }, error: /no string/ },
+        data: { _meta: { next: { browseIdentifier: 3 } } }, error: /no string/ },
+      { name: '"_meta.next.browseIdentifier" can be empty', shouldFail: false,
+        data: { _meta: { current: { browseIdentifier: undefined } } } },
       { name: '"_meta.next.offset" must be integer', shouldFail: true,
         data: { _meta: { next: { offset: null } } }, error: /no integer/ },
       { name: '"_meta.next.limit" must be integer', shouldFail: true,

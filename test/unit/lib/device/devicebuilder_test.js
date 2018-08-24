@@ -185,7 +185,7 @@ describe('./lib/device/devicebuilder.js', function() {
     it('should catch invalid controller', function() {
       expect(function() {
         device
-          .enableRegistration({ headerText, description, type, }, 'notAFunction');
+          .enableRegistration({ headerText, description, type }, 'notAFunction');
       }).to.throw(/INVALID_REGISTRATION_CONTROLLER/);
     });
 
@@ -195,7 +195,7 @@ describe('./lib/device/devicebuilder.js', function() {
 
       expect(function() {
         device
-          .enableRegistration({ headerText, description, type, }, registrationController);
+          .enableRegistration({ headerText, description, type }, registrationController);
       }).to.throw(/INVALID_REGISTRATION_CONTROLLER/);
     });
 
@@ -205,36 +205,36 @@ describe('./lib/device/devicebuilder.js', function() {
 
       expect(function() {
         device
-          .enableRegistration({ headerText, description, type, }, registrationController);
+          .enableRegistration({ headerText, description, type }, registrationController);
       }).to.throw(/INVALID_REGISTRATION_CONTROLLER/);
     });
 
     it('should catch invalid type', function() {
       expect(function() {
         device
-          .enableRegistration({ headerText, description, type: 'IP_ADDRESS', }, registrationController);
+          .enableRegistration({ headerText, description, type: 'IP_ADDRESS' }, registrationController);
       }).to.throw(/INVALID_REGISTRATION_TYPE/);
     });
 
     it('should catch missing header', function() {
       expect(function() {
         device
-          .enableRegistration({ description, type, }, registrationController);
+          .enableRegistration({ description, type }, registrationController);
       }).to.throw(/MISSING_REGISTRATION_HEADERTEXT_OR_DESCRIPTION/);
     });
 
     it('should catch missing description', function() {
       expect(function() {
         device
-          .enableRegistration({ headerText, type, }, registrationController);
+          .enableRegistration({ headerText, type }, registrationController);
       }).to.throw(/MISSING_REGISTRATION_HEADERTEXT_OR_DESCRIPTION/);
     });
 
     it('should fail to create device, multiple enableRegistration', function() {
       expect(function() {
         device
-          .enableRegistration({ headerText, description, type, }, registrationController)
-          .enableRegistration({ headerText, description, type, }, registrationController);
+          .enableRegistration({ headerText, description, type }, registrationController)
+          .enableRegistration({ headerText, description, type }, registrationController);
       }).to.throw(/REGISTERHANLDER_ALREADY_DEFINED/);
     });
 
@@ -242,7 +242,7 @@ describe('./lib/device/devicebuilder.js', function() {
       expect(() => {
         device
           .setType('light')
-          .enableRegistration({ headerText, description, type, }, registrationController)
+          .enableRegistration({ headerText, description, type }, registrationController)
           .addSlider({ name: 'example-slider', label: 'my slider', range: [0,200], unit: '@' },
             { setter: function() {}, getter: function() {} })
           .build('foo');
@@ -252,8 +252,8 @@ describe('./lib/device/devicebuilder.js', function() {
     it('should build device with a enabled registration and discovery', function() {
       device
         .setType('light')
-        .enableRegistration({ headerText, description, type, }, registrationController)
-        .enableDiscovery({ headerText, description, }, function(){})
+        .enableRegistration({ headerText, description, type }, registrationController)
+        .enableDiscovery({ headerText, description }, function(){})
         .addSlider({ name: 'example-slider', label: 'my slider', range: [0,200], unit: '@' },
           { setter: function() {}, getter: function() {} })
         .build('foo');
@@ -402,16 +402,16 @@ describe('./lib/device/devicebuilder.js', function() {
           'name': 'example-adapter',
           'tokens': [
             'foo',
-            'bar'
+            'bar',
           ],
-        }
+        },
       ],
       'capabilities': [{
         'type': 'button',
         'name': 'example-button',
         'label': 'my button',
-        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-button'
-      }]
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-button',
+      }],
     });
   });
 
@@ -441,17 +441,17 @@ describe('./lib/device/devicebuilder.js', function() {
           'name': 'example-adapter',
           'tokens': [
             'foo',
-            'bar'
+            'bar',
           ],
           'icon': 'sonos',
-        }
+        },
       ],
       'capabilities': [{
         'type': 'button',
         'name': 'example-button',
         'label': 'my button',
-        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-button'
-      }]
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-button',
+      }],
     });
   });
 
@@ -482,18 +482,18 @@ describe('./lib/device/devicebuilder.js', function() {
           'name': 'example-adapter',
           'tokens': [
             'foo',
-            'bar'
+            'bar',
           ],
           'icon': 'sonos',
-          'specificname': 'VERY SPECIFIC'
-        }
+          'specificname': 'VERY SPECIFIC',
+        },
       ],
       'capabilities': [{
         'type': 'button',
         'name': 'example-button',
         'label': 'my button',
-        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-button'
-      }]
+        'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-button',
+      }],
     });
   });
 
@@ -679,7 +679,7 @@ describe('./lib/device/devicebuilder.js', function() {
         {
           'name': 'example-adapter',
           'tokens': [],
-        }
+        },
       ],
       'capabilities': [{
         'type': 'sensor',
@@ -687,8 +687,8 @@ describe('./lib/device/devicebuilder.js', function() {
         'label': 'label',
         'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/LABELNAME_SENSOR',
         'sensor': {
-          'type': 'custom',
-        }
+          'type': 'string',
+        },
       },
         {
           'type': 'textlabel',
@@ -696,8 +696,8 @@ describe('./lib/device/devicebuilder.js', function() {
           'label': 'label',
           isLabelVisible: undefined,
           'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
-          'sensor': 'LABELNAME_SENSOR'
-      }]
+          'sensor': 'LABELNAME_SENSOR',
+      }],
     });
   });
 
@@ -724,7 +724,7 @@ describe('./lib/device/devicebuilder.js', function() {
         {
           'name': 'example-adapter',
           'tokens': [],
-        }
+        },
       ],
       'capabilities': [{
         'type': 'sensor',
@@ -732,8 +732,8 @@ describe('./lib/device/devicebuilder.js', function() {
         'label': 'label',
         'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/LABELNAME_SENSOR',
         'sensor': {
-          'type': 'custom',
-        }
+          'type': 'string',
+        },
       },
         {
           'type': 'textlabel',
@@ -741,8 +741,8 @@ describe('./lib/device/devicebuilder.js', function() {
           'label': 'label',
           isLabelVisible: false,
           'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/labelname',
-          'sensor': 'LABELNAME_SENSOR'
-        }]
+          'sensor': 'LABELNAME_SENSOR',
+        }],
     });
   });
 
@@ -773,7 +773,7 @@ describe('./lib/device/devicebuilder.js', function() {
         {
           'name': 'example-adapter',
           'tokens': [],
-        }
+        },
       ],
       'capabilities': [
         {
@@ -785,10 +785,10 @@ describe('./lib/device/devicebuilder.js', function() {
             'type': 'range',
             'range': [
               0,
-              200
+              200,
             ],
-            'unit': '%40'
-          }
+            'unit': '%40',
+          },
         },
         {
           'type': 'slider',
@@ -800,12 +800,12 @@ describe('./lib/device/devicebuilder.js', function() {
             'sensor': 'EXAMPLE-SLIDER_SENSOR',
             'range': [
               0,
-              200
+              200,
             ],
-            'unit': '%40'
-          }
-        }
-      ]
+            'unit': '%40',
+          },
+        },
+      ],
     });
   });
 
@@ -830,7 +830,7 @@ describe('./lib/device/devicebuilder.js', function() {
       .defineTiming({
         powerOnDelayMs,
         sourceSwitchDelayMs,
-        shutdownDelayMs
+        shutdownDelayMs,
       })
       .build('foo');
     expect(device.timing.standbyCommandDelay).to.equal(powerOnDelayMs);
@@ -845,7 +845,7 @@ describe('./lib/device/devicebuilder.js', function() {
       .addTextLabel({ name:'labelname', label: 'label' }, function(){})
       .setType('VOD')
       .defineTiming({
-        powerOnDelayMs
+        powerOnDelayMs,
       })
       .build('foo');
     expect(device.timing.standbyCommandDelay).to.equal(powerOnDelayMs);
@@ -907,7 +907,7 @@ describe('./lib/device/devicebuilder.js', function() {
         {
           'name': 'example-adapter',
           'tokens': [],
-        }
+        },
       ],
       'capabilities': [
         {
@@ -916,17 +916,17 @@ describe('./lib/device/devicebuilder.js', function() {
           'label': 'my switch',
           'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/EXAMPLE-SWITCH_SENSOR',
           'sensor': {
-            'type': 'binary'
-          }
+            'type': 'binary',
+          },
         },
         {
           'type': 'switch',
           'name': 'example-switch',
           'label': 'my switch',
           'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-switch',
-          'sensor': 'EXAMPLE-SWITCH_SENSOR'
-        }
-      ]
+          'sensor': 'EXAMPLE-SWITCH_SENSOR',
+        },
+      ],
     });
   });
 
@@ -971,17 +971,53 @@ describe('./lib/device/devicebuilder.js', function() {
         {
           'name': 'example-adapter',
           'tokens': [],
-        }
+        },
       ],
       'capabilities': [
         {
           'label': 'my directory',
           'name': 'example-directory',
           'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-directory',
-          'type': 'directory'
-        }
-      ]
+          'type': 'directory',
+        },
+      ],
     });
+  });
+
+  it('should build device with a root directory', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addRootDirectory({ name: 'example-directory', label: 'my directory' },
+        { getter: () => {}, action: () => {} })
+      .build('foo');
+
+    expect(device.capabilities).to.deep.equal([
+        {
+          isRoot: true,
+          'label': 'my directory',
+          'name': 'example-directory',
+          'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-directory',
+          'type': 'directory',
+        },
+      ]);
+  });
+
+  it('should build device with a queue directory', function() {
+    const device = new DeviceBuilder('example-adapter', 'XXX')
+      .setManufacturer('NEEO')
+      .addQueueDirectory({ name: 'example-directory', label: 'my directory' },
+        { getter: () => {}, action: () => {} })
+      .build('foo');
+
+    expect(device.capabilities).to.deep.equal([
+        {
+          isQueue: true,
+          'label': 'my directory',
+          'name': 'example-directory',
+          'path': '/device/apt-d8ffe38dfb9b37c867e3d9c97e5b670a8f8efc50/example-directory',
+          'type': 'directory',
+        },
+      ]);
   });
 
   it('should fail to add directory without controller action', function() {

@@ -7,7 +7,7 @@ const ExpressDriver = require('../../../../lib/expressBrainDriver/index');
 const ExpressServer = require('../../../../lib/expressBrainDriver/server');
 
 describe('./lib/expressBrainDriver/index.js', function() {
-  const sandbox = sinon.sandbox.create();
+  const sandbox = sinon.createSandbox();
 
   beforeEach(function() {
     sandbox.stub(ExpressServer);

@@ -1,5 +1,6 @@
 'use strict';
 
+const debug = require('debug')('neeo:cli:DeviceLoader');
 const fs = require('fs');
 const path = require('path');
 const config = require('../lib/config');
@@ -9,7 +10,20 @@ module.exports = {
 };
 
 function loadDevices() {
-  return getLocalDevices().concat(getExternalDevices());
+  let localDevices = [];
+  try {
+    localDevices = getLocalDevices();
+  } catch (err) {
+    debug('SKIPPED_LOCAL_DRIVERS', err.message);
+    // We ignore missing local devices
+    if (err && !err.message.includes('ENOENT')) {
+      throw err;
+    }
+  }
+  const externalDevices = getExternalDevices();
+  const devices = [...localDevices, ...externalDevices];
+
+  return devices;
 }
 
 function getLocalDevices() {
@@ -33,8 +47,8 @@ function getExternalDevices() {
 }
 
 function isNeeoDriver(driverPath, file) {
-  const isNeeoPrefixed = (file) =>
-    file.startsWith('neeo-') || file.startsWith('neeo_');
+  const isNeeoPrefixed = (_file) =>
+    _file.startsWith('neeo-') || _file.startsWith('neeo_');
   const devicesIndexPath = path.join(driverPath, file, 'devices', 'index.js');
 
   return isNeeoPrefixed(file) && fs.existsSync(devicesIndexPath);
@@ -50,12 +64,14 @@ function loadDevicesFrom({ rootPath, directory, filter }) {
     .filter(filter)
     .map((file) => {
       try {
+        debug('try to load driver from', rootPath, file);
         const devicesPath = path.join(rootPath, file, directory);
         return require(devicesPath).devices;
       } catch (error) {
         console.error(
           `could not load devices in file ${file}: ${error.message}`
         );
+        console.error('DRIVER LOAD FAILED STACKTRACE:\n', error.stack);
       }
     })
     .reduce((acc, val) => acc.concat(val), [])

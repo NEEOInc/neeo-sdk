@@ -10,7 +10,7 @@ const adapterName = 'adapter0';
 const url = 'http://foo.bar';
 
 describe('./lib/device/brain/deviceSubscriptions.js', function() {
-  const sandbox = sinon.sandbox.create();
+  const sandbox = sinon.createSandbox();
   let netMock;
 
   beforeEach(function() {

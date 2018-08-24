@@ -3,10 +3,10 @@
 const expect = require('chai').expect;
 const ListBuilder = require('../../../../../lib/device/lists/listBuilder');
 
-describe('./lib/device/lists/listBuilder.js', function () {
+describe('./lib/device/lists/listBuilder.js', function() {
 
-  describe('initialization', function () {
-    it('should correctly set default values', function () {
+  describe('initialization', function() {
+    it('should correctly set default values', function() {
       // WHEN
       const builder = new ListBuilder({
         title: 'title',
@@ -21,32 +21,23 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(builder._meta.totalMatchingItems).to.equal(0);
     });
 
-    it('should fail to initialize with too big limit (64 max)', function () {
+    it('should fail to initialize with too big limit (64 max)', function() {
       // WHEN
       expect(() => {
         new ListBuilder({
           title: 'Foo',
-          limit: 50000
-        }); 
+          limit: 50000,
+        });
       }).to.throw(/ERROR_LIST_LIMIT_MAXIMUM_EXCEEDED/);
     });
 
-    it('should fail to initialize without title', function () {
-      // WHEN
-      expect(() => {
-        new ListBuilder({}); 
-      }).to.throw(/ERROR_LIST_TITLE_EMPTY/);
-    });
-
-    it('should fail to initialize without params', function () {
-      // WHEN
-      expect(() => {
-        new ListBuilder(); 
-      }).to.throw(/ERROR_LIST_NO_OPTIONS_PROVIDED/);
+    it('should initialize simple list', function() {
+      const result = new ListBuilder();
+      expect(result.title).to.equal('');
     });
   });
 
-  it('should build correct metadata for empty list', function () {
+  it('should build correct metadata for empty list', function() {
     // GIVEN
     const expectedMetaData = {
       current: {
@@ -60,7 +51,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
         browseIdentifier: 'ident',
       },
       totalItems: 0,
-      totalMatchingItems: 30
+      totalMatchingItems: 30,
     };
 
     // WHEN
@@ -76,7 +67,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
     expect(listBuilder._meta).to.deep.equal(expectedMetaData);
   });
 
-  it('should build correct metadata for list with real items', function () {
+  it('should build correct metadata for list with real items', function() {
     // GIVEN
     const listBuilder = new ListBuilder({
       title: 'title',
@@ -104,7 +95,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
         browseIdentifier: 'ident',
       },
       totalItems: 5,
-      totalMatchingItems: 500
+      totalMatchingItems: 500,
     };
 
     // WHEN
@@ -118,7 +109,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
     expect(listBuilder._meta).to.deep.equal(expectedMetaData);
   });
 
-  it('should build correct metadata for list with real items - second page', function () {
+  it('should build correct metadata for list with real items - second page', function() {
     // GIVEN
     const listBuilder = new ListBuilder({
       title: 'title',
@@ -151,7 +142,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
         browseIdentifier: 'ident',
       },
       totalItems: 5,
-      totalMatchingItems: 500
+      totalMatchingItems: 500,
     };
 
     // WHEN
@@ -165,17 +156,24 @@ describe('./lib/device/lists/listBuilder.js', function () {
     expect(listBuilder._meta).to.deep.equal(expectedMetaData);
   });
 
-  describe('adding elements', function () {
+  it('should set list title', function() {
+    const title = 'CUSTOM TITLE';
+    const result = new ListBuilder();
+    result.setListTitle(title);
+    expect(result.title).to.equal(title);
+  });
+
+  describe('adding elements', function() {
     let listBuilder;
 
-    beforeEach(function () {
+    beforeEach(function() {
       listBuilder = new ListBuilder({
         title: 'title',
         browseIdentifier: 'foo',
       });
     });
 
-    it('should add list item', function () {
+    it('should add list item', function() {
       // GIVEN
       const params = {
         title: 'foo',
@@ -190,7 +188,88 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(1);
     });
 
-    it('should fail to add list item without params', function () {
+    it('should add list items', function() {
+      // GIVEN
+      const params = {
+        title: 'foo',
+        thumbnailUri: 'someimage',
+        actionIdentifier: 'someaction',
+      };
+
+      // WHEN
+      listBuilder.addListItems([ params ]);
+
+      // THEN
+      expect(listBuilder.items.length).to.equal(1);
+    });
+
+    function _buildListItems(arrayLength) {
+      const params = {
+        thumbnailUri: 'someimage',
+        actionIdentifier: 'someaction',
+      };
+      const listData = new Array(arrayLength).fill(1)
+        .map((unused, index) => {
+          const title = 'foo ' + index;
+          return Object.assign({ title }, params);
+        });
+      return listData;
+    }
+
+    it('should respect maximal items when using addListItems, list initially empty', function() {
+      // GIVEN
+      const arrayLength = 100;
+      const listData = _buildListItems(arrayLength);
+
+      // WHEN
+      listBuilder.addListItems(listData)
+        .setTotalMatchingItems(arrayLength);
+
+      // THEN
+      expect(listBuilder.items.length).to.equal(listBuilder.limit);
+      expect(listBuilder.totalMatchingItems).to.equal(arrayLength);
+      expect(listBuilder.items[0].title).to.equal('foo 0');
+      expect(listBuilder._meta.next).to.deep.equal({ offset: 64, limit: listBuilder.limit, browseIdentifier: 'foo' } );
+    });
+
+    it('should respect maximal items when using addListItems, list initially NOT empty', function() {
+      // GIVEN
+      const arrayLength = 100;
+      const listData = _buildListItems(arrayLength);
+      const params = {
+        title: 'foo',
+        thumbnailUri: 'someimage',
+        actionIdentifier: 'someaction',
+      };
+
+      // WHEN
+      listBuilder.addListItem(params)
+        .addListItems(listData)
+        .setTotalMatchingItems(arrayLength + 1);
+
+      // THEN
+      expect(listBuilder.items.length).to.equal(64);
+      expect(listBuilder.totalMatchingItems).to.equal(arrayLength + 1);
+      expect(listBuilder.items[1].title).to.equal('foo 0');
+    });
+
+    it('should respect maximal items when using addListItems, overflow', function() {
+      // GIVEN
+      const arrayLength = 100;
+      const listData = _buildListItems(arrayLength);
+
+      // WHEN
+      listBuilder.addListItems(listData)
+        .addListItems(listData)
+        .setTotalMatchingItems(arrayLength * 2);
+
+      // THEN
+      expect(listBuilder.items.length).to.equal(64);
+      expect(listBuilder.totalMatchingItems).to.equal(arrayLength * 2);
+      expect(listBuilder.items[0].title).to.equal('foo 0');
+    });
+
+    it('should fail to add list item without params', function() {
       // WHEN
       expect(() => {
         listBuilder.addListItem();
@@ -198,7 +277,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(0);
     });
 
-    it('should add list header', function () {
+    it('should add list header', function() {
       // GIVEN
       const title = 'headertitle';
 
@@ -209,18 +288,16 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(1);
     });
 
-    it('should fail to add list header without params', function () {
-      // WHEN
-      expect(() => {
-        listBuilder.addListHeader();
-      }).to.throw(/ERROR_LIST_TITLE_EMPTY/);
-      expect(listBuilder.items.length).to.equal(0);
+    it('should add empty list header without params', function() {
+      listBuilder.addListHeader();
+      expect(listBuilder.items.length).to.equal(1);
+      expect(listBuilder.items[0]).to.deep.equal({ isHeader: true, title: '' });
     });
 
-    it('should add list tile', function () {
+    it('should add list tile', function() {
       // GIVEN
       const params = [{
-        thumbnailUri: 'http://www.image.com/image.jpg'
+        thumbnailUri: 'http://www.image.com/image.jpg',
       }];
 
       // WHEN
@@ -230,7 +307,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(1);
     });
 
-    it('should fail to add list tile without thumbnail param', function () {
+    it('should fail to add list tile without thumbnail param', function() {
       // WHEN
       expect(() => {
         listBuilder.addListTiles([{ actionIdentifier: 'foo' }]);
@@ -238,12 +315,12 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items.length).to.equal(0);
     });
 
-    it('should add list info item', function () {
+    it('should add list info item', function() {
       // GIVEN
       const params = {
         title: 'foo',
         thumbnailUri: 'someimage',
-        actionIdentifier: 'someaction'
+        actionIdentifier: 'someaction',
       };
 
       // WHEN
@@ -254,18 +331,14 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items[0].isInfoItem).to.equal(true);
     });
 
-    it('should fail to add list info item without title', function () {
-      // GIVEN
-      const params = {};
-
-      // WHEN
-      expect(() => {
-        listBuilder.addListInfoItem(params);
-      }).to.throw(/ERROR_LIST_TITLE_EMPTY/);
-      expect(listBuilder.items.length).to.equal(0);
+    it('should fail to add list info item without title', function() {
+      listBuilder.addListInfoItem({});
+      expect(listBuilder.items.length).to.equal(1);
+      expect(listBuilder.items[0].isInfoItem).to.equal(true);
+      expect(listBuilder.items[0].title).to.equal('');
     });
 
-    it('should add list button', function () {
+    it('should add list button', function() {
       // GIVEN
       const params = [{
         title: 'some title',
@@ -281,7 +354,7 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items[0].buttons[0].actionIdentifier).to.equal(params[0].actionIdentifier);
     });
 
-    it('should add two list buttons', function () {
+    it('should add two list buttons', function() {
       // GIVEN
       const buttons = [{
         title: 'some title',
@@ -300,11 +373,11 @@ describe('./lib/device/lists/listBuilder.js', function () {
       expect(listBuilder.items[0].buttons[1].isButton).to.equal(true);
     });
 
-    it('should fail to add list button without title param', function () {
+    it('should fail to add list button without title and icon param', function () {
       // WHEN
       expect(() => {
         listBuilder.addListButtons([{ actionIdentifier: 'foo' }]);
-      }).to.throw(/ERROR_LIST_BUTTON_TITLE_EMPTY/);
+      }).to.throw(/ERROR_LIST_BUTTON_TITLE_OR_ICON_EMPTY/);
       expect(listBuilder.items.length).to.equal(0);
     });
   });
