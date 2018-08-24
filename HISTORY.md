@@ -1,4 +1,4 @@
-## UNRELEASED
+## 0.51.13 (08/24/2018)
 - improve sensor label fallbacks
 - fixes addSensor() not properly handling all different sensor types
 - fixed multiroom notifications - when a device was added in several rooms, only the first room was updated with new values
