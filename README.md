@@ -147,6 +147,7 @@ const BRAIN_IP = '10.0.0.10';
 neeoapi
   .startServer({
     brain: BRAIN_IP,
+    port: 6336,
     name: 'debug-server',
     devices: [
       driver,
