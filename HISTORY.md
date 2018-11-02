@@ -1,3 +1,13 @@
+## 0.52.15 (10/30/2018)
+- (Breaking) removed `addRootDirectory` and `addQueueDirectory` from DeviceBuilder
+- updated `addDirectory` function now accepts a 'role' parameter. For instance `'ROOT'` or `'QUEUE'` (this replaces `addRootDirectory` and `addQueueDirectory`)
+- updated `enableDiscovery` function now accepts the `enableDynamicDeviceBuilder` parameter. This allows to build (different) devices during discovery
+- added `uiAction` property to ListItems and ListTiles to allow additional GUI action after user clicked on item (i.e. going back to root of directory or closing the modal) - see issue #102 and #111 for more detail
+- added new registration type `'ACCOUNT'`, for registering with an username and password
+- added support for device types `'HDMISWITCH'` and `'TUNER'`
+- rewrote source code to TypeScript, thanks @amirburbea
+- fixed documentation, thanks @enternoescape
+
 ## 0.51.13 (08/24/2018)
 - improve sensor label fallbacks
 - fixes addSensor() not properly handling all different sensor types

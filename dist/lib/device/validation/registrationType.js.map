@@ -1,0 +1,1 @@
+{"version":3,"file":"registrationType.js","sourceRoot":"","sources":["../../../../src/lib/device/validation/registrationType.ts"],"names":[],"mappings":";;AAAA,MAAM,oBAAoB,GAAG,CAAC,eAAe,EAAE,SAAS,CAAC,CAAC;AAE1D,kBAAyB,IAAY;IACnC,IAAI,CAAC,oBAAoB,CAAC,QAAQ,CAAC,IAAI,CAAC,EAAE;QACxC,MAAM,IAAI,KAAK,CAAC,8BAA8B,IAAI,EAAE,CAAC,CAAC;KACvD;AACH,CAAC;AAJD,4BAIC"}

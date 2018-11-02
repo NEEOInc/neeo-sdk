@@ -10,7 +10,7 @@ If you're looking for examples, take a look at the example repository at https:/
   - [Windows OS](#windows-os)
 - [NEEO-CLI](#neeo-cli)
   - [Why the NEEO-CLI?](#why-the-neeo-cli)
-  - [_deprecated_ NEEO-sdk cli](#_deprecated_-neeo-sdk-cli)
+  - [_deprecated_ NEEO-sdk cli](#deprecated-neeo-sdk-cli)
 - [SDK Documentation](#sdk-documentation)
   - [Driver export best practices](#driver-export-best-practices)
   - [Running a single driver locally in development mode](#running-a-single-driver-locally-in-development-mode)
@@ -18,6 +18,7 @@ If you're looking for examples, take a look at the example repository at https:/
   - [SDK Driver Migration to 0.51.0](#sdk-driver-migration-to-0510)
 - [Hints](#hints)
   - [Quirks](#quirks)
+  - [Dynamic Device Builder](#dynamic-device-builder)
 - [NEEO Macro Names](#neeo-macro-names)
   - [Power Control Capability](#power-control-capability)
   - [Volume Control Capability](#volume-control-capability)
@@ -147,6 +148,7 @@ const BRAIN_IP = '10.0.0.10';
 neeoapi
   .startServer({
     brain: BRAIN_IP,
+    port: 6336,
     name: 'debug-server',
     devices: [
       driver,
@@ -172,6 +174,18 @@ After 0.50.0 we've decided to move the CLI to a separate repository.
 
 To migrate a driver to the new @neeo/cli, follow: [Driver migration guide to @neeo/cli](./MIGRATION-0-51-0.md).
 
+## Updating device drivers
+
+To tell the NEEO Brain about changes to your device's components you can simply change the driver version (`.setDriverVersion`).
+If you for example add new buttons to a device, you can increase the version and this will let the Brain know to fetch the new components.
+
+You do not need to update the version if you do not change the components. When adding the version to a device that was previously not versioned, start with 1.
+The NEEO Brain will assume it was previously 0 and update. The check for updates happens as soon as the SDK driver is started and registers with the NEEO Brain
+
+### NOTE
+ * the NEEO Brain will only add new components, updating or removing old components is not supported
+ * the `name` of a component is used as an identifier for that component, changing it will result in it being added as a "new" component instead of the old one being updated
+
 ## Hints
 
 A collection of hints if you create a device driver.
@@ -180,7 +194,24 @@ A collection of hints if you create a device driver.
 * Make sure that your driver handles if the device reboots. It's possible that the device IP changed after the reboot.
 * Make sure to handle the case when the user deleted the device from the NEEO Brain, so the driver won't send notifications anymore and shut down any running services (`registerDeviceSubscriptionHandler`).
 * Make sure your driver allocate resources only if needed - use the `registerInitialiseFunction` to initialise your driver.
-* List the minimal firmware version of the device you use - this might help if a driver does not work as expected.
+* List the minimal firmware version of the device you use - this might help if a driver does not work as expected (use `.enableDiscovery` to show information to the user).
+* The `.registerSubscriptionFunction` function is used to inject the notification function to your driver. So the driver can send updates to the NEEO Brain.
+* The `.registerDeviceSubscriptionHandler` function is used to inform your driver how many devices are in use on the NEEO Brain and when a device is added or removed from the NEEO Brain.
+
+### Dynamic Device Builder
+
+If you need to build different devices dynamically (for example to write an SDK driver for a controller that controls lights and switches) you can do that
+thanks to the updated `.enableDiscovery` function introduced in the v0.52 release.
+It static defined device contains the information that it's able to build dynamic devices as soon the discovery function is called.
+
+* you must set `enableDynamicDeviceBuilder` to true when you configure the `.enableDiscovery` options
+* your discovery function needs to return the dynamically build devices as `.device` attribute (see `dynamicDeviceBuilder` example)
+* Make sure the name (`neeoapi.buildDevice('THIS-IS-THE-NAME')`) of **ALL** SDK devices of your driver (the initial device and the dynamically build devices) are **identical** - else your device won't be found.
+* Don't forget to call the `.addCapability('dynamicDevice’)` to the dynamic build devices.
+* Use the `.registerDeviceSubscriptionHandler` function:
+  * The initializeDeviceList can be used to build the dynamic devices in use as soon as the driver starts.
+  * This is important so the NEEO Brain won't miss a state update.
+* Update the discovery function to handle the optional optionalDeviceId - this optionalDeviceId is set when your driver needs to rebuild the dynamic device (for example after a restart of your SDK driver)
 
 ### Quirks
 
