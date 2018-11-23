@@ -1,4 +1,4 @@
-## 0.52.15 (10/30/2018)
+## 0.52.18 (11/23/2018)
 - (Breaking) removed `addRootDirectory` and `addQueueDirectory` from DeviceBuilder
 - updated `addDirectory` function now accepts a 'role' parameter. For instance `'ROOT'` or `'QUEUE'` (this replaces `addRootDirectory` and `addQueueDirectory`)
 - updated `enableDiscovery` function now accepts the `enableDynamicDeviceBuilder` parameter. This allows to build (different) devices during discovery
