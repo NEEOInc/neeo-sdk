@@ -3,6 +3,5 @@ doc/
 node_modules/
 .DS_Store
 npm-debug.log
-**/*.js
 !src/lib/device/validation/vendor/validate.min.js
 package/
