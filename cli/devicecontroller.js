@@ -50,10 +50,10 @@ function storeSdkServerConfiguration(brain, sdkOptions, devices) {
   const { serverPort, serverName } = sdkOptions;
   serverConfiguration = {
     brain,
-    port: serverPort || process.env.ADAPTERPORT || 6336,
+    port: serverPort || process.env.NEEO_SERVER_PORT || 6336,
     name: serverName || 'default',
-    adapterIpAddress: process.env.ADAPTERIPADDRESS,
-    baseurl: process.env.BASEURL,
+    adapterIpAddress: process.env.NEEO_SERVER_IP,
+    baseurl: process.env.NEEO_SERVER_BASEURL,
     devices,
   };
 }
