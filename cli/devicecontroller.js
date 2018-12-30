@@ -50,7 +50,7 @@ function storeSdkServerConfiguration(brain, sdkOptions, devices) {
   const { serverPort, serverName } = sdkOptions;
   serverConfiguration = {
     brain,
-    port: serverPort || 6336,
+    port: serverPort || process.env.ADAPTERPORT || 6336,
     name: serverName || 'default',
     adapterIpAddress: process.env.ADAPTERIPADDRESS,
     baseurl: process.env.BASEURL,
