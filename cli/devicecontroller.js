@@ -52,6 +52,8 @@ function storeSdkServerConfiguration(brain, sdkOptions, devices) {
     brain,
     port: serverPort || 6336,
     name: serverName || 'default',
+    adapterIpAddress: process.env.ADAPTERIPADDRESS,
+    baseurl: process.env.BASEURL,
     devices,
   };
 }
