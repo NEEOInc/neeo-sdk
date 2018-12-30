@@ -76,6 +76,8 @@ describe('./cli/devicecontroller.js', function() {
             },
             port: 6336,
             name: 'default',
+            adapterIpAddress: undefined,
+            baseurl: undefined,
             devices: [device],
           });
         });
@@ -95,6 +97,8 @@ describe('./cli/devicecontroller.js', function() {
               },
               port: 6336,
               name: 'default',
+              adapterIpAddress: undefined,
+              baseurl: undefined,
               devices: [device],
             });
           });
