@@ -1,9 +1,16 @@
 .nyc_output/
 coverage/
-dist/
+cli/
+lib/
+dist/test/
 docs/
 test/
 *.md
 .travis.yml
 .editorconfig
 .jshintrc
+index.ts
+tsconfig.json
+tslint.json
+yarn.lock
+.github

@@ -1,1 +1,6 @@
---timeout 5000 --reporter list --exit
+--timeout 5000 
+--reporter list 
+--exit 
+--require source-map-support/register 
+--require ts-node/register 
+test/

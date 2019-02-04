@@ -1,0 +1,32 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-no-unused-expression-chai"
+  ],
+  "jsRules": {},
+  "rules": {
+    "no-empty-interface": false,
+    "no-namespace": true,
+    "no-empty": false,
+    "quotemark": [true, "single"],
+    "interface-name": [true, "never-prefix"],
+    "object-literal-sort-keys": false,
+    "object-literal-key-quotes": false,
+    "trailing-comma": [
+      true,
+      {
+        "singleLine": "never",
+        "multiline": {
+          "objects": "always",
+          "arrays": "always",
+          "functions": "never",
+          "typeLiterals": "always"
+        },
+        "esSpecCompliant": true
+      }
+    ],
+    "max-classes-per-file": [true, 2]
+  },
+  "rulesDirectory": []
+}

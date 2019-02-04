@@ -1,3 +1,16 @@
+## 0.53.8 (02/04/2018)
+
+## 0.52.20 (UNRELEASED)
+- updated `addDirectory` function now accepts a 'role' parameter. `'ROOT'` or `'QUEUE'` for the player, this makes `addRootDirectory` and `addQueueDirectory` deprecated.
+- updated `enableDiscovery` function now accepts the `enableDynamicDeviceBuilder` parameter. This allows to build (different) devices during discovery
+- added new component `registerFavoriteHandlers()` to handle favorites as a callback instead of separate digits.
+- added `uiAction` property to ListItems and ListTiles to allow additional GUI action after user clicked on item (i.e. going back to root of directory or closing the modal) - see issue #102 and #111 for more detail
+- added new registration type `'ACCOUNT'`, for registering with an username and password
+- added support for device types `'HDMISWITCH'`, `'TUNER'`, `'AUDIO'` and `'SOUNDBAR'`, thanks @nklerk
+- support for SDK Device updates
+- rewrote source code to TypeScript, thanks @amirburbea
+- documentation fixes and improvements, thanks @enternoescape, @tmrobert8, @yoctopuce
+
 ## 0.51.13 (08/24/2018)
 - improve sensor label fallbacks
 - fixes addSensor() not properly handling all different sensor types
