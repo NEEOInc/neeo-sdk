@@ -36,11 +36,10 @@ export class Database {
         deviceCapabilities,
       } = adapter;
 
-      debug('build adapter.adapterName', adapterName);
+      debug('parsing adapter.adapterName %o:', adapterName);
       devices.forEach((device) => {
         debug(
-          'build adapter.adapterName',
-          adapter.adapterName,
+          '  device:',
           index,
           adapter.manufacturer,
           device.name

@@ -1,1 +1,2 @@
-export declare function getCapability(capability: string): string;
+import { DeviceStaticCapability } from '../../models/deviceCapability';
+export declare function getCapability(capability: DeviceStaticCapability): DeviceStaticCapability;

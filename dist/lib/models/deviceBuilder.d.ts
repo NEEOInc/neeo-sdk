@@ -1,70 +1,62 @@
 import { ButtonHandler } from './buttonHandler';
-import { ButtonDescriptor } from './descriptors/buttonDescriptor';
-import { DirectoryDescriptor } from './descriptors/directoryDescriptor';
-import { ImageDescriptor } from './descriptors/imageDescriptor';
-import { SensorDescriptor } from './descriptors/sensorDescriptor';
-import { SliderDescriptor } from './descriptors/sliderDescriptor';
-import { SwitchDescriptor } from './descriptors/switchDescriptor';
-import { TextLabelDescriptor } from './descriptors/textLabelDescriptor';
+import { ButtonDescriptor, Descriptor, DeviceSubscriptionHandler, Directory, Discovery, FavoritesHandler, Image, PlayerWidget, Registration, Sensor, Slider, Subscription, Switch, TextLabel } from './descriptors';
 import { DeviceAdapterModel } from './deviceAdapter';
+import { DeviceCapability } from './deviceCapability';
 import { DeviceSetup } from './deviceSetup';
-import { DeviceSubscriptionHandler } from './deviceSubscriptionHandler';
-import { DeviceTypes } from './deviceTypes';
-import { DiscoveryResult } from './discoveryResult';
+import { DeviceType } from './deviceType';
 import { InitialiseFunction } from './initialiseFunction';
-import { Registration } from './registration';
-import { SubscriptionFunction } from './subscriptionFunction';
 import { TimingSpecifier } from './timingSpecifier';
 export interface DeviceBuilder {
     readonly manufacturer: string;
     readonly deviceidentifier: string;
     readonly directories: Array<{
-        param: DirectoryDescriptor;
-        controller: DirectoryDescriptor.Controller;
+        param: Directory.Descriptor;
+        controller: Directory.Controller;
     }>;
     readonly buttons: ReadonlyArray<{
         param: ButtonDescriptor;
     }>;
     readonly discovery: ReadonlyArray<{
-        controller: DiscoveryResult.Controller;
+        controller: Discovery.Controller;
     }>;
     readonly switches: ReadonlyArray<{
-        param: SwitchDescriptor;
-        controller: SwitchDescriptor.Controller;
+        param: Descriptor;
+        controller: Switch.Controller;
     }>;
     readonly sliders: ReadonlyArray<{
-        param: SliderDescriptor;
-        controller: SliderDescriptor.Controller;
+        param: Slider.Descriptor;
+        controller: Slider.Controller;
     }>;
     readonly textLabels: ReadonlyArray<{
-        param: TextLabelDescriptor;
+        param: TextLabel.Descriptor;
         controller: {
-            getter: TextLabelDescriptor.Controller;
+            getter: TextLabel.Controller;
         };
     }>;
     readonly sensors: ReadonlyArray<{
-        param: SensorDescriptor;
-        controller: SensorDescriptor.Controller;
+        param: Sensor.Descriptor;
+        controller: Sensor.Controller;
     }>;
     readonly imageUrls: ReadonlyArray<{
-        param: ImageDescriptor;
+        param: Image.Descriptor;
         controller: {
-            getter: ImageDescriptor.Controller;
+            getter: Image.Controller;
         };
     }>;
     readonly hasPowerStateSensor: boolean;
     readonly additionalSearchTokens: ReadonlyArray<string>;
-    readonly deviceCapabilities: ReadonlyArray<string>;
+    readonly deviceCapabilities: ReadonlyArray<DeviceCapability>;
     readonly devicename: string;
-    readonly type: DeviceTypes;
+    readonly type: DeviceType;
     readonly setup: DeviceSetup;
     readonly buttonHandler?: ButtonHandler;
     readonly deviceSubscriptionHandlers?: DeviceSubscriptionHandler.Controller;
+    readonly favoritesHandler?: FavoritesHandler.Controller;
     readonly registration: any[];
     readonly driverVersion?: number;
     setManufacturer(manufacturer?: string): this;
     setDriverVersion(version: number): this;
-    setType(type: DeviceTypes): this;
+    setType(type: DeviceType): this;
     setIcon(icon: 'sonos'): this;
     setSpecificName(value: string): this;
     addAdditionalSearchToken(token: string): this;
@@ -73,22 +65,27 @@ export interface DeviceBuilder {
         headerText: string;
         description: string;
         enableDynamicDeviceBuilder: boolean;
-    }, controller: DiscoveryResult.Controller): this;
+    }, controller: Discovery.Controller): this;
     supportsTiming(): boolean;
+    supportsFavorites(): boolean;
     defineTiming(deviceTiming: TimingSpecifier): this;
-    registerSubscriptionFunction(controller: SubscriptionFunction): this;
+    registerSubscriptionFunction(controller: Subscription.Controller): this;
     registerInitialiseFunction(controller: InitialiseFunction): this;
     addButton(button: ButtonDescriptor): this;
     addButtonGroup(groupName: string): this;
     addButtonHandler(handler: ButtonHandler): this;
-    addSlider(param: SliderDescriptor, controller: SliderDescriptor.Controller): this;
-    addSensor(param: SensorDescriptor, controller: SensorDescriptor.Controller): this;
-    addPowerStateSensor(controller: SensorDescriptor.PowerStateController): this;
-    addSwitch(param: SwitchDescriptor, controller: SwitchDescriptor.Controller): this;
-    addTextLabel(param: TextLabelDescriptor, controller: TextLabelDescriptor.Controller): this;
-    addImageUrl(param: ImageDescriptor, controller: ImageDescriptor.Controller): this;
-    addDirectory(configuration: DirectoryDescriptor, controller: DirectoryDescriptor.Controller): this;
+    addSlider(param: Slider.Descriptor, controller: Slider.Controller): this;
+    addSensor(param: Sensor.Descriptor, controller: Sensor.Controller): this;
+    addPowerStateSensor(controller: Sensor.PowerStateController): this;
+    addSwitch(param: Descriptor, controller: Switch.Controller): this;
+    addTextLabel(param: TextLabel.Descriptor, controller: TextLabel.Controller): this;
+    addImageUrl(param: Image.Descriptor, controller: Image.Controller): this;
+    addDirectory(configuration: Directory.Descriptor, controller: Directory.Controller): this;
+    addQueueDirectory(configuration: Directory.Descriptor, controller: Directory.Controller): this;
+    addRootDirectory(configuration: Directory.Descriptor, controller: Directory.Controller): this;
     addCapability(capability: 'alwaysOn' | 'bridgeDevice' | 'dynamicDevice' | 'addAnotherDevice'): this;
+    addPlayerWidget(handler: PlayerWidget.Controller): this;
     enableRegistration(options: Registration.Options, controller: Registration.Controller): this;
     registerDeviceSubscriptionHandler(controller: DeviceSubscriptionHandler.Controller): this;
+    registerFavoriteHandlers(controller: FavoritesHandler.Controller): this;
 }

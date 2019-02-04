@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = require("../../config");
-var helper_1 = require("./helper");
+var validate = require("./helper");
 var url = require("fast-url-parser");
 var LIST_MAX_LIMIT = config_1.default.maxListItemsPerPage;
 var MAX_BUTTONS_PER_ROW = config_1.default.maxButtonsPerRow;
@@ -43,12 +43,8 @@ function validateLimit(limit) {
 }
 exports.validateLimit = validateLimit;
 function validateList(list) {
-    helper_1.default(list, {
-        _meta: { presence: true },
-    });
-    helper_1.default(list._meta, {
-        current: { presence: true },
-    });
+    validate.ensurePropertyValue(list, '_meta');
+    validate.ensurePropertyValue(list._meta, 'current');
     ['current', 'previous', 'next'].forEach(function (key) {
         var meta = list._meta[key];
         if (!meta) {
@@ -56,23 +52,21 @@ function validateList(list) {
         }
         var browseIdentifier = meta.browseIdentifier, offset = meta.offset, limit = meta.limit;
         if (browseIdentifier) {
-            helper_1.default.isString(browseIdentifier);
+            validate.isString(browseIdentifier);
         }
-        helper_1.default.isInteger(offset);
-        helper_1.default.isInteger(limit);
+        validate.isInteger(offset);
+        validate.isInteger(limit);
     });
-    helper_1.default.isArray(list.items);
+    validate.isArray(list.items);
     list.items.forEach(function (item) {
         if (item.isHeader) {
-            return helper_1.default(item, {
-                title: { presence: true },
-            });
+            return validate.ensurePropertyValue(item, 'title');
         }
         if (item.title) {
-            helper_1.default.isString(item.title);
+            validate.isString(item.title);
         }
         if (item.label) {
-            helper_1.default.isString(item.label);
+            validate.isString(item.label);
         }
         if (item.thumbnailUri) {
             validateThumbnail(item.thumbnailUri);
@@ -88,13 +82,13 @@ function validateList(list) {
             });
         }
         if (item.browseIdentifier) {
-            helper_1.default.isString(item.browseIdentifier);
+            validate.isString(item.browseIdentifier);
         }
         if (item.actionIdentifier) {
-            helper_1.default.isString(item.actionIdentifier);
+            validate.isString(item.actionIdentifier);
         }
         if (item.uiAction) {
-            helper_1.default.isString(item.uiAction);
+            validate.isString(item.uiAction);
             validateUIAction(item.uiAction);
         }
     });

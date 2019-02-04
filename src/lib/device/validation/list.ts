@@ -1,6 +1,6 @@
 import config from '../../config';
 import * as Models from '../../models';
-import validate from './helper';
+import * as validate from './helper';
 
 import * as url from 'fast-url-parser';
 
@@ -57,13 +57,8 @@ export function validateLimit(limit?: number) {
 }
 
 export function validateList(list: Models.ListBuilder) {
-  validate(list, {
-    _meta: { presence: true },
-  });
-
-  validate(list._meta, {
-    current: { presence: true },
-  });
+  validate.ensurePropertyValue(list, '_meta');
+  validate.ensurePropertyValue(list._meta, 'current');
 
   ['current', 'previous', 'next'].forEach((key) => {
     const meta = list._meta[key as 'current' | 'previous' | 'next'];
@@ -82,9 +77,7 @@ export function validateList(list: Models.ListBuilder) {
 
   list.items.forEach((item) => {
     if (item.isHeader) {
-      return validate(item, {
-        title: { presence: true },
-      });
+      return validate.ensurePropertyValue(item, 'title');
     }
 
     if (item.title) {

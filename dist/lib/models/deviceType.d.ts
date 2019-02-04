@@ -1,0 +1,1 @@
+export declare type DeviceType = 'ACCESSOIRE' | 'AUDIO' | 'AVRECEIVER' | 'DVB' | 'DVD' | 'GAMECONSOLE' | 'LIGHT' | 'MEDIAPLAYER' | 'PROJECTOR' | 'TV' | 'VOD' | 'MUSICPLAYER' | 'HDMISWITCH' | 'SOUNDBAR' | 'TUNER';

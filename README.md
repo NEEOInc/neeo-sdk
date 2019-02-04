@@ -223,6 +223,8 @@ There are some issues on the SDK we will address in the future. To avoid breakin
 
 The view for a device in the recipe is generated automatically depending on the device capabilities.
 
+See [widget documentation](./widgetDocumentation.md) for more details on the way default views are generated.
+
 ## Power Control Capability
 
 If your device supports Power control (power on device, power off device), add this capability - the generated recipe

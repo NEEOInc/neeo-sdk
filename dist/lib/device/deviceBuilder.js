@@ -1,30 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Debug = require("debug");
+var Models = require("../models");
 var deviceCapability_1 = require("./deviceCapability");
 var validation = require("./validation");
 var debug = Debug('neeo:device:DeviceBuilder');
-var MAXIMAL_STRING_LENGTH = 48;
+var MAXIMAL_STRING_LENGTH = validation.MAXIMAL_STRING_LENGTH;
 var DEFAULT_MANUFACTURER = 'NEEO';
 var DEFAULT_TYPE = 'ACCESSOIRE';
 var API_VERSION = '1.0';
-var MAXIMAL_TIMING_VALUE_MS = 60 * 1000;
-function checkParamName(param) {
-    if (!param || !param.name) {
-        throw new Error('MISSING_ELEMENT_NAME');
-    }
-    if (!validation.stringLength(param.name, MAXIMAL_STRING_LENGTH)) {
-        throw new Error('NAME_TOO_LONG_' + param.name);
-    }
-}
-function checkOptionalLabel(param) {
-    if (!param || !param.label) {
-        return;
-    }
-    if (!validation.stringLength(param.label, MAXIMAL_STRING_LENGTH)) {
-        throw new Error('LABEL_TOO_LONG_' + param.label);
-    }
-}
+var PLAYER_BUTTON_NAMES = Models.PlayerWidget.playerButtonNames;
+var PLAYER_VOLUME = Models.PlayerWidget.playerVolumeDefinition;
+var PLAYER_COVER_ART = Models.PlayerWidget.coverArtDefinition;
+var PLAYER_TITLE = Models.PlayerWidget.titleDefinition;
+var PLAYER_DESCRIPTION = Models.PlayerWidget.descriptionDefinition;
+var PLAYER_PLAYING = Models.PlayerWidget.playingDefinition;
+var PLAYER_MUTE = Models.PlayerWidget.muteDefinition;
+var PLAYER_SHUFFLE = Models.PlayerWidget.shuffleDefinition;
+var PLAYER_REPEAT = Models.PlayerWidget.repeatDefinition;
 var DeviceBuilder = (function () {
     function DeviceBuilder(name, uniqueString) {
         this.manufacturer = DEFAULT_MANUFACTURER;
@@ -85,9 +78,15 @@ var DeviceBuilder = (function () {
         return this;
     };
     DeviceBuilder.prototype.build = function () {
-        var _a = this, buttons = _a.buttons, buttonHandler = _a.buttonHandler, devicename = _a.devicename, type = _a.type, deviceidentifier = _a.deviceidentifier, manufacturer = _a.manufacturer, setup = _a.setup, additionalSearchTokens = _a.additionalSearchTokens, deviceCapabilities = _a.deviceCapabilities, specificname = _a.specificname, icon = _a.icon, timing = _a.timing, subscriptionFunction = _a.subscriptionFunction, initialiseFunction = _a.initializeFunction;
+        var _a = this, buttons = _a.buttons, buttonHandler = _a.buttonHandler, devicename = _a.devicename, type = _a.type, deviceidentifier = _a.deviceidentifier, favoritesHandler = _a.favoritesHandler, manufacturer = _a.manufacturer, setup = _a.setup, additionalSearchTokens = _a.additionalSearchTokens, deviceCapabilities = _a.deviceCapabilities, specificname = _a.specificname, icon = _a.icon, timing = _a.timing, subscriptionFunction = _a.subscriptionFunction, initialiseFunction = _a.initializeFunction;
         if (timing && validation.deviceTypeDoesNotSupportTiming(type)) {
             throw new Error('TIMING_DEFINED_BUT_DEVICETYPE_HAS_NO_SUPPORT');
+        }
+        if (favoritesHandler && !validation.deviceTypeHasFavoritesSupport(type)) {
+            throw new Error('FAVORITES_HANDLER_DEFINED_BUT_DEVICETYPE_HAS_NO_SUPPORT');
+        }
+        if (this.validatePlayerWidget && !validation.deviceTypeHasPlayerSupport(type)) {
+            throw new Error('INVALID_DEVICE_TYPE_FOR_PLAYER_WIDGET_' + type);
         }
         if (buttons.length && !buttonHandler) {
             throw new Error('BUTTONS_DEFINED_BUT_NO_BUTTONHANDLER_DEFINED');
@@ -95,7 +94,7 @@ var DeviceBuilder = (function () {
         if (setup.registration && !setup.discovery) {
             throw new Error('REGISTRATION_ENABLED_MISSING_DISCOVERY_STEP');
         }
-        var _b = deviceCapability_1.default(this), capabilities = _b.capabilities, handler = _b.handlers;
+        var _b = deviceCapability_1.buildDeviceCapabilities(this), capabilities = _b.capabilities, handler = _b.handlers;
         var dynamicDeviceBuilderEnabled = this.setup.enableDynamicDeviceBuilder === true;
         if (!dynamicDeviceBuilderEnabled && capabilities.length === 0) {
             throw new Error('INVALID_DEVICE_DESCRIPTION_NO_CAPABILITIES');
@@ -106,11 +105,15 @@ var DeviceBuilder = (function () {
         if (setup.registration) {
             deviceCapabilities.push('register-user-account');
         }
+        if (favoritesHandler) {
+            deviceCapabilities.push('customFavoriteHandler');
+        }
         if (validation.deviceTypeNeedsInputCommand(type) &&
             validation.hasNoInputButtonsDefined(buttons)) {
-            console.warn('\nWARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!');
-            console.warn('WARNING: no input commands defined! Your device might not work as desired, check the docs');
-            console.warn('Devicename:', devicename);
+            console.warn('\nWARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!\n' +
+                'WARNING: no input commands defined! Your device might not work as\n' +
+                'desired, check the docs.\n' +
+                'Devicename:' + devicename);
         }
         return {
             adapterName: deviceidentifier,
@@ -137,20 +140,10 @@ var DeviceBuilder = (function () {
     };
     DeviceBuilder.prototype.enableDiscovery = function (options, controller) {
         debug('enable discovery %o', options);
-        if (typeof controller !== 'function') {
-            throw new Error('INVALID_DISCOVERY_FUNCTION');
-        }
-        if (!options) {
-            throw new Error('INVALID_DISCOVERY_PARAMETER');
-        }
-        var headerText = options.headerText, description = options.description, enableDynamicDeviceBuilder = options.enableDynamicDeviceBuilder;
-        if (!headerText || !description) {
-            throw new Error('INVALID_DISCOVERY_PARAMETER');
-        }
         var _a = this, setup = _a.setup, discovery = _a.discovery;
-        if (setup.discovery) {
-            throw new Error('DISCOVERHANDLER_ALREADY_DEFINED');
-        }
+        validation.checkNotYetDefined(setup.discovery, 'DISCOVERHANDLER');
+        validation.validateDiscovery(options, controller);
+        var headerText = options.headerText, description = options.description, enableDynamicDeviceBuilder = options.enableDynamicDeviceBuilder;
         this.setup = Object.assign(setup, {
             discovery: true,
             introheader: headerText,
@@ -163,79 +156,57 @@ var DeviceBuilder = (function () {
     DeviceBuilder.prototype.supportsTiming = function () {
         return !validation.deviceTypeDoesNotSupportTiming(this.type);
     };
+    DeviceBuilder.prototype.supportsFavorites = function () {
+        return validation.deviceTypeHasFavoritesSupport(this.type);
+    };
     DeviceBuilder.prototype.defineTiming = function (param) {
-        if (!param) {
-            throw new Error('INVALID_TIMING_PARAMETER');
-        }
-        function validateTime(timeMs) {
-            if (!Number.isInteger(timeMs)) {
-                throw new Error('INVALID_TIMING_VALUE');
-            }
-            if (timeMs < 0 || timeMs > MAXIMAL_TIMING_VALUE_MS) {
-                throw new Error('INVALID_TIMING_VALUE');
-            }
-            return timeMs;
-        }
         debug('define timing %o', param);
-        var powerOnDelayMs = param.powerOnDelayMs, sourceSwitchDelayMs = param.sourceSwitchDelayMs, shutdownDelayMs = param.shutdownDelayMs;
-        if (!powerOnDelayMs && !sourceSwitchDelayMs && !shutdownDelayMs) {
-            throw new Error('INVALID_TIMING_PARAMETER');
-        }
+        validation.validateTiming(param);
         this.timing = {
-            standbyCommandDelay: !!powerOnDelayMs ? validateTime(powerOnDelayMs) : undefined,
-            sourceSwitchDelay: !!sourceSwitchDelayMs ? validateTime(sourceSwitchDelayMs) : undefined,
-            shutdownDelay: !!shutdownDelayMs ? validateTime(shutdownDelayMs) : undefined,
+            standbyCommandDelay: param.powerOnDelayMs,
+            sourceSwitchDelay: param.sourceSwitchDelayMs,
+            shutdownDelay: param.shutdownDelayMs,
         };
         return this;
     };
     DeviceBuilder.prototype.registerSubscriptionFunction = function (controller) {
         debug('get subscription function');
-        if (typeof controller !== 'function') {
-            throw new Error('INVALID_SUBSCRIPTIONHANDLER_FUNCTION');
-        }
-        if (this.subscriptionFunction) {
-            throw new Error('SUBSCRIPTIONHANDLER_ALREADY_DEFINED');
-        }
+        validation.checkNotYetDefined(this.subscriptionFunction, 'SUBSCRIPTIONHANDLER');
+        validation.validateFunctionController(controller, 'SUBSCRIPTIONHANDLER');
         this.subscriptionFunction = controller;
         return this;
     };
     DeviceBuilder.prototype.registerInitialiseFunction = function (controller) {
         debug('get initialise function');
-        if (typeof controller !== 'function') {
-            throw new Error('INVALID_INITIALISATION_FUNCTION');
-        }
-        if (this.initializeFunction) {
-            throw new Error('INITIALISATION_FUNCTION_ALREADY_DEFINED');
-        }
+        validation.checkNotYetDefined(this.initializeFunction, 'INITIALISATIONHANDLER');
+        validation.validateFunctionController(controller, 'INITIALISATIONHANDLER');
         this.initializeFunction = controller;
         return this;
     };
     DeviceBuilder.prototype.registerDeviceSubscriptionHandler = function (controller) {
         debug('enable device subscriptions');
-        if (this.deviceSubscriptionHandlers) {
-            throw new Error('DEVICESUBSCRIPTIONHANDLERS_ALREADY_DEFINED');
-        }
-        if (!controller) {
-            throw new Error('INVALID_SUBSCRIPTION_CONTROLLER_UNDEFINED');
-        }
-        var requiredFuncions = [
-            'deviceAdded',
-            'deviceRemoved',
-            'initializeDeviceList',
-        ];
-        var missingFunctions = requiredFuncions.filter(function (functionName) {
-            return typeof controller[functionName] !== 'function';
+        validation.checkNotYetDefined(this.deviceSubscriptionHandlers, 'DEVICESUBSCRIPTIONHANDLERS');
+        validation.validateController(controller, {
+            requiredFunctions: ['deviceAdded', 'deviceRemoved', 'initializeDeviceList'],
+            handlerName: 'DEVICESUBSCRIPTION',
         });
-        if (missingFunctions.length) {
-            throw new Error("INVALID_SUBSCRIPTION_CONTROLLER missing " + missingFunctions.join(', ') + " function(s)");
-        }
         this.deviceSubscriptionHandlers = controller;
+        return this;
+    };
+    DeviceBuilder.prototype.registerFavoriteHandlers = function (controller) {
+        debug('enable favorite handlers');
+        validation.checkNotYetDefined(this.favoritesHandler, 'FAVORITE_HANDLERS');
+        validation.validateController(controller, {
+            requiredFunctions: ['execute'],
+            handlerName: 'FAVORITE',
+        });
+        this.favoritesHandler = controller;
         return this;
     };
     DeviceBuilder.prototype.addButton = function (param) {
         debug('add button %o', param);
-        checkParamName(param);
-        checkOptionalLabel(param);
+        validation.checkNameFor(param);
+        validation.checkLabelFor(param);
         this.buttons.push({ param: param });
         return this;
     };
@@ -250,26 +221,19 @@ var DeviceBuilder = (function () {
     };
     DeviceBuilder.prototype.addButtonHandler = function (controller) {
         debug('add buttonhandler');
-        if (typeof controller !== 'function') {
-            throw new Error('MISSING_BUTTONHANDLER_CONTROLLER_PARAMETER');
-        }
-        if (this.buttonHandler) {
-            throw new Error('BUTTONHANDLER_ALREADY_DEFINED');
-        }
+        validation.checkNotYetDefined(this.buttonHandler, 'BUTTONHANDLER');
+        validation.validateFunctionController(controller, 'BUTTONHANDLER');
         this.buttonHandler = controller;
         return this;
     };
     DeviceBuilder.prototype.enableRegistration = function (options, controller) {
         var _a = this, setup = _a.setup, registration = _a.registration;
         debug('enable registration %o', options);
-        if (setup.registration) {
-            throw new Error('REGISTERHANLDER_ALREADY_DEFINED');
-        }
-        if (!controller ||
-            typeof controller.register !== 'function' ||
-            typeof controller.isRegistered !== 'function') {
-            throw new Error('INVALID_REGISTRATION_CONTROLLER');
-        }
+        validation.checkNotYetDefined(setup.registration, 'REGISTERHANLDER');
+        validation.validateController(controller, {
+            requiredFunctions: ['register', 'isRegistered'],
+            handlerName: 'REGISTRATION',
+        });
         if (!options) {
             throw new Error('INVALID_REGISTRATION: Options cannot be undefined');
         }
@@ -288,31 +252,34 @@ var DeviceBuilder = (function () {
     };
     DeviceBuilder.prototype.addSlider = function (param, controller) {
         debug('add slider %o', param);
-        checkParamName(param);
-        checkOptionalLabel(param);
-        if (!controller ||
-            typeof controller.setter !== 'function' ||
-            typeof controller.getter !== 'function') {
-            throw new Error("INVALID_SLIDER_CONTROLLER: " + param.name);
-        }
+        validation.checkNameFor(param);
+        validation.checkLabelFor(param);
+        validation.validateController(controller, {
+            requiredFunctions: ['setter', 'getter'],
+            handlerName: 'SLIDER',
+            componentName: param.name,
+        });
         this.sliders.push({ param: param, controller: controller });
         return this;
     };
     DeviceBuilder.prototype.addSensor = function (param, controller) {
         debug('add sensor %o', param);
-        checkParamName(param);
-        checkOptionalLabel(param);
-        if (!controller || typeof controller.getter !== 'function') {
-            throw new Error("INVALID_SENSOR_CONTROLLER: " + param.name);
-        }
+        validation.checkNameFor(param);
+        validation.checkLabelFor(param);
+        validation.validateController(controller, {
+            requiredFunctions: ['getter'],
+            handlerName: 'SENSOR',
+            componentName: param.name,
+        });
         this.sensors.push({ param: param, controller: controller });
         return this;
     };
     DeviceBuilder.prototype.addPowerStateSensor = function (controller) {
         debug('add power sensor');
-        if (!controller || typeof controller.getter !== 'function') {
-            throw new Error('INVALID_POWERSENSOR_CONTROLLER');
-        }
+        validation.validateController(controller, {
+            requiredFunctions: ['getter'],
+            handlerName: 'POWERSENSOR',
+        });
         var param = {
             name: 'powerstate',
             label: 'Powerstate',
@@ -324,54 +291,41 @@ var DeviceBuilder = (function () {
     };
     DeviceBuilder.prototype.addSwitch = function (param, controller) {
         debug('add switch %o', param);
-        checkParamName(param);
-        checkOptionalLabel(param);
-        if (!controller ||
-            typeof controller.setter !== 'function' ||
-            typeof controller.getter !== 'function') {
-            throw new Error("INVALID_SWITCH_CONTROLLER: " + param.name);
-        }
+        validation.checkNameFor(param);
+        validation.checkLabelFor(param);
+        validation.validateController(controller, {
+            requiredFunctions: ['setter', 'getter'],
+            handlerName: 'SWITCH',
+            componentName: param.name,
+        });
         this.switches.push({ param: param, controller: controller });
         return this;
     };
-    DeviceBuilder.prototype.addTextLabel = function (param, controller) {
+    DeviceBuilder.prototype.addTextLabel = function (param, getter) {
         debug('add textlabel %o', param);
-        checkParamName(param);
-        checkOptionalLabel(param);
-        if (!controller || typeof controller !== 'function') {
-            throw new Error("INVALID_LABEL_CONTROLLER: " + param.name);
-        }
-        this.textLabels.push({ param: param, controller: { getter: controller } });
+        validation.checkNameFor(param);
+        validation.checkLabelFor(param);
+        validation.validateFunctionController(getter, "TEXTLABELHANDLER: " + param.name);
+        this.textLabels.push({ param: param, controller: { getter: getter } });
         return this;
     };
-    DeviceBuilder.prototype.addImageUrl = function (param, controller) {
+    DeviceBuilder.prototype.addImageUrl = function (param, getter) {
         debug('add imageurl %o', param);
-        checkParamName(param);
-        checkOptionalLabel(param);
-        if (!controller || typeof controller !== 'function') {
-            throw new Error("INVALID_IMAGEURL_CONTROLLER: " + param.name);
-        }
-        this.imageUrls.push({ param: param, controller: { getter: controller } });
+        validation.checkNameFor(param);
+        validation.checkLabelFor(param);
+        validation.validateFunctionController(getter, "IMAGEURLHANDLER: " + param.name);
+        this.imageUrls.push({ param: param, controller: { getter: getter } });
         return this;
     };
     DeviceBuilder.prototype.addDirectory = function (param, controller) {
         debug('add directory %o', param);
-        checkParamName(param);
-        if (!param.label) {
-            throw new Error('MISSING_DIRECTORY_LABEL');
-        }
-        if (!validation.stringLength(param.label, MAXIMAL_STRING_LENGTH)) {
-            throw new Error('DIRECTORY_LABEL_TOO_LONG_' + param.label);
-        }
-        if (!controller) {
-            throw new Error("INVALID_DIRECTORY_CONTROLLER: " + param.name);
-        }
-        if (typeof controller.getter !== 'function') {
-            throw new Error("INVALID_DIRECTORY_CONTROLLER_GETTER_NOT_A_FUNCTION: " + param.name);
-        }
-        if (typeof controller.action !== 'function') {
-            throw new Error("INVALID_DIRECTORY_CONTROLLER_ACTION_NOT_A_FUNCTION: " + param.name);
-        }
+        validation.checkNameFor(param);
+        validation.checkLabelFor(param, { mandatory: true });
+        validation.validateController(controller, {
+            requiredFunctions: ['getter', 'action'],
+            handlerName: 'DIRECTORY',
+            componentName: param.name,
+        });
         var addedDirectoryRole = param.role;
         if (addedDirectoryRole) {
             this.checkDirectoryRole(addedDirectoryRole);
@@ -379,9 +333,53 @@ var DeviceBuilder = (function () {
         this.directories.push({ param: param, controller: controller });
         return this;
     };
+    DeviceBuilder.prototype.addQueueDirectory = function (params, controller) {
+        console.warn('WARNING: addQueueDirectory() is deprecated in favor of ' +
+            'addDirectory() and will be removed in future versions.');
+        var bridgeParams = Object.assign({ role: 'QUEUE' }, params);
+        return this.addDirectory(bridgeParams, controller);
+    };
+    DeviceBuilder.prototype.addRootDirectory = function (params, controller) {
+        console.warn('WARNING: addRootDirectory() is deprecated in favor of ' +
+            'addDirectory() and will be removed in future versions.');
+        var bridgeParams = Object.assign({ role: 'ROOT' }, params);
+        return this.addDirectory(bridgeParams, controller);
+    };
     DeviceBuilder.prototype.addCapability = function (capability) {
         debug('add capability %o', capability);
         this.deviceCapabilities.push(validation.validateCapability(capability));
+        return this;
+    };
+    DeviceBuilder.prototype.addPlayerWidget = function (handler) {
+        var _this = this;
+        debug('adding player widget components');
+        validation.checkNotYetDefined(this.validatePlayerWidget, 'PLAYER_WIDGET');
+        validation.validatePlayerWidget(handler);
+        this.addDirectory({
+            name: handler.rootDirectory.name || 'ROOT_DIRECTORY',
+            label: handler.rootDirectory.label || 'ROOT',
+            role: 'ROOT',
+        }, handler.rootDirectory.controller);
+        var queueDirectory = handler.queueDirectory;
+        if (queueDirectory) {
+            this.addDirectory({
+                name: queueDirectory.name || 'QUEUE_DIRECTORY',
+                label: queueDirectory.label || 'QUEUE',
+                role: 'QUEUE',
+            }, queueDirectory.controller);
+        }
+        this.addSlider(PLAYER_VOLUME, handler.volumeController);
+        this.addSensor(PLAYER_COVER_ART, handler.coverArtController);
+        this.addSensor(PLAYER_DESCRIPTION, handler.descriptionController);
+        this.addSensor(PLAYER_TITLE, handler.titleController);
+        this.addSwitch(PLAYER_PLAYING, handler.playingController);
+        this.addSwitch(PLAYER_MUTE, handler.muteController);
+        this.addSwitch(PLAYER_SHUFFLE, handler.shuffleController);
+        this.addSwitch(PLAYER_REPEAT, handler.repeatController);
+        PLAYER_BUTTON_NAMES.forEach(function (name) {
+            _this.addButton({ name: name });
+        });
+        this.validatePlayerWidget = true;
         return this;
     };
     DeviceBuilder.prototype.addButtonHander = function (controller) {

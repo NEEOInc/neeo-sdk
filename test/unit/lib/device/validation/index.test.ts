@@ -36,4 +36,64 @@ describe('./lib/device/validation.ts', () => {
     const result = validation.stringLength('aaa', 5);
     expect(result).to.equal(true);
   });
+
+  describe('validateController', () => {
+    let options;
+
+    beforeEach(() => {
+      options = {
+        requiredFunctions: [],
+        handlerName: 'UNIT_TEST',
+      };
+    });
+
+    it('should reject undefined controller', () => {
+      const controller = undefined;
+      expect(() => {
+        validation.validateController(controller, options);
+      }).to.throw(`INVALID_${options.handlerName}_CONTROLLER undefined`);
+    });
+
+    it('should reject undefined controller including optional component name', () => {
+      const controller = undefined;
+      options.componentName = 'unitTest';
+      expect(() => {
+        validation.validateController(controller, options);
+      }).to.throw(`INVALID_${options.handlerName}_CONTROLLER of ${options.componentName} undefined`);
+    });
+
+    it('should list missing properties when rejecting', () => {
+      options.requiredFunctions = ['notMissing', 'missing', 'alsoMissing'];
+      const controller = {
+        notMissing: () => {},
+      };
+      expect(() => {
+        validation.validateController(controller, options);
+      }).to.throw(`INVALID_${options.handlerName}_CONTROLLER missing missing, alsoMissing function(s)`);
+    });
+
+    it('should list missing properties when rejecting with comonent name', () => {
+      options.requiredFunctions = ['notMissing', 'missingFunction'];
+      options.componentName = 'unitTest';
+      const controller = {
+        notMissing: () => {},
+      };
+      expect(() => {
+        validation.validateController(controller, options);
+      }).to.throw(`INVALID_${options.handlerName}_CONTROLLER of unitTest missing missingFunction function(s)`);
+    });
+
+    it('should accept valid controller', () => {
+      const controller = {
+        functionF: () => {},
+        functionA: () => {},
+        functionC: () => {},
+        functionE: () => {},
+      };
+      options.requiredFunctions = Object.keys(controller);
+      expect(() => {
+        validation.validateController(controller, options);
+      }).to.not.throw();
+    });
+  });
 });

@@ -1,6 +1,6 @@
 {
   "name": "neeo-sdk",
-  "version": "0.52.18",
+  "version": "0.53.8",
   "description": "NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.",
   "repository": "https://github.com/NEEOInc/neeo-sdk",
   "license": "MIT",
@@ -9,16 +9,16 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "axios": "^0.18.0",
-    "bluebird": "^3.5.2",
+    "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "bonjour": "^3.5.0",
-    "commander": "^2.16.0",
-    "debug": "^3.1.0",
-    "express": "^4.16.3",
+    "commander": "^2.19.0",
+    "debug": "^4.1.0",
+    "express": "^4.16.4",
     "fast-url-parser": "^1.1.3",
     "openpgp": "^2.6.2",
-    "rxjs": "^6.2.2",
-    "semver": "^5.5.0",
+    "rxjs": "^6.3.3",
+    "semver": "^5.6.0",
     "tokensearch.js": "^0.8.0",
     "tslib": "^1.9.3"
   },
@@ -40,14 +40,14 @@
     "chai-as-promised": "^7.1.1",
     "doxdox": "^2.0.3",
     "mocha": "^5.1.1",
-    "nock": "^9.4.2",
-    "nyc": "^12.0.2",
+    "nock": "^10.0.2",
+    "nyc": "^13.1.0",
     "sinon": "^6.3.4",
     "sinon-chai": "^3.2.0",
     "source-map-support": "^0.5.6",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
-    "tslint-no-unused-expression-chai": "^0.1.3",
+    "tslint-no-unused-expression-chai": "^0.1.4",
     "typescript": "^2.9.2"
   },
   "engines": {
@@ -56,8 +56,7 @@
   "scripts": {
     "test": "TS_NODE_PROJECT=./test/tsconfig.json nyc mocha ./test/**/*.ts --opts ./test/mocha.opts",
     "tslint": "tslint src/**/*.ts test/**/*.ts",
-    "copy:validate-lib": "mkdir -p ./dist/lib/device/validation/vendor && cp ./src/lib/device/validation/vendor/validate.min.js ./dist/lib/device/validation/vendor/",
-    "build": "tsc && npm run copy:validate-lib",
+    "build": "tsc",
     "build:clean": "rm -rf ./dist",
     "doc:clean": "rm -rf ./docs",
     "clean": "npm run build:clean && npm run doc:clean",
@@ -86,6 +85,12 @@
     "reporter": [
       "text-summary",
       "lcov"
+    ]
+  },
+  "greenkeeper": {
+    "ignore": [
+      "nock",
+      "openpgp"
     ]
   },
   "bin": {

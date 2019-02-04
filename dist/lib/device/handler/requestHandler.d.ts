@@ -5,12 +5,18 @@ interface Device {
     deviceId: string;
     body?: any;
 }
+interface DeviceRequestModel {
+    deviceid: string;
+    handler: Models.CapabilityHandler;
+    body?: any;
+    value?: any;
+}
 export declare class RequestHandler {
     readonly deviceDatabase: Database;
     static build(deviceDatabase: Database): RequestHandler;
     readonly discoveredDynamicDevices: Map<string, Device>;
     constructor(deviceDatabase: Database);
-    searchDevice(query: string): Models.DeviceModel[];
+    searchDevice(query: string): any;
     getDevice(id: number): Models.DeviceModel;
     getAdapterDefinition(adapterName: string): Models.DeviceModel;
     getDeviceByAdapterId(adapterId: string): Promise<Models.DeviceAdapterModel>;
@@ -18,31 +24,13 @@ export declare class RequestHandler {
     getDiscoveredDeviceComponentHandler(deviceId: any, componentName: any): any;
     discover(handler: {
         controller: any;
-    }, optionalDeviceId?: string): Promise<any>;
-    isRegistered(handler: Models.CapabilityHandler | undefined): Promise<any>;
-    register(handler: Models.CapabilityHandler, userdata: any): Promise<any>;
-    handleAction(device: {
-        handler: Models.CapabilityHandler;
-        deviceid: string;
-        body?: any;
-    }): Promise<any>;
-    handleGet(device: {
-        deviceid: string;
-        handler: Models.CapabilityHandler;
-        body?: any;
-    }): Promise<any>;
-    handleSet(device: {
-        deviceid: string;
-        handler: Models.CapabilityHandler;
-        value: any;
-    }): Promise<{
-        success: boolean;
-    }>;
-    subscribe(handler: Models.CapabilityHandler, deviceId: string): Promise<{
-        success: boolean;
-    }>;
-    unsubscribe(handler: Models.CapabilityHandler, deviceId: string): Promise<{
-        success: boolean;
-    }>;
+    }, optionalDeviceId?: string): any;
+    isRegistered(handler: Models.CapabilityHandler | undefined): any;
+    register(handler: Models.CapabilityHandler, userdata: any): any;
+    handleAction(device: DeviceRequestModel): Promise<any>;
+    handleGet(device: DeviceRequestModel): Promise<any>;
+    handleSet(device: DeviceRequestModel): any;
+    subscribe(handler: Models.CapabilityHandler, deviceId: string): any;
+    unsubscribe(handler: Models.CapabilityHandler, deviceId: string): any;
 }
 export {};

@@ -4,7 +4,7 @@ import * as Models from '../../models';
 
 const debug = Debug('neeo:device:express:route:handler:discover');
 
-function validateDevices(devices: Models.DiscoveryResult[]) {
+function validateDevices(devices: Models.Discovery.Result[]) {
   return devices.every((device) => {
     if (!(device instanceof Object) && !Array.isArray(device)) {
       return false;
@@ -20,7 +20,7 @@ function validateDevices(devices: Models.DiscoveryResult[]) {
   });
 }
 
-function uniqueDeviceIdCheck(devices: Models.DiscoveryResult[]) {
+function uniqueDeviceIdCheck(devices: Models.Discovery.Result[]) {
   const uniqueIds = Object.keys(
     devices.reduce((reduced, device) => {
       reduced[device.id] = device.name;
@@ -32,7 +32,7 @@ function uniqueDeviceIdCheck(devices: Models.DiscoveryResult[]) {
 }
 
 export function run(
-  handler: Models.DiscoveryResult.Controller,
+  handler: Models.Discovery.Controller,
   registerDiscoveredDeviceFunction: (deviceId: string, device: any) => any,
   optionalDeviceId?: string
 ) {

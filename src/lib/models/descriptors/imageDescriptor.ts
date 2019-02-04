@@ -1,10 +1,7 @@
-import { Descriptor } from './descriptor';
+import { Descriptor as BaseDescriptor } from './descriptor';
 
-export interface ImageDescriptor extends Descriptor {
+export interface Descriptor extends BaseDescriptor {
   readonly size: 'small' | 'large';
   readonly uri?: string;
 }
-
-export namespace ImageDescriptor {
-  export type Controller = (deviceId: string) => string | PromiseLike<string>;
-}
+export type Controller = (deviceId: string) => string | PromiseLike<string>;

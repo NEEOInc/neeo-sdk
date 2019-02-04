@@ -44,7 +44,7 @@ function askDeviceDiscoverForDeviceInstance(req) {
 function validateDeviceIdRoute(req) {
     if (!req.deviceid) {
         debug('MISSING_DEVICEID');
-        return;
+        return false;
     }
     if (req.handler) {
         return true;

@@ -43,6 +43,8 @@ describe('./lib/device/validation/capability.ts', () => {
   });
 
   it('should fail to get a invalid capability (string)', () => {
-    expect(() => capability.getCapability('foo')).to.throw(/INVALID_CAPABILITY/);
+    // @ts-ignore
+    expect(() => capability.getCapability('foo'))
+      .to.throw(/INVALID_CAPABILITY/);
   });
 });

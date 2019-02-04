@@ -13,6 +13,7 @@ var TYPE_DIRECTORY = 'directory';
 var TYPE_DISCOVER_ROUTE = 'discover';
 var TYPE_REGISTER_ROUTE = 'register';
 var TYPE_DEVICE_SUBSCRIPTION_ROUTE = 'devicesubscription';
+var TYPE_FAVORITE_HANDLER_ROUTE = 'favoritehandler';
 exports.SENSOR_TYPE_ARRAY = 'array';
 exports.SENSOR_TYPE_BINARY = 'binary';
 exports.SENSOR_TYPE_CUSTOM = 'custom';
@@ -33,14 +34,6 @@ var SLIDER_TYPE_RANGE = 'range';
 var SLIDER_DEFAULT_RANGE = [0, 100];
 var SLIDER_DEFAULT_UNIT = '%';
 var VALID_IMAGEURL_SIZES = ['small', 'large'];
-function validateParameter(pathPrefix, param) {
-    if (!pathPrefix) {
-        throw new Error('INVALID_PATHPREFIX');
-    }
-    if (!param || !param.name) {
-        throw new Error('INVALID_BUILD_PARAMETER');
-    }
-}
 function buildButton(pathPrefix, param) {
     validateParameter(pathPrefix, param);
     var name = encodeURIComponent(param.name);
@@ -215,6 +208,18 @@ function buildDeviceSubscription(pathPrefix) {
     return getRouteFor(pathPrefix, TYPE_DEVICE_SUBSCRIPTION_ROUTE);
 }
 exports.buildDeviceSubscription = buildDeviceSubscription;
+function buildFavoritesHandler(pathPrefix) {
+    return getRouteFor(pathPrefix, TYPE_FAVORITE_HANDLER_ROUTE);
+}
+exports.buildFavoritesHandler = buildFavoritesHandler;
+function validateParameter(pathPrefix, param) {
+    if (!pathPrefix) {
+        throw new Error('INVALID_PATHPREFIX');
+    }
+    if (!param || !param.name) {
+        throw new Error('INVALID_BUILD_PARAMETER');
+    }
+}
 function getRouteFor(pathPrefix, route) {
     if (!pathPrefix) {
         throw new Error('INVALID_PATHPREFIX');

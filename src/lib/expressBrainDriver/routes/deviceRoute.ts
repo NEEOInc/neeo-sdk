@@ -39,18 +39,18 @@ router.param('adapterid', (req, res, next, adapterid) => {
 router.param('component', (req, res, next, component) => {
   const handler = req.adapter.handler.get(component);
   if (handler) {
-    // static device, handler found
+    debug('using static handler for component:', component);
     req.handler = handler;
     return next();
   }
 
   const adapterName = req.adapter.adapterName;
   if (!adapterName) {
-    debug('handler not defined for', component);
-    errorHandler('COMPONENT_HANDLER_NOT_FOUND', next);
+    errorHandler(`COMPONENT_HANDLER_NOT_FOUND ${adapterName}:${component}`, next);
     return;
   }
 
+  debug('dynamic device needed for component:', component);
   dynamicDevice.storeDataInRequest(req, adapterName, component);
   next();
 });
@@ -181,7 +181,7 @@ router.get('/:adapterid/:component/:deviceid', (req, res, next) => {
 });
 
 router.post('/:adapterid/:component/:deviceid', (req, res, next) => {
-  debug('get request [%o]', req.params);
+  debug('post request [%o]', req.params);
   const model = {
     handler: req.handler,
     deviceid: req.deviceid,

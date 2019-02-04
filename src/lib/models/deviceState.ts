@@ -1,5 +1,7 @@
 import { PromiseCache } from './promiseCache';
 
+/* tslint:disable:max-line-length */
+
 export type StateChangeCallback = (id: number, clientObject: object) => void | PromiseLike<void>;
 
 /**

@@ -49,7 +49,7 @@ describe('./cli/deviceController.ts', () => {
           brainHost: '10.0.0.1',
         };
         sandbox.stub(deviceLoader, 'loadDevices').returns([]);
-        sandbox.stub(process, 'exit').returns({});
+        sandbox.stub(process, 'exit');
 
         return startDevices(sdkOptions).then(() => {
           expect(process.exit).to.have.been.calledOnce;

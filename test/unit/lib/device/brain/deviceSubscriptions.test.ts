@@ -54,7 +54,7 @@ describe('./lib/device/brain/deviceSubscriptions.ts', () => {
         adapterName,
         url,
       });
-      sandbox.stub(BluePromise, 'delay').returns(BluePromise.resolve());
+      sandbox.stub<{}, never>(BluePromise, 'delay' as never).returns(BluePromise.resolve());
     });
 
     it('should fetch subscriptions from the Brain', () => {

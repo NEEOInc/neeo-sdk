@@ -1,13 +1,13 @@
 import * as Models from '../../models';
 export default class implements Models.ListBuilder {
-    readonly items: Models.ListBuilder.Item[];
-    _meta: Models.ListBuilder.Metadata;
+    readonly items: Models.ListItem[];
+    _meta: Models.ListMetadata;
     title: string;
     private limit;
     private offset;
     private totalMatchingItems;
     private browseIdentifier?;
-    constructor({ title, limit, offset, totalMatchingItems, browseIdentifier, }?: Models.ListBuilder.Parameters);
+    constructor({ title, limit, offset, totalMatchingItems, browseIdentifier, }?: Models.ListParameters);
     setListTitle(name: string): this;
     setTotalMatchingItems(totalMatchingItems: number): this;
     addListItem(params: Models.ListItemParameters, updateList?: boolean): this;

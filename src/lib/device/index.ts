@@ -18,6 +18,8 @@ const MAXIMAL_CONNECTION_ATTEMPTS_TO_BRAIN = 8;
 let brainDriver: ExpressBrainDriver;
 const debug = Debug('neeo:device:device');
 
+/* tslint:disable:max-line-length */
+
 /**
  * Create new device factory, builds a searchable device for the NEEO Brain
  * @function
@@ -73,7 +75,7 @@ export function buildCustomDevice(
  *      title: 'foo'
  *    })
  */
-export function buildBrowseList(options: Models.ListBuilder.Parameters): Models.ListBuilder {
+export function buildBrowseList(options: Models.ListParameters): Models.ListBuilder {
   return new ListBuilder(options);
 }
 

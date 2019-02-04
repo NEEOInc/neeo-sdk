@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var BluePromise = require("bluebird");
 var Debug = require("debug");
 var button = require("./button");
 var deviceSubscriptions = require("./deviceSubscriptions");
 var directory = require("./directory");
 var discover = require("./discover");
+var favorite = require("./favorite");
 var imageUrl = require("./imageUrl");
 var register = require("./registration");
 var slider = require("./slider");
@@ -50,7 +52,7 @@ var RequestHandler = (function () {
     RequestHandler.prototype.discover = function (handler, optionalDeviceId) {
         var _this = this;
         if (!handler || !handler.controller) {
-            return Promise.reject(new Error('INVALID_DISCOVER_PARAMETER'));
+            return BluePromise.reject(new Error('INVALID_DISCOVER_PARAMETER'));
         }
         var handlerFunction = handler.controller;
         return checkForFunction(handlerFunction).then(function () {
@@ -60,7 +62,7 @@ var RequestHandler = (function () {
     RequestHandler.prototype.isRegistered = function (handler) {
         debug('isRegistered?');
         if (!handler || !handler.controller) {
-            return Promise.reject(new Error('INVALID_REGISTERED_HANDLER'));
+            return BluePromise.reject(new Error('INVALID_REGISTERED_HANDLER'));
         }
         var handlerFunction = handler.controller
             .isRegistered;
@@ -69,7 +71,7 @@ var RequestHandler = (function () {
     RequestHandler.prototype.register = function (handler, userdata) {
         debug('register');
         if (!handler || !handler.controller) {
-            return Promise.reject(new Error('INVALID_REGISTER_HANDLER'));
+            return BluePromise.reject(new Error('INVALID_REGISTER_HANDLER'));
         }
         var handlerFunction = handler.controller
             .register;
@@ -80,7 +82,7 @@ var RequestHandler = (function () {
     RequestHandler.prototype.handleAction = function (device) {
         if (deviceIsInvalid(device)) {
             debug('handleraction failed %o', device);
-            return Promise.reject(new Error('INVALID_ACTION_PARAMETER'));
+            return BluePromise.reject(new Error('INVALID_ACTION_PARAMETER'));
         }
         var componenttype = device.handler.componenttype, deviceid = device.deviceid, params = device.body;
         var handlerFunction;
@@ -94,17 +96,16 @@ var RequestHandler = (function () {
                 });
             default:
                 debug('INVALID_ACTION_COMPONENT %o', { component: componenttype });
-                return Promise.reject(new Error("INVALID_ACTION_COMPONENT: " + componenttype));
+                return BluePromise.reject(new Error("INVALID_ACTION_COMPONENT: " + componenttype));
         }
     };
     RequestHandler.prototype.handleGet = function (device) {
         if (deviceIsInvalid(device)) {
             debug('handlerget failed %o', device);
-            return Promise.reject(new Error('INVALID_GET_PARAMETER'));
+            return BluePromise.reject(new Error('INVALID_GET_PARAMETER'));
         }
         var deviceid = device.deviceid, _a = device.handler, componenttype = _a.componenttype, controller = _a.controller, params = device.body;
-        debug('process get request for', componenttype);
-        debug('deviceId: ', deviceid);
+        debug('process get request for %s:%s', componenttype, deviceid);
         switch (componenttype) {
             case 'button':
                 return checkForFunction(controller).then(function (handler) {
@@ -131,14 +132,18 @@ var RequestHandler = (function () {
                 return checkForFunction(controller.getter).then(function (handler) {
                     return directory.directoryGet(handler, deviceid, params);
                 });
+            case 'favoritehandler':
+                return checkForFunction(controller.execute).then(function (handler) {
+                    return favorite.execute(handler, deviceid, params);
+                });
         }
         debug('INVALID_GET_COMPONENT %o', { component: componenttype });
-        return Promise.reject(new Error('INVALID_GET_COMPONENT'));
+        return BluePromise.reject(new Error('INVALID_GET_COMPONENT'));
     };
     RequestHandler.prototype.handleSet = function (device) {
         if (deviceIsInvalid(device)) {
             debug('handlerset failed %o', device);
-            return Promise.reject(new Error('INVALID_SET_PARAMETER'));
+            return BluePromise.reject(new Error('INVALID_SET_PARAMETER'));
         }
         var deviceid = device.deviceid, _a = device.handler, componenttype = _a.componenttype, controller = _a.controller, value = device.value;
         debug('process set request for', componenttype, value);
@@ -153,11 +158,11 @@ var RequestHandler = (function () {
                 });
         }
         debug('INVALID_SET_COMPONENT %o', { component: componenttype });
-        return Promise.reject(new Error('INVALID_SET_COMPONENT'));
+        return BluePromise.reject(new Error('INVALID_SET_COMPONENT'));
     };
     RequestHandler.prototype.subscribe = function (handler, deviceId) {
         if (!handler || !handler.controller) {
-            return Promise.resolve(SUCCESS);
+            return BluePromise.resolve(SUCCESS);
         }
         var handlerFunction = handler.controller
             .deviceAdded;
@@ -167,7 +172,7 @@ var RequestHandler = (function () {
     };
     RequestHandler.prototype.unsubscribe = function (handler, deviceId) {
         if (!handler || !handler.controller) {
-            return Promise.resolve(SUCCESS);
+            return BluePromise.resolve(SUCCESS);
         }
         var handlerFunction = handler.controller
             .deviceRemoved;
@@ -179,7 +184,10 @@ var RequestHandler = (function () {
 }());
 exports.RequestHandler = RequestHandler;
 function deviceIsInvalid(device) {
-    return !device || !device.handler || !device.handler.componenttype || !device.handler.controller;
+    return !device ||
+        !device.handler ||
+        !device.handler.componenttype ||
+        !device.handler.controller;
 }
 function checkForFunction(func) {
     return new Promise(function (resolve, reject) {

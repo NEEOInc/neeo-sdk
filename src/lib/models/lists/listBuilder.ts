@@ -4,6 +4,8 @@ import { ListItemParameters } from './listItemParameters';
 import { ListTileParameters } from './listTileParameters';
 import { ListUIAction } from './listUIAction';
 
+/* tslint:disable:max-line-length */
+
 /**
  * @module ListBuilder
  * @description Factory method to build a custom list.
@@ -28,50 +30,10 @@ import { ListUIAction } from './listUIAction';
  *    })
  *
  */
-export namespace ListBuilder {
-  export interface Item {
-    readonly isHeader?: boolean;
-    readonly isTile?: boolean;
-    readonly isInfoItem?: boolean;
-    readonly isButton?: boolean;
-    readonly isIconButton?: boolean;
-    readonly actionIdentifier?: string;
-    readonly browseIdentifier?: string;
-    readonly thumbnailUri?: string;
-    readonly uiAction?: ListUIAction;
-    readonly label?: string;
-    readonly title?: string;
-    readonly tiles?: any[];
-    readonly buttons?: any[];
-  }
-
-  export interface Metadata {
-    totalItems?: number;
-    totalMatchingItems?: number;
-    current?: Metadatum;
-    next?: Metadatum;
-    previous?: Metadatum;
-  }
-
-  export interface Metadatum {
-    browseIdentifier?: string;
-    offset?: number;
-    limit?: number;
-  }
-
-  export interface Parameters {
-    title?: string;
-    totalMatchingItems?: number;
-    limit?: number;
-    offset?: number;
-    browseIdentifier?: string;
-  }
-}
-
 export interface ListBuilder {
-  readonly items: ReadonlyArray<ListBuilder.Item>;
+  readonly items: ReadonlyArray<ListItem>;
   readonly title: string;
-  readonly _meta: ListBuilder.Metadata;
+  readonly _meta: ListMetadata;
 
   /**
    * @function addListHeader
@@ -204,4 +166,42 @@ export interface ListBuilder {
    *    }])
    */
   addListButtons(params: ReadonlyArray<ListButtonParameters>): this;
+}
+
+export interface ListItem {
+  readonly isHeader?: boolean;
+  readonly isTile?: boolean;
+  readonly isInfoItem?: boolean;
+  readonly isButton?: boolean;
+  readonly isIconButton?: boolean;
+  readonly actionIdentifier?: string;
+  readonly browseIdentifier?: string;
+  readonly thumbnailUri?: string;
+  readonly uiAction?: ListUIAction;
+  readonly label?: string;
+  readonly title?: string;
+  readonly tiles?: any[];
+  readonly buttons?: any[];
+}
+
+export interface ListMetadata {
+  totalItems?: number;
+  totalMatchingItems?: number;
+  current?: ListMetadatum;
+  next?: ListMetadatum;
+  previous?: ListMetadatum;
+}
+
+export interface ListMetadatum {
+  browseIdentifier?: string;
+  offset?: number;
+  limit?: number;
+}
+
+export interface ListParameters {
+  title?: string;
+  totalMatchingItems?: number;
+  limit?: number;
+  offset?: number;
+  browseIdentifier?: string;
 }

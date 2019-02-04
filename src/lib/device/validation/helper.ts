@@ -1,38 +1,30 @@
-import * as validate from './vendor/validate.min.js';
-
-/*
- * Just a wrapper around the library `validate.js`.
- * BUT throwing an error in case of validation errors
- */
-
-function ValidateWrapper(this: any, ...args: any[]) {
-  const errors = validate.apply(this, args);
-  if (errors) {
-    throw new Error('Validation failed: ' + JSON.stringify(errors));
+export function isInteger(intToCheck: any) {
+  const fullfilled = Number.isInteger(intToCheck);
+  if (!fullfilled) {
+    throw new Error('Validation failed: no integer');
   }
 }
 
-namespace ValidateWrapper {
-  export function isInteger(this: any, ...args: any[]) {
-    const fullfilled = validate.isInteger.apply(this, args);
-    if (!fullfilled) {
-      throw new Error('Validation failed: no integer');
-    }
-  }
-
-  export function isArray(this: any, ...args: any[]) {
-    const fullfilled = validate.isArray.apply(this, args);
-    if (!fullfilled) {
-      throw new Error('Validation failed: no array');
-    }
-  }
-
-  export function isString(this: any, ...args: any[]) {
-    const fullfilled = validate.isString.apply(this, args);
-    if (!fullfilled) {
-      throw new Error('Validation failed: no string');
-    }
+export function isArray(arrayToCheck: any) {
+  const fullfilled = Array.isArray(arrayToCheck);
+  if (!fullfilled) {
+    throw new Error('Validation failed: no array');
   }
 }
 
-export default ValidateWrapper;
+export function isString(stringToCheck: any) {
+  const fullfilled = typeof stringToCheck === 'string';
+  if (!fullfilled) {
+    throw new Error('Validation failed: no string');
+  }
+}
+
+export function ensurePropertyValue(objectToCheck: any, propertyToCheck: string) {
+  const fullfilled = objectToCheck &&
+    objectToCheck.hasOwnProperty(propertyToCheck) &&
+    objectToCheck[propertyToCheck] !== null &&
+    typeof objectToCheck[propertyToCheck] !== 'undefined';
+  if (!fullfilled) {
+    throw new Error(`Validation failed: property "${propertyToCheck}" not present`);
+  }
+}

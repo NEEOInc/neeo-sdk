@@ -4,14 +4,18 @@ import * as ComponentFactory from './componentFactory';
 
 const debug = Debug('neeo:device:DeviceCapability');
 
-const CAPABILITY_DYNAMIC_DEVICE = 'dynamicDevice';
-const CAPABILITIES_REQUIRING_DISCOVERY = [
+const CAPABILITY_DYNAMIC_DEVICE: Models.DeviceCapability = 'dynamicDevice';
+const CAPABILITIES_REQUIRING_DISCOVERY: Models.DeviceCapability[] = [
   'bridgeDevice',
   'addAnotherDevice',
   'register-user-account',
 ];
 
-export default function(deviceBuilder: Models.DeviceBuilder) {
+export {
+  buildDeviceCapabilities,
+};
+
+function buildDeviceCapabilities(deviceBuilder: Models.DeviceBuilder) {
   if (!deviceBuilder || typeof deviceBuilder !== 'object') {
     throw new Error('INVALID_PARAMETERS');
   }
@@ -33,11 +37,12 @@ export default function(deviceBuilder: Models.DeviceBuilder) {
     deviceSubscriptionHandlers,
     directories,
     discovery,
+    favoritesHandler,
     registration,
     deviceidentifier,
     buttonHandler,
   } = deviceBuilder;
-  const capabilities = [] as Models.Component[];
+  const capabilities = [] as any[];
 
   const pathPrefix = `/device/${deviceidentifier}/`;
 
@@ -46,8 +51,7 @@ export default function(deviceBuilder: Models.DeviceBuilder) {
 
   const handlers = new Map<string, Models.CapabilityHandler>();
 
-  // TODO: Type controller
-  function addCapability(capability: Models.Component, controller: any) {
+  function addCapability(capability: any, controller: any) {
     const { type, path, name } = capability;
     debug('register capability', devicename, type, path);
 
@@ -65,7 +69,7 @@ export default function(deviceBuilder: Models.DeviceBuilder) {
     throw new Error(`DUPLICATE_PATH_DETECTED: ${capability.name}`);
   }
 
-  function addRouteHandler(capability: Models.Component, controller: any) {
+  function addRouteHandler(capability: any, controller: any) {
     const { type, path, name } = capability;
     debug('register route', type, path);
 
@@ -154,9 +158,10 @@ export default function(deviceBuilder: Models.DeviceBuilder) {
     deviceCapabilities.includes(capability)
   );
 
-  const isDynamicDevice = deviceBuilder.deviceCapabilities.includes(CAPABILITY_DYNAMIC_DEVICE);
+  const isNotDynamicDevice = !deviceBuilder.deviceCapabilities
+    .includes(CAPABILITY_DYNAMIC_DEVICE);
 
-  if (discoveryRequired && noDiscovery && !isDynamicDevice) {
+  if (discoveryRequired && noDiscovery && isNotDynamicDevice) {
     const discoveryRequiredFor = CAPABILITIES_REQUIRING_DISCOVERY.join(', ');
     throw new Error('DISCOVERY_REQUIRED ' + discoveryRequiredFor + ' require discovery');
   }
@@ -169,6 +174,13 @@ export default function(deviceBuilder: Models.DeviceBuilder) {
     addRouteHandler(
       ComponentFactory.buildDeviceSubscription(pathPrefix),
       deviceSubscriptionHandlers
+    );
+  }
+
+  if (favoritesHandler) {
+    addRouteHandler(
+      ComponentFactory.buildFavoritesHandler(pathPrefix),
+      favoritesHandler
     );
   }
 

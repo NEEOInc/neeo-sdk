@@ -19,10 +19,7 @@ const DEVICE_SENSOR_UPDATE_TYPE = 'DEVICE_SENSOR_UPDATE';
 export default class {
   private queueSize: number;
   private readonly brainUri: string;
-  private readonly sensorValues: Map<
-    string,
-    Models.SensorDescriptor.SensorValue
-  >;
+  private readonly sensorValues: Map<string, Models.Sensor.Value>;
 
   constructor(options: { url: string }) {
     debug('init', options);

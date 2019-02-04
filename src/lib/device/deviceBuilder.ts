@@ -1,67 +1,57 @@
 import * as Debug from 'debug';
 import * as Models from '../models';
-import buildDeviceCapabilities from './deviceCapability';
+import { buildDeviceCapabilities } from './deviceCapability';
 import * as validation from './validation';
 
 const debug = Debug('neeo:device:DeviceBuilder');
 
-const MAXIMAL_STRING_LENGTH = 48;
+const MAXIMAL_STRING_LENGTH = validation.MAXIMAL_STRING_LENGTH;
 const DEFAULT_MANUFACTURER = 'NEEO';
-const DEFAULT_TYPE: Models.DeviceTypes = 'ACCESSOIRE';
+const DEFAULT_TYPE: Models.DeviceType = 'ACCESSOIRE';
 const API_VERSION = '1.0';
-const MAXIMAL_TIMING_VALUE_MS = 60 * 1000;
-
-function checkParamName(param?: { name?: string }) {
-  if (!param || !param.name) {
-    throw new Error('MISSING_ELEMENT_NAME');
-  }
-  if (!validation.stringLength(param.name, MAXIMAL_STRING_LENGTH)) {
-    throw new Error('NAME_TOO_LONG_' + param.name);
-  }
-}
-
-function checkOptionalLabel(param?: { label?: string }) {
-  if (!param || !param.label) {
-    return;
-  }
-  if (!validation.stringLength(param.label, MAXIMAL_STRING_LENGTH)) {
-    throw new Error('LABEL_TOO_LONG_' + param.label);
-  }
-}
+const PLAYER_BUTTON_NAMES = Models.PlayerWidget.playerButtonNames;
+const PLAYER_VOLUME = Models.PlayerWidget.playerVolumeDefinition;
+const PLAYER_COVER_ART = Models.PlayerWidget.coverArtDefinition;
+const PLAYER_TITLE = Models.PlayerWidget.titleDefinition;
+const PLAYER_DESCRIPTION = Models.PlayerWidget.descriptionDefinition;
+const PLAYER_PLAYING = Models.PlayerWidget.playingDefinition;
+const PLAYER_MUTE = Models.PlayerWidget.muteDefinition;
+const PLAYER_SHUFFLE = Models.PlayerWidget.shuffleDefinition;
+const PLAYER_REPEAT = Models.PlayerWidget.repeatDefinition;
 
 export class DeviceBuilder implements Models.DeviceBuilder {
   public readonly buttons: Array<{ param: Models.ButtonDescriptor }>;
   public readonly deviceidentifier: string;
   public readonly sensors: Array<{
-    param: Models.SensorDescriptor;
-    controller: Models.SensorDescriptor.Controller;
+    param: Models.Sensor.Descriptor;
+    controller: Models.Sensor.Controller;
   }>;
   public readonly discovery: Array<{
-    controller: Models.DiscoveryResult.Controller;
+    controller: Models.Discovery.Controller;
   }>;
   public readonly sliders: Array<{
-    param: Models.SliderDescriptor;
-    controller: Models.SliderDescriptor.Controller;
+    param: Models.Slider.Descriptor;
+    controller: Models.Slider.Controller;
   }>;
   public readonly switches: Array<{
-    param: Models.SwitchDescriptor;
-    controller: Models.SwitchDescriptor.Controller;
+    param: Models.Descriptor;
+    controller: Models.Switch.Controller;
   }>;
   public readonly textLabels: Array<{
-    param: Models.TextLabelDescriptor;
-    controller: { getter: Models.TextLabelDescriptor.Controller };
+    param: Models.TextLabel.Descriptor;
+    controller: { getter: Models.TextLabel.Controller };
   }>;
   public readonly imageUrls: Array<{
-    param: Models.ImageDescriptor;
-    controller: { getter: Models.ImageDescriptor.Controller };
+    param: Models.Image.Descriptor;
+    controller: { getter: Models.Image.Controller };
   }>;
   public readonly directories: Array<{
-    param: Models.DirectoryDescriptor;
-    controller: Models.DirectoryDescriptor.Controller;
+    param: Models.Directory.Descriptor;
+    controller: Models.Directory.Controller;
   }>;
   public readonly registration: any[];
   public readonly additionalSearchTokens: string[];
-  public readonly deviceCapabilities: string[];
+  public readonly deviceCapabilities: Models.DeviceCapability[];
   public readonly devicename: string;
   public buttonHandler?: Models.ButtonHandler;
   public hasPowerStateSensor: boolean;
@@ -69,13 +59,15 @@ export class DeviceBuilder implements Models.DeviceBuilder {
   public type = DEFAULT_TYPE;
   public setup: Models.DeviceSetup;
   public deviceSubscriptionHandlers?: Models.DeviceSubscriptionHandler.Controller;
+  public favoritesHandler?: Models.FavoritesHandler.Controller;
   public driverVersion?: number;
 
   private icon?: string;
   private initializeFunction?: Models.InitialiseFunction;
-  private subscriptionFunction?: Models.SubscriptionFunction;
+  private subscriptionFunction?: Models.Subscription.Controller;
   private specificname?: string;
   private timing?: Models.DeviceTiming;
+  private validatePlayerWidget?: boolean;
 
   constructor(name: string, uniqueString?: string) {
     if (!validation.stringLength(name, MAXIMAL_STRING_LENGTH)) {
@@ -146,6 +138,7 @@ export class DeviceBuilder implements Models.DeviceBuilder {
       devicename,
       type,
       deviceidentifier,
+      favoritesHandler,
       manufacturer,
       setup,
       additionalSearchTokens,
@@ -159,6 +152,12 @@ export class DeviceBuilder implements Models.DeviceBuilder {
 
     if (timing && validation.deviceTypeDoesNotSupportTiming(type)) {
       throw new Error('TIMING_DEFINED_BUT_DEVICETYPE_HAS_NO_SUPPORT');
+    }
+    if (favoritesHandler && !validation.deviceTypeHasFavoritesSupport(type)) {
+      throw new Error('FAVORITES_HANDLER_DEFINED_BUT_DEVICETYPE_HAS_NO_SUPPORT');
+    }
+    if (this.validatePlayerWidget && !validation.deviceTypeHasPlayerSupport(type)) {
+      throw new Error('INVALID_DEVICE_TYPE_FOR_PLAYER_WIDGET_' + type);
     }
     if (buttons.length && !buttonHandler) {
       throw new Error('BUTTONS_DEFINED_BUT_NO_BUTTONHANDLER_DEFINED');
@@ -180,20 +179,21 @@ export class DeviceBuilder implements Models.DeviceBuilder {
     if (setup.registration) {
       deviceCapabilities.push('register-user-account');
     }
+    if (favoritesHandler) {
+      deviceCapabilities.push('customFavoriteHandler');
+    }
+
     if (
       validation.deviceTypeNeedsInputCommand(type) &&
       validation.hasNoInputButtonsDefined(buttons)
     ) {
       // tslint:disable-next-line
       console.warn(
-        '\nWARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!'
+        '\nWARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!\n' +
+        'WARNING: no input commands defined! Your device might not work as\n' +
+        'desired, check the docs.\n' +
+        'Devicename:' + devicename
       );
-      // tslint:disable-next-line
-      console.warn(
-        'WARNING: no input commands defined! Your device might not work as desired, check the docs'
-      );
-      // tslint:disable-next-line
-      console.warn('Devicename:', devicename);
     }
     return {
       adapterName: deviceidentifier,
@@ -220,28 +220,14 @@ export class DeviceBuilder implements Models.DeviceBuilder {
   }
 
   public enableDiscovery(
-    options: {
-      headerText?: string;
-      description?: string;
-      enableDynamicDeviceBuilder?: boolean;
-    },
-    controller: Models.DiscoveryResult.Controller
+    options: Models.Discovery.Options,
+    controller: Models.Discovery.Controller
   ) {
     debug('enable discovery %o', options);
-    if (typeof controller !== 'function') {
-      throw new Error('INVALID_DISCOVERY_FUNCTION');
-    }
-    if (!options) {
-      throw new Error('INVALID_DISCOVERY_PARAMETER');
-    }
-    const { headerText, description, enableDynamicDeviceBuilder } = options;
-    if (!headerText || !description) {
-      throw new Error('INVALID_DISCOVERY_PARAMETER');
-    }
     const { setup, discovery } = this;
-    if (setup.discovery) {
-      throw new Error('DISCOVERHANDLER_ALREADY_DEFINED');
-    }
+    validation.checkNotYetDefined(setup.discovery, 'DISCOVERHANDLER');
+    validation.validateDiscovery(options, controller);
+    const { headerText, description, enableDynamicDeviceBuilder } = options;
     this.setup = Object.assign(setup, {
       discovery: true,
       introheader: headerText,
@@ -256,44 +242,26 @@ export class DeviceBuilder implements Models.DeviceBuilder {
     return !validation.deviceTypeDoesNotSupportTiming(this.type);
   }
 
+  public supportsFavorites() {
+    return validation.deviceTypeHasFavoritesSupport(this.type);
+  }
+
   public defineTiming(param: Models.TimingSpecifier) {
-    if (!param) {
-      throw new Error('INVALID_TIMING_PARAMETER');
-    }
-
-    function validateTime(timeMs: number) {
-      if (!Number.isInteger(timeMs)) {
-        throw new Error('INVALID_TIMING_VALUE');
-      }
-      if (timeMs < 0 || timeMs > MAXIMAL_TIMING_VALUE_MS) {
-        throw new Error('INVALID_TIMING_VALUE');
-      }
-      return timeMs;
-    }
-
     debug('define timing %o', param);
-    const { powerOnDelayMs, sourceSwitchDelayMs, shutdownDelayMs } = param;
-    if (!powerOnDelayMs && !sourceSwitchDelayMs && !shutdownDelayMs) {
-      throw new Error('INVALID_TIMING_PARAMETER');
-    }
-
+    validation.validateTiming(param);
     this.timing = {
-      standbyCommandDelay: !!powerOnDelayMs ? validateTime(powerOnDelayMs) : undefined,
-      sourceSwitchDelay: !!sourceSwitchDelayMs ? validateTime(sourceSwitchDelayMs) : undefined,
-      shutdownDelay: !!shutdownDelayMs ? validateTime(shutdownDelayMs) : undefined,
+      standbyCommandDelay: param.powerOnDelayMs,
+      sourceSwitchDelay: param.sourceSwitchDelayMs,
+      shutdownDelay: param.shutdownDelayMs,
     };
 
     return this;
   }
 
-  public registerSubscriptionFunction(controller: Models.SubscriptionFunction) {
+  public registerSubscriptionFunction(controller: Models.Subscription.Controller) {
     debug('get subscription function');
-    if (typeof controller !== 'function') {
-      throw new Error('INVALID_SUBSCRIPTIONHANDLER_FUNCTION');
-    }
-    if (this.subscriptionFunction) {
-      throw new Error('SUBSCRIPTIONHANDLER_ALREADY_DEFINED');
-    }
+    validation.checkNotYetDefined(this.subscriptionFunction, 'SUBSCRIPTIONHANDLER');
+    validation.validateFunctionController(controller, 'SUBSCRIPTIONHANDLER');
     this.subscriptionFunction = controller;
 
     return this;
@@ -301,12 +269,8 @@ export class DeviceBuilder implements Models.DeviceBuilder {
 
   public registerInitialiseFunction(controller: Models.InitialiseFunction) {
     debug('get initialise function');
-    if (typeof controller !== 'function') {
-      throw new Error('INVALID_INITIALISATION_FUNCTION');
-    }
-    if (this.initializeFunction) {
-      throw new Error('INITIALISATION_FUNCTION_ALREADY_DEFINED');
-    }
+    validation.checkNotYetDefined(this.initializeFunction, 'INITIALISATIONHANDLER');
+    validation.validateFunctionController(controller, 'INITIALISATIONHANDLER');
     this.initializeFunction = controller;
 
     return this;
@@ -316,34 +280,34 @@ export class DeviceBuilder implements Models.DeviceBuilder {
     controller: Models.DeviceSubscriptionHandler.Controller
   ) {
     debug('enable device subscriptions');
-    if (this.deviceSubscriptionHandlers) {
-      throw new Error('DEVICESUBSCRIPTIONHANDLERS_ALREADY_DEFINED');
-    }
-    if (!controller) {
-      throw new Error('INVALID_SUBSCRIPTION_CONTROLLER_UNDEFINED');
-    }
-    const requiredFuncions: ReadonlyArray<keyof Models.DeviceSubscriptionHandler.Controller> = [
-      'deviceAdded',
-      'deviceRemoved',
-      'initializeDeviceList',
-    ];
-    const missingFunctions = requiredFuncions.filter((functionName) => {
-      return typeof controller[functionName] !== 'function';
+    validation.checkNotYetDefined(this.deviceSubscriptionHandlers, 'DEVICESUBSCRIPTIONHANDLERS');
+    validation.validateController(controller, {
+      requiredFunctions: ['deviceAdded', 'deviceRemoved', 'initializeDeviceList'],
+      handlerName: 'DEVICESUBSCRIPTION',
     });
-    if (missingFunctions.length) {
-      throw new Error(
-        `INVALID_SUBSCRIPTION_CONTROLLER missing ${missingFunctions.join(', ')} function(s)`
-      );
-    }
     this.deviceSubscriptionHandlers = controller;
+
+    return this;
+  }
+
+  public registerFavoriteHandlers(
+    controller: Models.FavoritesHandler.Controller
+  ) {
+    debug('enable favorite handlers');
+    validation.checkNotYetDefined(this.favoritesHandler, 'FAVORITE_HANDLERS');
+    validation.validateController(controller, {
+      requiredFunctions: ['execute'],
+      handlerName: 'FAVORITE',
+    });
+    this.favoritesHandler = controller;
 
     return this;
   }
 
   public addButton(param: Models.ButtonDescriptor) {
     debug('add button %o', param);
-    checkParamName(param);
-    checkOptionalLabel(param);
+    validation.checkNameFor(param);
+    validation.checkLabelFor(param);
 
     this.buttons.push({ param });
 
@@ -362,13 +326,8 @@ export class DeviceBuilder implements Models.DeviceBuilder {
 
   public addButtonHandler(controller: Models.ButtonHandler) {
     debug('add buttonhandler');
-    if (typeof controller !== 'function') {
-      throw new Error('MISSING_BUTTONHANDLER_CONTROLLER_PARAMETER');
-    }
-    if (this.buttonHandler) {
-      throw new Error('BUTTONHANDLER_ALREADY_DEFINED');
-    }
-
+    validation.checkNotYetDefined(this.buttonHandler, 'BUTTONHANDLER');
+    validation.validateFunctionController(controller, 'BUTTONHANDLER');
     this.buttonHandler = controller;
 
     return this;
@@ -380,16 +339,12 @@ export class DeviceBuilder implements Models.DeviceBuilder {
   ) {
     const { setup, registration } = this;
     debug('enable registration %o', options);
-    if (setup.registration) {
-      throw new Error('REGISTERHANLDER_ALREADY_DEFINED');
-    }
-    if (
-      !controller ||
-      typeof controller.register !== 'function' ||
-      typeof controller.isRegistered !== 'function'
-    ) {
-      throw new Error('INVALID_REGISTRATION_CONTROLLER');
-    }
+    validation.checkNotYetDefined(setup.registration, 'REGISTERHANLDER');
+    validation.validateController(controller, {
+      requiredFunctions: ['register', 'isRegistered'],
+      handlerName: 'REGISTRATION',
+    });
+
     if (!options) {
       throw new Error('INVALID_REGISTRATION: Options cannot be undefined');
     }
@@ -408,116 +363,102 @@ export class DeviceBuilder implements Models.DeviceBuilder {
     return this;
   }
 
-  public addSlider(param: Models.SliderDescriptor, controller: Models.SliderDescriptor.Controller) {
+  public addSlider(param: Models.Slider.Descriptor, controller: Models.Slider.Controller) {
     debug('add slider %o', param);
-    checkParamName(param);
-    checkOptionalLabel(param);
-    if (
-      !controller ||
-      typeof controller.setter !== 'function' ||
-      typeof controller.getter !== 'function'
-    ) {
-      throw new Error(`INVALID_SLIDER_CONTROLLER: ${param.name}`);
-    }
+    validation.checkNameFor(param);
+    validation.checkLabelFor(param);
+    validation.validateController(controller, {
+      requiredFunctions: ['setter', 'getter'],
+      handlerName: 'SLIDER',
+      componentName: param.name,
+    });
 
     this.sliders.push({ param, controller });
 
     return this;
   }
 
-  public addSensor(param: Models.SensorDescriptor, controller: Models.SensorDescriptor.Controller) {
+  public addSensor(param: Models.Sensor.Descriptor, controller: Models.Sensor.Controller) {
     debug('add sensor %o', param);
-    checkParamName(param);
-    checkOptionalLabel(param);
-    if (!controller || typeof controller.getter !== 'function') {
-      throw new Error(`INVALID_SENSOR_CONTROLLER: ${param.name}`);
-    }
+    validation.checkNameFor(param);
+    validation.checkLabelFor(param);
+    validation.validateController(controller, {
+      requiredFunctions: ['getter'],
+      handlerName: 'SENSOR',
+      componentName: param.name,
+    });
 
     this.sensors.push({ param, controller });
 
     return this;
   }
 
-  public addPowerStateSensor(controller: Models.SensorDescriptor.PowerStateController) {
+  public addPowerStateSensor(controller: Models.Sensor.PowerStateController) {
     debug('add power sensor');
-    if (!controller || typeof controller.getter !== 'function') {
-      throw new Error('INVALID_POWERSENSOR_CONTROLLER');
-    }
+    validation.validateController(controller, {
+      requiredFunctions: ['getter'],
+      handlerName: 'POWERSENSOR',
+    });
+
     const param = {
       name: 'powerstate',
       label: 'Powerstate',
       type: 'power',
     };
-
     this.sensors.push({ param, controller });
-
     this.hasPowerStateSensor = true;
 
     return this;
   }
 
-  public addSwitch(param: Models.SwitchDescriptor, controller: Models.SwitchDescriptor.Controller) {
+  public addSwitch(param: Models.Descriptor, controller: Models.Switch.Controller) {
     debug('add switch %o', param);
-    checkParamName(param);
-    checkOptionalLabel(param);
-    if (
-      !controller ||
-      typeof controller.setter !== 'function' ||
-      typeof controller.getter !== 'function'
-    ) {
-      throw new Error(`INVALID_SWITCH_CONTROLLER: ${param.name}`);
-    }
+    validation.checkNameFor(param);
+    validation.checkLabelFor(param);
+    validation.validateController(controller, {
+      requiredFunctions: ['setter', 'getter'],
+      handlerName: 'SWITCH',
+      componentName: param.name,
+    });
+
     this.switches.push({ param, controller });
     return this;
   }
 
   public addTextLabel(
-    param: Models.TextLabelDescriptor,
-    controller: Models.TextLabelDescriptor.Controller
+    param: Models.TextLabel.Descriptor,
+    getter: Models.TextLabel.Controller
   ) {
     debug('add textlabel %o', param);
-    checkParamName(param);
-    checkOptionalLabel(param);
-    if (!controller || typeof controller !== 'function') {
-      throw new Error(`INVALID_LABEL_CONTROLLER: ${param.name}`);
-    }
+    validation.checkNameFor(param);
+    validation.checkLabelFor(param);
+    validation.validateFunctionController(getter, `TEXTLABELHANDLER: ${param.name}`);
     // NOTE: we need a controller getter here
-    this.textLabels.push({ param, controller: { getter: controller } });
+    this.textLabels.push({ param, controller: { getter } });
     return this;
   }
 
-  public addImageUrl(param: Models.ImageDescriptor, controller: Models.ImageDescriptor.Controller) {
+  public addImageUrl(param: Models.Image.Descriptor, getter: Models.Image.Controller) {
     debug('add imageurl %o', param);
-    checkParamName(param);
-    checkOptionalLabel(param);
-    if (!controller || typeof controller !== 'function') {
-      throw new Error(`INVALID_IMAGEURL_CONTROLLER: ${param.name}`);
-    }
-    this.imageUrls.push({ param, controller: { getter: controller } });
+    validation.checkNameFor(param);
+    validation.checkLabelFor(param);
+    validation.validateFunctionController(getter, `IMAGEURLHANDLER: ${param.name}`);
+    this.imageUrls.push({ param, controller: { getter } });
     return this;
   }
 
   public addDirectory(
-    param: Models.DirectoryDescriptor,
-    controller: Models.DirectoryDescriptor.Controller
+    param: Models.Directory.Descriptor,
+    controller: Models.Directory.Controller
   ) {
     debug('add directory %o', param);
-    checkParamName(param);
-    if (!param.label) {
-      throw new Error('MISSING_DIRECTORY_LABEL');
-    }
-    if (!validation.stringLength(param.label, MAXIMAL_STRING_LENGTH)) {
-      throw new Error('DIRECTORY_LABEL_TOO_LONG_' + param.label);
-    }
-    if (!controller) {
-      throw new Error(`INVALID_DIRECTORY_CONTROLLER: ${param.name}`);
-    }
-    if (typeof controller.getter !== 'function') {
-      throw new Error(`INVALID_DIRECTORY_CONTROLLER_GETTER_NOT_A_FUNCTION: ${param.name}`);
-    }
-    if (typeof controller.action !== 'function') {
-      throw new Error(`INVALID_DIRECTORY_CONTROLLER_ACTION_NOT_A_FUNCTION: ${param.name}`);
-    }
+    validation.checkNameFor(param);
+    validation.checkLabelFor(param, { mandatory: true });
+    validation.validateController(controller, {
+      requiredFunctions: ['getter', 'action'],
+      handlerName: 'DIRECTORY',
+      componentName: param.name,
+    });
 
     const addedDirectoryRole = param.role;
     if (addedDirectoryRole) {
@@ -528,9 +469,76 @@ export class DeviceBuilder implements Models.DeviceBuilder {
     return this;
   }
 
-  public addCapability(capability: string) {
+  /**
+   * @deprecated
+   */
+  public addQueueDirectory(
+    params: Models.Directory.Descriptor,
+    controller: Models.Directory.Controller
+  ) {
+    // tslint:disable-next-line
+    console.warn('WARNING: addQueueDirectory() is deprecated in favor of ' +
+      'addDirectory() and will be removed in future versions.');
+    const bridgeParams = Object.assign({ role: 'QUEUE' }, params);
+    return this.addDirectory(bridgeParams, controller);
+  }
+
+  /**
+   * @deprecated
+   */
+  public addRootDirectory(
+    params: Models.Directory.Descriptor,
+    controller: Models.Directory.Controller
+  ) {
+    // tslint:disable-next-line
+    console.warn('WARNING: addRootDirectory() is deprecated in favor of ' +
+      'addDirectory() and will be removed in future versions.');
+    const bridgeParams = Object.assign({ role: 'ROOT' }, params);
+    return this.addDirectory(bridgeParams, controller);
+  }
+
+  public addCapability(capability: Models.DeviceStaticCapability) {
     debug('add capability %o', capability);
     this.deviceCapabilities.push(validation.validateCapability(capability));
+    return this;
+  }
+
+  public addPlayerWidget(handler: Models.PlayerWidget.Controller) {
+    debug('adding player widget components');
+    validation.checkNotYetDefined(this.validatePlayerWidget, 'PLAYER_WIDGET');
+    validation.validatePlayerWidget(handler);
+
+    this.addDirectory({
+      name: handler.rootDirectory.name || 'ROOT_DIRECTORY',
+      label: handler.rootDirectory.label || 'ROOT',
+      role: 'ROOT',
+    }, handler.rootDirectory.controller);
+
+    const queueDirectory = handler.queueDirectory;
+    if (queueDirectory) {
+      this.addDirectory({
+        name: queueDirectory.name || 'QUEUE_DIRECTORY',
+        label: queueDirectory.label || 'QUEUE',
+        role: 'QUEUE',
+      }, queueDirectory.controller);
+    }
+
+    this.addSlider(PLAYER_VOLUME, handler.volumeController);
+
+    this.addSensor(PLAYER_COVER_ART, handler.coverArtController);
+    this.addSensor(PLAYER_DESCRIPTION, handler.descriptionController);
+    this.addSensor(PLAYER_TITLE, handler.titleController);
+
+    this.addSwitch(PLAYER_PLAYING, handler.playingController);
+    this.addSwitch(PLAYER_MUTE, handler.muteController);
+    this.addSwitch(PLAYER_SHUFFLE, handler.shuffleController);
+    this.addSwitch(PLAYER_REPEAT, handler.repeatController);
+
+    PLAYER_BUTTON_NAMES.forEach((name) => {
+      this.addButton({ name });
+    });
+
+    this.validatePlayerWidget = true;
     return this;
   }
 

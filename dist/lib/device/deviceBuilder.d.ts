@@ -5,52 +5,54 @@ export declare class DeviceBuilder implements Models.DeviceBuilder {
     }>;
     readonly deviceidentifier: string;
     readonly sensors: Array<{
-        param: Models.SensorDescriptor;
-        controller: Models.SensorDescriptor.Controller;
+        param: Models.Sensor.Descriptor;
+        controller: Models.Sensor.Controller;
     }>;
     readonly discovery: Array<{
-        controller: Models.DiscoveryResult.Controller;
+        controller: Models.Discovery.Controller;
     }>;
     readonly sliders: Array<{
-        param: Models.SliderDescriptor;
-        controller: Models.SliderDescriptor.Controller;
+        param: Models.Slider.Descriptor;
+        controller: Models.Slider.Controller;
     }>;
     readonly switches: Array<{
-        param: Models.SwitchDescriptor;
-        controller: Models.SwitchDescriptor.Controller;
+        param: Models.Descriptor;
+        controller: Models.Switch.Controller;
     }>;
     readonly textLabels: Array<{
-        param: Models.TextLabelDescriptor;
+        param: Models.TextLabel.Descriptor;
         controller: {
-            getter: Models.TextLabelDescriptor.Controller;
+            getter: Models.TextLabel.Controller;
         };
     }>;
     readonly imageUrls: Array<{
-        param: Models.ImageDescriptor;
+        param: Models.Image.Descriptor;
         controller: {
-            getter: Models.ImageDescriptor.Controller;
+            getter: Models.Image.Controller;
         };
     }>;
     readonly directories: Array<{
-        param: Models.DirectoryDescriptor;
-        controller: Models.DirectoryDescriptor.Controller;
+        param: Models.Directory.Descriptor;
+        controller: Models.Directory.Controller;
     }>;
     readonly registration: any[];
     readonly additionalSearchTokens: string[];
-    readonly deviceCapabilities: string[];
+    readonly deviceCapabilities: Models.DeviceCapability[];
     readonly devicename: string;
     buttonHandler?: Models.ButtonHandler;
     hasPowerStateSensor: boolean;
     manufacturer: string;
-    type: Models.DeviceTypes;
+    type: Models.DeviceType;
     setup: Models.DeviceSetup;
     deviceSubscriptionHandlers?: Models.DeviceSubscriptionHandler.Controller;
+    favoritesHandler?: Models.FavoritesHandler.Controller;
     driverVersion?: number;
     private icon?;
     private initializeFunction?;
     private subscriptionFunction?;
     private specificname?;
     private timing?;
+    private validatePlayerWidget?;
     constructor(name: string, uniqueString?: string);
     setManufacturer(manufacturer?: string): this;
     setDriverVersion(version: number): this;
@@ -59,28 +61,29 @@ export declare class DeviceBuilder implements Models.DeviceBuilder {
     setSpecificName(specificname?: string): this;
     addAdditionalSearchToken(token: string): this;
     build(): Models.DeviceAdapterModel;
-    enableDiscovery(options: {
-        headerText?: string;
-        description?: string;
-        enableDynamicDeviceBuilder?: boolean;
-    }, controller: Models.DiscoveryResult.Controller): this;
+    enableDiscovery(options: Models.Discovery.Options, controller: Models.Discovery.Controller): this;
     supportsTiming(): boolean;
+    supportsFavorites(): boolean;
     defineTiming(param: Models.TimingSpecifier): this;
-    registerSubscriptionFunction(controller: Models.SubscriptionFunction): this;
+    registerSubscriptionFunction(controller: Models.Subscription.Controller): this;
     registerInitialiseFunction(controller: Models.InitialiseFunction): this;
     registerDeviceSubscriptionHandler(controller: Models.DeviceSubscriptionHandler.Controller): this;
+    registerFavoriteHandlers(controller: Models.FavoritesHandler.Controller): this;
     addButton(param: Models.ButtonDescriptor): this;
     addButtonGroup(groupName: string): this;
     addButtonHandler(controller: Models.ButtonHandler): this;
     enableRegistration(options: Models.Registration.Options, controller: Models.Registration.Controller): this;
-    addSlider(param: Models.SliderDescriptor, controller: Models.SliderDescriptor.Controller): this;
-    addSensor(param: Models.SensorDescriptor, controller: Models.SensorDescriptor.Controller): this;
-    addPowerStateSensor(controller: Models.SensorDescriptor.PowerStateController): this;
-    addSwitch(param: Models.SwitchDescriptor, controller: Models.SwitchDescriptor.Controller): this;
-    addTextLabel(param: Models.TextLabelDescriptor, controller: Models.TextLabelDescriptor.Controller): this;
-    addImageUrl(param: Models.ImageDescriptor, controller: Models.ImageDescriptor.Controller): this;
-    addDirectory(param: Models.DirectoryDescriptor, controller: Models.DirectoryDescriptor.Controller): this;
-    addCapability(capability: string): this;
+    addSlider(param: Models.Slider.Descriptor, controller: Models.Slider.Controller): this;
+    addSensor(param: Models.Sensor.Descriptor, controller: Models.Sensor.Controller): this;
+    addPowerStateSensor(controller: Models.Sensor.PowerStateController): this;
+    addSwitch(param: Models.Descriptor, controller: Models.Switch.Controller): this;
+    addTextLabel(param: Models.TextLabel.Descriptor, getter: Models.TextLabel.Controller): this;
+    addImageUrl(param: Models.Image.Descriptor, getter: Models.Image.Controller): this;
+    addDirectory(param: Models.Directory.Descriptor, controller: Models.Directory.Controller): this;
+    addQueueDirectory(params: Models.Directory.Descriptor, controller: Models.Directory.Controller): this;
+    addRootDirectory(params: Models.Directory.Descriptor, controller: Models.Directory.Controller): this;
+    addCapability(capability: Models.DeviceStaticCapability): this;
+    addPlayerWidget(handler: Models.PlayerWidget.Controller): this;
     addButtonHander(controller: Models.ButtonHandler): void;
     private checkDirectoryRole;
 }

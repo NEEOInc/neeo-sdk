@@ -14,9 +14,9 @@ var Database = (function () {
         var index = 0;
         adapters.forEach(function (adapter) {
             var adapterName = adapter.adapterName, devices = adapter.devices, type = adapter.type, manufacturer = adapter.manufacturer, setup = adapter.setup, timing = adapter.timing, capabilities = adapter.capabilities, deviceCapabilities = adapter.deviceCapabilities;
-            debug('build adapter.adapterName', adapterName);
+            debug('parsing adapter.adapterName %o:', adapterName);
             devices.forEach(function (device) {
-                debug('build adapter.adapterName', adapter.adapterName, index, adapter.manufacturer, device.name);
+                debug('  device:', index, adapter.manufacturer, device.name);
                 var icon = device.icon, name = device.name, tokens = device.tokens;
                 _this.devices.push({
                     id: index++,

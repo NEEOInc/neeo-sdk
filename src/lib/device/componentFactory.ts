@@ -3,6 +3,7 @@ import * as Models from '../models';
 
 const debug = Debug('neeo:device:ComponentFactory');
 
+// TODO declare types in models/components to use here and in requestHandler.
 const TYPE_BUTTON = 'button';
 const TYPE_SWITCH = 'switch';
 const TYPE_SLIDER = 'slider';
@@ -13,6 +14,7 @@ const TYPE_DIRECTORY = 'directory';
 const TYPE_DISCOVER_ROUTE = 'discover';
 const TYPE_REGISTER_ROUTE = 'register';
 const TYPE_DEVICE_SUBSCRIPTION_ROUTE = 'devicesubscription';
+const TYPE_FAVORITE_HANDLER_ROUTE = 'favoritehandler';
 
 export const SENSOR_TYPE_ARRAY = 'array';
 export const SENSOR_TYPE_BINARY = 'binary';
@@ -38,19 +40,10 @@ const SLIDER_DEFAULT_UNIT = '%';
 
 const VALID_IMAGEURL_SIZES = ['small', 'large'];
 
-function validateParameter(pathPrefix: string, param: { name: string }) {
-  if (!pathPrefix) {
-    throw new Error('INVALID_PATHPREFIX');
-  }
-  if (!param || !param.name) {
-    throw new Error('INVALID_BUILD_PARAMETER');
-  }
-}
-
 export function buildButton(
   pathPrefix: string,
   param: Models.ButtonDescriptor
-): Models.UIComponent {
+) {
   validateParameter(pathPrefix, param);
   const name = encodeURIComponent(param.name);
   const path = pathPrefix + name;
@@ -66,8 +59,8 @@ export function buildButton(
 
 export function buildDirectory(
   pathPrefix: string,
-  param: Models.DirectoryDescriptor
-): Models.DirectoryComponent {
+  param: Models.Directory.Descriptor
+) {
   validateParameter(pathPrefix, param);
   const name = encodeURIComponent(param.name);
   const path = pathPrefix + name;
@@ -84,8 +77,8 @@ export function buildDirectory(
 
 export function buildSwitch(
   pathPrefix: string,
-  param: Models.SwitchDescriptor
-): Models.SensorComponent {
+  param: Models.Descriptor
+) {
   validateParameter(pathPrefix, param);
   const name = encodeURIComponent(param.name);
   const path = pathPrefix + name;
@@ -113,8 +106,8 @@ function validateRange(param?: ReadonlyArray<number>) {
 
 function buildPowerSensor(
   pathPrefix: string,
-  param: Models.SensorDescriptor
-): Models.SensorComponent {
+  param: Models.Sensor.Descriptor
+) {
   const component = buildSensorHelper(pathPrefix, param, SENSOR_TYPE_POWER);
 
   // Power state sensors are added by addPowerStateSensor with the name
@@ -129,8 +122,8 @@ function buildPowerSensor(
 
 export function buildSensor(
   pathPrefix: string,
-  param: Models.SensorDescriptor
-): Models.SensorComponent {
+  param: Models.Sensor.Descriptor
+) {
   if (param.type === SENSOR_TYPE_POWER) {
     return buildPowerSensor(pathPrefix, param);
   }
@@ -144,8 +137,8 @@ export function buildSensor(
 
 export function buildRangeSlider(
   pathPrefix: string,
-  param: Models.SliderDescriptor
-): Models.SliderComponent {
+  param: Models.Slider.Descriptor
+) {
   validateParameter(pathPrefix, param);
   const name = encodeURIComponent(param.name);
   const path = pathPrefix + name;
@@ -169,7 +162,7 @@ export function buildRangeSlider(
 
 function buildSensorHelper(
   pathPrefix: string,
-  param: Models.SensorDescriptor,
+  param: Models.Sensor.Descriptor,
   type = SENSOR_DEFAULT_TYPE
 ) {
   validateParameter(pathPrefix, param);
@@ -200,7 +193,7 @@ function buildSensorHelper(
   return component;
 }
 
-function buildLegacyFallbackSensor(pathPrefix: string, param: Models.SensorDescriptor) {
+function buildLegacyFallbackSensor(pathPrefix: string, param: Models.Sensor.Descriptor) {
   debug(
     'Warning: no type for sensor %s, using default. ' +
       'This fallback will be removed in a future version.',
@@ -218,8 +211,8 @@ function buildLegacyFallbackSensor(pathPrefix: string, param: Models.SensorDescr
 
 export function buildTextLabel(
   pathPrefix: string,
-  param: Models.TextLabelDescriptor
-): Models.SensorComponent & { isLabelVisible: boolean | undefined } {
+  param: Models.TextLabel.Descriptor
+) {
   validateParameter(pathPrefix, param);
   const name = encodeURIComponent(param.name);
   const path = pathPrefix + name;
@@ -243,8 +236,8 @@ function validateImageSize(size: string) {
 
 export function buildImageUrl(
   pathPrefix: string,
-  param: Models.ImageDescriptor
-): Models.ImageComponent {
+  param: Models.Image.Descriptor
+) {
   validateParameter(pathPrefix, param);
   const name = encodeURIComponent(param.name);
   const path = pathPrefix + name;
@@ -269,16 +262,29 @@ export function buildImageUrl(
   };
 }
 
-export function buildDiscovery(pathPrefix: string): Models.DiscoveryComponent {
+export function buildDiscovery(pathPrefix: string) {
   return getRouteFor(pathPrefix, TYPE_DISCOVER_ROUTE);
 }
 
-export function buildRegister(pathPrefix: string): Models.RegistrationComponent {
+export function buildRegister(pathPrefix: string) {
   return getRouteFor(pathPrefix, TYPE_REGISTER_ROUTE);
 }
 
-export function buildDeviceSubscription(pathPrefix: string): Models.SubscriptionComponent {
+export function buildDeviceSubscription(pathPrefix: string) {
   return getRouteFor(pathPrefix, TYPE_DEVICE_SUBSCRIPTION_ROUTE);
+}
+
+export function buildFavoritesHandler(pathPrefix: string) {
+  return getRouteFor(pathPrefix, TYPE_FAVORITE_HANDLER_ROUTE);
+}
+
+function validateParameter(pathPrefix: string, param: { name: string }) {
+  if (!pathPrefix) {
+    throw new Error('INVALID_PATHPREFIX');
+  }
+  if (!param || !param.name) {
+    throw new Error('INVALID_BUILD_PARAMETER');
+  }
 }
 
 function getRouteFor(pathPrefix: string, route: string) {

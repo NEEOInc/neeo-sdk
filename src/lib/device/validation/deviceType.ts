@@ -1,7 +1,8 @@
-import { DeviceTypes } from '../../models/deviceTypes';
+import { DeviceType } from '../../models/deviceType';
 
-const TYPES: DeviceTypes[] = [
+const TYPES: DeviceType[] = [
   'ACCESSOIRE',
+  'AUDIO',
   'AVRECEIVER',
   'DVB',
   'DVD',
@@ -13,24 +14,45 @@ const TYPES: DeviceTypes[] = [
   'TV',
   'VOD',
   'HDMISWITCH',
+  'SOUNDBAR',
   'TUNER',
 ];
 
-function isDeviceType(text: string): text is DeviceTypes {
-  return TYPES.includes(text as DeviceTypes);
+const FAVORITES_SUPPORT_TYPES: DeviceType[] = [
+  'TV',
+  'DVB',
+  'TUNER',
+];
+
+const PLAYER_SUPPORT_TYPES: DeviceType[] = [
+  'MEDIAPLAYER',
+  'MUSICPLAYER',
+  'VOD',
+];
+
+function isDeviceType(text: string): text is DeviceType {
+  return TYPES.includes(text as DeviceType);
 }
 
-export function needsInputCommand(type: DeviceTypes) {
-  return ['AVRECEIVER', 'TV', 'PROJECTOR', 'HDMISWITCH'].includes(type);
+export function needsInputCommand(type: DeviceType) {
+  return ['AVRECEIVER', 'TV', 'PROJECTOR', 'HDMISWITCH', 'SOUNDBAR'].includes(type);
 }
 
-export function doesNotSupportTiming(type: DeviceTypes) {
+export function doesNotSupportTiming(type: DeviceType) {
   switch (type) {
     case 'ACCESSOIRE':
     case 'LIGHT':
       return true;
   }
   return false;
+}
+
+export function hasFavoritesSupport(type: DeviceType) {
+  return FAVORITES_SUPPORT_TYPES.includes(type);
+}
+
+export function hasPlayerSupport(type: DeviceType) {
+  return PLAYER_SUPPORT_TYPES.includes(type);
 }
 
 export function getDeviceType(type: string) {

@@ -1,14 +1,16 @@
-const CAPABILITIES = [
+import { DeviceStaticCapability } from '../../models/deviceCapability';
+
+const CAPABILITIES: DeviceStaticCapability[] = [
+  'addAnotherDevice',
   'alwaysOn',
   'bridgeDevice',
   'dynamicDevice',
-  'addAnotherDevice',
   'groupVolume',
 ];
 
-export function getCapability(capability: string) {
+export function getCapability(capability: DeviceStaticCapability) {
   if (CAPABILITIES.includes(capability)) {
     return capability;
   }
-  throw new Error('INVALID_CAPABILITY');
+  throw new Error('INVALID_CAPABILITY: ' + capability);
 }

@@ -94,7 +94,7 @@ describe('./lib/dynamicDevice/dynamicDevice.ts', () => {
     it('should fail to validate route when deviceId is missing', () => {
       const req = {};
       const result = dynamicDevice.validateDeviceIdRoute(req);
-      expect(result).to.equal(undefined);
+      expect(result).to.equal(false);
     });
 
     it('should validate route when deviceId is provided and static handler is registered', () => {

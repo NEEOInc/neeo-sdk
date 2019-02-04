@@ -1,5 +1,4 @@
 import * as Debug from 'debug';
-import { Component } from '../models';
 import * as COMPONENTS from './components';
 
 export { COMPONENTS };
@@ -14,7 +13,7 @@ export function registerHandler(inputRequestHandler) {
   requestHandler = inputRequestHandler;
 }
 
-export function storeDataInRequest(req: any, adapterName: string, component: Component) {
+export function storeDataInRequest(req: any, adapterName: string, component: any) {
   // dynamic device, handler not found yet
   req[REQUEST_DTO_DYNAMICADAPTER] = {
     adapterName,
@@ -56,7 +55,7 @@ function askDeviceDiscoverForDeviceInstance(req: any) {
 export function validateDeviceIdRoute(req: any) {
   if (!req.deviceid) {
     debug('MISSING_DEVICEID');
-    return;
+    return false;
   }
   if (req.handler) {
     return true;

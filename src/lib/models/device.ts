@@ -1,18 +1,17 @@
-import { Component } from './components';
 import { DeviceSetup } from './deviceSetup';
 import { DeviceTiming } from './deviceTiming';
-import { DeviceTypes } from './deviceTypes';
+import { DeviceType } from './deviceType';
 
 export interface DeviceModel {
   readonly id: string | number;
   readonly adapterName: string;
-  readonly type: DeviceTypes;
+  readonly type: DeviceType;
   readonly manufacturer: string;
   readonly name: string;
   readonly tokens: string;
   readonly setup: DeviceSetup;
   readonly timing: DeviceTiming;
-  readonly capabilities: ReadonlyArray<Component>;
+  readonly capabilities: ReadonlyArray<any>;
   readonly deviceCapabilities: ReadonlyArray<string>;
   readonly icon?: string;
   readonly device: {

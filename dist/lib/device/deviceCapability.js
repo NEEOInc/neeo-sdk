@@ -10,7 +10,7 @@ var CAPABILITIES_REQUIRING_DISCOVERY = [
     'addAnotherDevice',
     'register-user-account',
 ];
-function default_1(deviceBuilder) {
+function buildDeviceCapabilities(deviceBuilder) {
     if (!deviceBuilder || typeof deviceBuilder !== 'object') {
         throw new Error('INVALID_PARAMETERS');
     }
@@ -18,7 +18,7 @@ function default_1(deviceBuilder) {
     if (emptyObject) {
         throw new Error('EMPTY_OBJECT');
     }
-    var buttons = deviceBuilder.buttons, sliders = deviceBuilder.sliders, switches = deviceBuilder.switches, textLabels = deviceBuilder.textLabels, imageUrls = deviceBuilder.imageUrls, sensors = deviceBuilder.sensors, deviceCapabilities = deviceBuilder.deviceCapabilities, devicename = deviceBuilder.devicename, deviceSubscriptionHandlers = deviceBuilder.deviceSubscriptionHandlers, directories = deviceBuilder.directories, discovery = deviceBuilder.discovery, registration = deviceBuilder.registration, deviceidentifier = deviceBuilder.deviceidentifier, buttonHandler = deviceBuilder.buttonHandler;
+    var buttons = deviceBuilder.buttons, sliders = deviceBuilder.sliders, switches = deviceBuilder.switches, textLabels = deviceBuilder.textLabels, imageUrls = deviceBuilder.imageUrls, sensors = deviceBuilder.sensors, deviceCapabilities = deviceBuilder.deviceCapabilities, devicename = deviceBuilder.devicename, deviceSubscriptionHandlers = deviceBuilder.deviceSubscriptionHandlers, directories = deviceBuilder.directories, discovery = deviceBuilder.discovery, favoritesHandler = deviceBuilder.favoritesHandler, registration = deviceBuilder.registration, deviceidentifier = deviceBuilder.deviceidentifier, buttonHandler = deviceBuilder.buttonHandler;
     var capabilities = [];
     var pathPrefix = "/device/" + deviceidentifier + "/";
     var isUniquePath = function (path) {
@@ -101,8 +101,9 @@ function default_1(deviceBuilder) {
     var discoveryRequired = CAPABILITIES_REQUIRING_DISCOVERY.some(function (capability) {
         return deviceCapabilities.includes(capability);
     });
-    var isDynamicDevice = deviceBuilder.deviceCapabilities.includes(CAPABILITY_DYNAMIC_DEVICE);
-    if (discoveryRequired && noDiscovery && !isDynamicDevice) {
+    var isNotDynamicDevice = !deviceBuilder.deviceCapabilities
+        .includes(CAPABILITY_DYNAMIC_DEVICE);
+    if (discoveryRequired && noDiscovery && isNotDynamicDevice) {
         var discoveryRequiredFor = CAPABILITIES_REQUIRING_DISCOVERY.join(', ');
         throw new Error('DISCOVERY_REQUIRED ' + discoveryRequiredFor + ' require discovery');
     }
@@ -113,10 +114,13 @@ function default_1(deviceBuilder) {
     if (deviceSubscriptionHandlers) {
         addRouteHandler(ComponentFactory.buildDeviceSubscription(pathPrefix), deviceSubscriptionHandlers);
     }
+    if (favoritesHandler) {
+        addRouteHandler(ComponentFactory.buildFavoritesHandler(pathPrefix), favoritesHandler);
+    }
     return {
         capabilities: capabilities,
         handlers: handlers,
     };
 }
-exports.default = default_1;
+exports.buildDeviceCapabilities = buildDeviceCapabilities;
 //# sourceMappingURL=deviceCapability.js.map

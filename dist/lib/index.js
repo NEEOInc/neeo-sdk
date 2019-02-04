@@ -7,6 +7,7 @@ var nodeCheck_1 = require("./nodeCheck");
 nodeCheck_1.checkNodeVersion();
 tslib_1.__exportStar(require("./discover"), exports);
 tslib_1.__exportStar(require("./recipe"), exports);
+tslib_1.__exportStar(require("./models"), exports);
 var device_2 = require("./device");
 exports.buildBrowseList = device_2.buildBrowseList;
 exports.buildDevice = device_2.buildDevice;

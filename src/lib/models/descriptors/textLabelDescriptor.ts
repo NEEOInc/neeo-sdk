@@ -1,9 +1,7 @@
-import { Descriptor } from './descriptor';
+import { Descriptor as BaseDescriptor } from './descriptor';
 
-export interface TextLabelDescriptor extends Descriptor {
+export interface Descriptor extends BaseDescriptor {
   readonly isLabelVisible?: boolean;
 }
 
-export namespace TextLabelDescriptor {
-  export type Controller = (deviceId: string) => string | PromiseLike<string>;
-}
+export type Controller = (deviceId: string) => string | PromiseLike<string>;

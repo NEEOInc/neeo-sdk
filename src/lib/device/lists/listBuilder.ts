@@ -13,9 +13,9 @@ const debug = Debug('neeo:device:list:builder');
 const DEFAULT_OFFSET = 0;
 
 export default class implements Models.ListBuilder {
-  public readonly items: Models.ListBuilder.Item[] = [];
+  public readonly items: Models.ListItem[] = [];
   // tslint:disable-next-line:variable-name
-  public _meta: Models.ListBuilder.Metadata = {};
+  public _meta: Models.ListMetadata = {};
   public title: string;
   private limit: number;
   private offset: number;
@@ -28,7 +28,7 @@ export default class implements Models.ListBuilder {
     offset,
     totalMatchingItems,
     browseIdentifier,
-  }: Models.ListBuilder.Parameters = {}) {
+  }: Models.ListParameters = {}) {
     this.title = title || '';
     this.limit = listValidation.validateLimit(limit);
     this.offset = offset && Number.isFinite(offset) && offset >= 0 ? offset : DEFAULT_OFFSET;
@@ -141,7 +141,7 @@ export default class implements Models.ListBuilder {
 
   private buildMetadata() {
     const { items, totalMatchingItems, offset, limit, browseIdentifier } = this;
-    const meta: Models.ListBuilder.Metadata = (this._meta = {
+    const meta: Models.ListMetadata = (this._meta = {
       totalItems: items.length,
       totalMatchingItems: Number.isFinite(totalMatchingItems) ? totalMatchingItems : items.length,
       current: { offset, limit, browseIdentifier },

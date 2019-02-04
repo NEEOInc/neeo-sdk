@@ -6,7 +6,7 @@ export declare class Database {
     private readonly deviceMap;
     private readonly deviceIndex;
     constructor(adapters: ReadonlyArray<Models.DeviceAdapterModel>);
-    search(query?: string): Models.DeviceModel[];
+    search(query?: string): any;
     getDevice(id: number): Models.DeviceModel;
     getAdapterDefinition(adapterName: string): Models.DeviceModel;
     getDeviceByAdapterId(adapterId: string): Promise<Models.DeviceAdapterModel>;

@@ -1,22 +1,12 @@
-declare module 'tokensearch.js' {
-  class TokenSearch<T = any> {
-    constructor(items: T[], options: TokenSearch.Options);
+declare class TokenSearch<T = any> {
+  constructor(items: T[], options: TokenSearchOptions);
 
-    public search(query: string): T[];
-  }
-
-  namespace TokenSearch {
-    export interface Options {
-      unique: boolean;
-      delimiter: string;
-      collectionKeys: string[];
-      threshold: number;
-    }
-  }
-
-  export = TokenSearch;
+  public search(query: string): T[];
 }
 
-declare class NumberConstructor {
-  public isFinite<T>(n: number | T): n is number;
+declare interface TokenSearchOptions {
+  unique: boolean;
+  delimiter: string;
+  collectionKeys: string[];
+  threshold: number;
 }

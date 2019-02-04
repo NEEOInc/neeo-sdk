@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="initial-scale=1">
-<title>NEEO SDK 0.52.18 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
+<title>NEEO SDK 0.53.8 &#8212; NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</title>
 <meta name="description" content="NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
@@ -163,7 +163,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
         <h1>
                 NEEO SDK
-            <small>0.52.18</small>
+            <small>0.53.8</small>
         </h1>
 
         <p>NEEO Brain SDK. For examples see https://github.com/NEEOInc/neeo-sdk-examples.</p>
@@ -341,6 +341,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
                         <li class="method-link scope-public">
+                            <a href="#src-lib-models-devicebuilder.ts-supportsfavorites" title="supportsFavorites">supportsFavorites</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
                             <a href="#src-lib-models-devicebuilder.ts-definetiming" title="defineTiming">defineTiming</a>
                         </li>
 
@@ -406,7 +411,22 @@ input[type="search"]::-webkit-search-cancel-button {
 
 
                         <li class="method-link scope-public">
+                            <a href="#src-lib-models-devicebuilder.ts-addqueuedirectory" title="addQueueDirectory">addQueueDirectory</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#src-lib-models-devicebuilder.ts-addrootdirectory" title="addRootDirectory">addRootDirectory</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
                             <a href="#src-lib-models-devicebuilder.ts-addcapability" title="addCapability">addCapability</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#src-lib-models-devicebuilder.ts-addplayerwidget" title="addPlayerWidget">addPlayerWidget</a>
                         </li>
 
 
@@ -417,6 +437,11 @@ input[type="search"]::-webkit-search-cancel-button {
 
                         <li class="method-link scope-public">
                             <a href="#src-lib-models-devicebuilder.ts-registerdevicesubscriptionhandler" title="registerDeviceSubscriptionHandler">registerDeviceSubscriptionHandler</a>
+                        </li>
+
+
+                        <li class="method-link scope-public">
+                            <a href="#src-lib-models-devicebuilder.ts-registerfavoritehandlers" title="registerFavoriteHandlers">registerFavoriteHandlers</a>
                         </li>
 
 
@@ -2212,7 +2237,7 @@ When adding the version to a device that was previously not versioned, start wit
 
                         <div class="description lead">
 
-                            <p>Optional parameter to define the device type. Default type is ACCESSOIRE. It is used to determine the display style and wiring suggestions in the NEEO app. Please note, ACCESSOIRE devices do not generate a view but can be used in other views as shortcut.</p>
+                            <p>Optional parameter to define the device type. Default type is ACCESSORY. It is used to determine the display style and wiring suggestions in the NEEO app. Please note, ACCESSORY devices do not generate a view but can be used in other views as shortcut.</p>
 
 
                         </div>
@@ -2243,6 +2268,7 @@ When adding the version to a device that was previously not versioned, start wit
                                         <td><p>supported device classes:</p>
 <ul>
 <li>ACCESSORY</li>
+<li>AUDIO</li>
 <li>AVRECEIVER</li>
 <li>DVB (aka. satellite receiver)</li>
 <li>DVD (aka. disc player)</li>
@@ -2255,6 +2281,7 @@ When adding the version to a device that was previously not versioned, start wit
 <li>TUNER</li>
 <li>TV</li>
 <li>VOD (aka. Video-On-Demand box like Apple TV, Fire TV...)</li>
+<li>SOUNDBAR</li>
 </ul>
 </td>
                                         <td>
@@ -2754,6 +2781,54 @@ When adding the version to a device that was previously not versioned, start wit
 
                     <div class="method scope-public">
 
+                        <h2 id="src-lib-models-devicebuilder.ts-supportsfavorites">
+                            <a href="#src-lib-models-devicebuilder.ts-supportsfavorites" class="permalink">#</a>
+                            <span class="method-name" title="supportsFavorites()">supportsFavorites()</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This function allows you to check if the current device type supports favorites.</p>
+
+
+                        </div>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">   <span class="hljs-keyword">if</span> (device.supportsFavorites()) { }</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>Boolean</code>
+                                    </p>
+
+                                    <p>Whether favorites are supported or not for this device type.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
                         <h2 id="src-lib-models-devicebuilder.ts-definetiming">
                             <a href="#src-lib-models-devicebuilder.ts-definetiming" class="permalink">#</a>
                             <span class="method-name" title="defineTiming(configuration)">defineTiming(configuration)</span>
@@ -2874,9 +2949,16 @@ When adding the version to a device that was previously not versioned, start wit
 
                         <div class="description lead">
 
-                            <p>This is used for devices which need to send dynamic value updates (for example switches or sliders state) to the Brain they are registered on. When the device is added to a Brain the SDK will call the controller function with an update function as argument (aka. inject the function). This function can be used to then send updates to the Brain when the value of the device updates.
-For example a device with a physical slider can use this to keep the digital slider in sync. This function can be only defined once per device definition.
-NOTE: if you use ES6 classes, make sure to wrap your callback in an arrow function, for example: .registerSubscriptionFunction((...args) =&gt; controller.setNotificationCallbacks(...args))</p>
+                            <p>Registering this allows sending updated component values to the NEEO Brain (for example switches or sliders state changes).
+This function can be only defined once per device definition.</p>
+<p>When the SDK is registered with a Brain the callback will be triggered with an update function as argument
+(aka. inject the function) and power state update functions.
+The update function can be used to then send updates to the Brain when the value device components changes
+(for example a physical slider is moved on the device, the digital slider is updated to the same value).
+The power updates can be used to notifiy the Brain when a device turns on or off
+(for example a light is turned off with a physical button).</p>
+<p>NOTE: if you use ES6 classes, make sure to wrap your callback in an arrow function,
+for example: <code>.registerSubscriptionFunction((...args) =&gt; controller.setNotificationCallbacks(...args))</code></p>
 
 
                         </div>
@@ -2904,8 +2986,17 @@ NOTE: if you use ES6 classes, make sure to wrap your callback in an arrow functi
                                         <td>
                                             <code>Function</code>
                                         </td>
-                                        <td><p>Callback function which will be called when the NEEO SDK Server starts, to register the update notification callback function and optional callback functions. OptionalCallbacks: if the device supports power state (see <strong>addPowerStateSensor</strong>) this additional callbacks are present: <strong>powerOnNotificationFunction</strong> - call this function with its deviceid when the device powers on.
-<strong>powerOffNotificationFunction</strong> - call this function with its deviceid when the device powers on</p>
+                                        <td><p>Called with the notification and optional power state callback functions:</p>
+<ul>
+<li>The first argument is the component update callback <code>updateCallback(options)</code></li>
+<li>The Second argument contains optional power state callbacks:
+if the device supports power state (see <strong>addPowerStateSensor</strong>) 2 additional callbacks are present:
+<ul>
+<li><strong>powerOnNotificationFunction</strong>, usage: <code>powerOnNotificationFunction(deviceId)</code></li>
+<li><strong>powerOffNotificationFunction</strong>, usage: <code>powerOffNotificationFunction(deviceId)</code></li>
+</ul>
+</li>
+</ul>
 </td>
                                         <td>
                                         </td>
@@ -2925,24 +3016,34 @@ NOTE: if you use ES6 classes, make sure to wrap your callback in an arrow functi
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript"><span class="hljs-keyword">let</span> updateCallbackReference, markDeviceOn, markDeviceOff;
-deviceBuilder.registerSubscriptionFunction(<span class="hljs-function">(<span class="hljs-params">updateCallback, optionalCallbackFunctions</span>) =&gt;</span> {
-  updateCallbackReference = updateCallback;
-  <span class="hljs-keyword">if</span> (optionalCallbackFunctions &amp;&amp; optionalCallbackFunctions.powerOnNotificationFunction) {
-    markDeviceOn = optionalCallbackFunctions.powerOnNotificationFunction;
+                                <pre><code class="hljs javascript"><span class="hljs-keyword">let</span> sendComponentUpdate, markDeviceOn, markDeviceOff;
+deviceBuilder.registerSubscriptionFunction(<span class="hljs-function">(<span class="hljs-params">updateCallback, optionalCallbacks</span>) =&gt;</span> {
+  sendComponentUpdate = updateCallback;
+  <span class="hljs-keyword">if</span> (optionalCallbacks &amp;&amp; optionalCallbacks.powerOnNotificationFunction) {
+    markDeviceOn = optionalCallbacks.powerOnNotificationFunction;
   }
-  <span class="hljs-keyword">if</span> (optionalCallbackFunctions &amp;&amp; optionalCallbackFunctions.powerOffNotificationFunction) {
-    markDeviceOff = optionalCallbackFunctions.powerOffNotificationFunction;
+  <span class="hljs-keyword">if</span> (optionalCallbacks &amp;&amp; optionalCallbacks.powerOffNotificationFunction) {
+    markDeviceOff = optionalCallbacks.powerOffNotificationFunction;
   }
 });
 
 <span class="hljs-comment">// Update sensor at some later point</span>
-<span class="hljs-keyword">if</span> (updateCallbackReference) {
+<span class="hljs-keyword">if</span> (sendComponentUpdate) {
   sendComponentUpdate({
-    <span class="hljs-attr">uniqueDeviceId</span>: uniqueDeviceId,
-    <span class="hljs-attr">component</span>: nameOfDeviceComponent, <span class="hljs-comment">// slider or switch</span>
-    value: updatedSensorValue
+    <span class="hljs-attr">uniqueDeviceId</span>: <span class="hljs-string">'default'</span>,  <span class="hljs-comment">// If enableDiscovery is used, use matching deviceId.</span>
+    component: <span class="hljs-string">'VOLUME_SENSOR'</span>, <span class="hljs-comment">// Name of the component added on start</span>
+                                <span class="hljs-comment">// with the device builder (see `addSlider()` for example)</span>
+    value: <span class="hljs-number">50</span>,                  <span class="hljs-comment">// Value to update component to</span>
+                                <span class="hljs-comment">// Should match component type (boolean for switch, ...)</span>
+  }).catch(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+    <span class="hljs-comment">// sendComponentUpdate returns a Promise</span>
+    <span class="hljs-comment">// adding a catch is needed to prevent an unhandled rejection.</span>
+    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'NOTIFICATION_FAILED'</span>, error.message);
   });
+}
+<span class="hljs-comment">// Update device powerState</span>
+<span class="hljs-keyword">if</span> (markDeviceOn) {
+  markDeviceOn(<span class="hljs-string">'default'</span>); <span class="hljs-comment">// again if enableDiscovery is used, use matching deviceId</span>
 }</code></pre>
 
 
@@ -3227,7 +3328,7 @@ Recipes.</p>
 
 
                                 <pre><code class="hljs javascript">.addButtonGroup(<span class="hljs-string">'Numpad'</span>)
-.addButtonHandler(<span class="hljs-function">(<span class="hljs-params">name, deviceid</span>) =&gt;</span> {
+.addButtonHandler(<span class="hljs-function">(<span class="hljs-params">name, deviceId</span>) =&gt;</span> {
   <span class="hljs-comment">// handle button events here</span>
 })</code></pre>
 
@@ -3312,7 +3413,7 @@ Recipes.</p>
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.addButtonHandler(<span class="hljs-function">(<span class="hljs-params">name, deviceid</span>) =&gt;</span> {
+                                <pre><code class="hljs javascript">.addButtonHandler(<span class="hljs-function">(<span class="hljs-params">name, deviceId</span>) =&gt;</span> {
    <span class="hljs-keyword">if</span> (name === <span class="hljs-string">'power-on'</span>) {
      <span class="hljs-comment">// Power on</span>
    } <span class="hljs-keyword">else</span> {
@@ -3473,7 +3574,10 @@ Recipes.</p>
 
                                 <pre><code class="hljs javascript">.addSlider(
   { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-slider'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my slider'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
-  { <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">newValue</span>) =&gt;</span> sensorValue = newValue, <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
+  {
+    <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, newValue</span>) =&gt;</span> sliderValue = newValue,
+    <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> sliderValue,
+  }
 )</code></pre>
 
 
@@ -3629,7 +3733,7 @@ Recipes.</p>
 
                                 <pre><code class="hljs javascript">.addSensor(
   { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-sensor'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my sensor'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'range'</span>, <span class="hljs-attr">range</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">200</span>], <span class="hljs-attr">unit</span>: <span class="hljs-string">'%'</span> },
-  { <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> sensorValue ) }
+  { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> sensorValue ) }
 )</code></pre>
 
 
@@ -3660,12 +3764,12 @@ Recipes.</p>
 
                         <h2 id="src-lib-models-devicebuilder.ts-addpowerstatesensor">
                             <a href="#src-lib-models-devicebuilder.ts-addpowerstatesensor" class="permalink">#</a>
-                            <span class="method-name" title="addPowerStateSensor(configuration, controller)">addPowerStateSensor(configuration, controller)</span>
+                            <span class="method-name" title="addPowerStateSensor(controller)">addPowerStateSensor(controller)</span>
                         </h2>
 
                         <div class="description lead">
 
-                            <p>Add a (binary) switch to your custom element</p>
+                            <p>Adds a special sensor that can be used to update device power state.</p>
 
 
                         </div>
@@ -3689,36 +3793,6 @@ Recipes.</p>
 
                                     <tbody>
                                     <tr>
-                                        <td>configuration</td>
-                                        <td>
-                                            <code>Object</code>
-                                        </td>
-                                        <td><p>JSON Configuration Object</p>
-</td>
-                                        <td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>configuration.name</td>
-                                        <td>
-                                            <code>String</code>
-                                        </td>
-                                        <td><p>identifier of this element</p>
-</td>
-                                        <td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>configuration.label</td>
-                                        <td>
-                                            <code>String</code>
-                                        </td>
-                                        <td><p>optional, visible label in the mobile app or on the NEEO Remote</p>
-</td>
-                                        <td>
-                                        </td>
-                                    </tr>
-                                    <tr>
                                         <td>controller</td>
                                         <td>
                                             <code>Object</code>
@@ -3733,7 +3807,7 @@ Recipes.</p>
                                         <td>
                                             <code>Function</code>
                                         </td>
-                                        <td><p>return current value of the Switch</p>
+                                        <td><p>return current value of the power sensor</p>
 </td>
                                         <td>
                                         </td>
@@ -3743,7 +3817,7 @@ Recipes.</p>
                                         <td>
                                             <code>Function</code>
                                         </td>
-                                        <td><p>update current value of the Switch</p>
+                                        <td><p>update current value of the power sensor</p>
 </td>
                                         <td>
                                         </td>
@@ -3763,10 +3837,10 @@ Recipes.</p>
                             <h3>Examples</h3>
 
 
-                                <pre><code class="hljs javascript">.addSwitch(
-  { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-switch'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my switch'</span> },
-  { <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">newValue</span>) =&gt;</span> switchState = newValue, <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> switchState ) }
- )</code></pre>
+                                <pre><code class="hljs javascript">.addPowerStateSensor({
+  <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, newValue</span>) =&gt;</span> sensorState = newValue,
+  <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> sensorState ),
+ })</code></pre>
 
 
                         </section>
@@ -3901,7 +3975,10 @@ Recipes.</p>
 
                                 <pre><code class="hljs javascript">.addSwitch(
   { <span class="hljs-attr">name</span>: <span class="hljs-string">'example-switch'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'my switch'</span> },
-  { <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">newValue</span>) =&gt;</span> switchState = newValue, <span class="hljs-attr">getter</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> switchState ) }
+  {
+    <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, newValue</span>) =&gt;</span> switchState = newValue,
+    <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> switchState,
+  }
  )</code></pre>
 
 
@@ -4027,7 +4104,7 @@ Recipes.</p>
 
                                 <pre><code class="hljs javascript">.addTextLabel(
   { <span class="hljs-attr">name</span>: <span class="hljs-string">'artistname'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Artist name'</span>, <span class="hljs-attr">isLabelVisible</span>: <span class="hljs-literal">false</span> },
-  controller.getArtist
+  (deviceId) =&gt; <span class="hljs-string">'Rude Tins'</span>
  )</code></pre>
 
 
@@ -4176,7 +4253,7 @@ Recipes.</p>
 
                                 <pre><code class="hljs javascript">.addImageUrl(
   { <span class="hljs-attr">name</span>: <span class="hljs-string">'albumcover'</span>, <span class="hljs-attr">label</span>: <span class="hljs-string">'Cover for current album'</span>, <span class="hljs-attr">size</span>: <span class="hljs-string">'small'</span> },
-  controller.getImageUri
+  (deviceId) =&gt; <span class="hljs-string">'http://imageurl'</span>
 )</code></pre>
 
 
@@ -4324,10 +4401,177 @@ Recipes.</p>
   <span class="hljs-attr">name</span>: <span class="hljs-string">'DEVICE_PLAY_QUEUE_DIRECTORY'</span>,
   <span class="hljs-attr">label</span>: <span class="hljs-string">'Queue'</span>,
   <span class="hljs-attr">role</span>: <span class="hljs-string">'QUEUE'</span>
-}, controller.handleDirectory)</code></pre>
+}, {
+  <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> controller.browse(deviceId, params),
+  <span class="hljs-attr">action</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> controller.listAction(deviceId, params),
+})</code></pre>
 
 
                         </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>Object</code>
+                                    </p>
+
+                                    <p>DeviceBuilder</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="src-lib-models-devicebuilder.ts-addqueuedirectory">
+                            <a href="#src-lib-models-devicebuilder.ts-addqueuedirectory" class="permalink">#</a>
+                            <span class="method-name" title="addQueueDirectory(configuration, controller)">addQueueDirectory(configuration, controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p><strong>deprecated</strong>: this funciton is for backwards compatibility, use <code>addDirectory()</code> instead.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>configuration</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>JSON Configuration Object, see <code>addDirectory()</code> for details.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>Controller callbacks Object, see <code>addDirectory()</code> for details.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>Object</code>
+                                    </p>
+
+                                    <p>DeviceBuilder</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="src-lib-models-devicebuilder.ts-addrootdirectory">
+                            <a href="#src-lib-models-devicebuilder.ts-addrootdirectory" class="permalink">#</a>
+                            <span class="method-name" title="addRootDirectory(configuration, controller)">addRootDirectory(configuration, controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p><strong>deprecated</strong>: this funciton is for backwards compatibility, use <code>addDirectory()</code> instead.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>configuration</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>JSON Configuration Object, see <code>addDirectory()</code> for details.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>Object</code>
+                                        </td>
+                                        <td><p>Controller callbacks Object, see <code>addDirectory()</code> for details.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
 
 
                         <section class="returns">
@@ -4429,6 +4673,125 @@ Recipes.</p>
                                     </p>
 
                                     <p>DeviceBuilder</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="src-lib-models-devicebuilder.ts-addplayerwidget">
+                            <a href="#src-lib-models-devicebuilder.ts-addplayerwidget" class="permalink">#</a>
+                            <span class="method-name" title="addPlayerWidget(controller)">addPlayerWidget(controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This is a helper to implement a player widget, it's similar to the button groups because it defines multiple sub components (buttons, sensors, sliders, ...). The player can
+only be added for the MUSICPLAYER / MEDIAPLAYER / VOD device types.</p>
+<p>PLEASE NOTE: this is a BETA feature, development is still in progress</p>
+<p>The following components will be registered:</p>
+<ul>
+<li>Buttons: PLAY, PLAY TOGGLE, PAUSE, VOLUME UP, VOLUME DOWN, MUTE TOGGLE, NEXT TRACK, PREVIOUS TRACK, SHUFFLE TOGGLE, REPEAT TOGGLE, CLEAR QUEUE</li>
+<li>Directories: root, (optional) queue</li>
+<li>Slider: VOLUME</li>
+<li>Sensors: COVER_ART_SENSOR, TITLE_SENSOR, DESCRIPTION_SENSOR</li>
+<li>Switches: PLAYING, MUTE, SHUFFLE, REPEAT</li>
+</ul>
+<p>Note: it is also possible to add all the required components manually
+without using addPlayerWidget(), it can be more flexible for advanced use
+but it is more error prone.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>PlayerWidget.Controller</code>
+                                        </td>
+                                        <td><p>Controller and player settings definition.</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.addPlayerWidget({
+  <span class="hljs-attr">rootDirectory</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'PLAYER_ROOT_DIRECTORY'</span>, <span class="hljs-comment">// Optional: will default to ROOT_DIRECTORY</span>
+    label: <span class="hljs-string">'My Library'</span>, <span class="hljs-comment">// Optional: will default to ROOT</span>
+    controller: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> ..., <span class="hljs-attr">action</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> ...},
+  },
+  <span class="hljs-comment">// Optional:</span>
+  queueDirectory: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'PLAYER_QUEUE_DIRECTORY'</span>, <span class="hljs-comment">// Optional: will default to QUEUE_DIRECTORY</span>
+    label: <span class="hljs-string">'Queue'</span>, <span class="hljs-comment">// Optional: will default to QUEUE</span>
+    controller: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> ..., <span class="hljs-attr">action</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> ...},
+  },
+  <span class="hljs-attr">volumeController</span>: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> ..., <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> ...},
+  <span class="hljs-attr">coverArtController</span>: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> ... },
+  <span class="hljs-attr">titleController</span>: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> ... },
+  <span class="hljs-attr">descriptionController</span>: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> ... },
+  <span class="hljs-attr">playingController</span>: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> ..., <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> ...},
+  <span class="hljs-attr">muteController</span>: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> ..., <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> ...},
+  <span class="hljs-attr">shuffleController</span>: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> ..., <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> ...},
+  <span class="hljs-attr">repeatController</span>: { <span class="hljs-attr">getter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> ..., <span class="hljs-attr">setter</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, params</span>) =&gt;</span> ...},
+})
+.addButtonHandler(<span class="hljs-function">(<span class="hljs-params">(deviceid, name</span>) =&gt;</span> {
+  <span class="hljs-comment">// The button handler is needed, but still registered separately.</span>
+}));</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
 
 
 
@@ -4698,6 +5061,107 @@ The callback has one parameter:
     <span class="hljs-attr">deviceAdded</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> debug(<span class="hljs-string">'device added'</span>, deviceId),
     <span class="hljs-attr">deviceRemoved</span>: <span class="hljs-function">(<span class="hljs-params">deviceId</span>) =&gt;</span> debug(<span class="hljs-string">'device removed'</span>, deviceId),
     <span class="hljs-attr">initializeDeviceList</span>: <span class="hljs-function">(<span class="hljs-params">deviceIds</span>) =&gt;</span> debug(<span class="hljs-string">'existing devices'</span>, deviceIds),
+  }
+)</code></pre>
+
+
+                        </section>
+
+
+                        <section class="returns">
+
+                            <h3>Returns</h3>
+
+
+
+                                    <p>
+                                            <code>DeviceBuilder</code>
+                                    </p>
+
+                                    <p>DeviceBuilder for chaining.</p>
+
+
+
+
+                        </section>
+
+                    </div>
+
+
+                    <div class="method scope-public">
+
+                        <h2 id="src-lib-models-devicebuilder.ts-registerfavoritehandlers">
+                            <a href="#src-lib-models-devicebuilder.ts-registerfavoritehandlers" class="permalink">#</a>
+                            <span class="method-name" title="registerFavoriteHandlers(controller)">registerFavoriteHandlers(controller)</span>
+                        </h2>
+
+                        <div class="description lead">
+
+                            <p>This allows a device that supports favorites (only TV, DVB or TUNER) to implement a custom handler, for example for channel &quot;42&quot;, rather than
+2 buttonHandler calls for &quot;4&quot; and &quot;2&quot;, a single call with &quot;42&quot; will be
+made to the favoriteHandler.</p>
+
+
+                        </div>
+
+
+                        <section class="parameters">
+
+                            <h3>Parameters</h3>
+
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>controller</td>
+                                        <td>
+                                            <code>FavoritesHandler.Controller</code>
+                                        </td>
+                                        <td><p>Controller callbacks Object</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>controller.execute</td>
+                                        <td>
+                                            <code>Function</code>
+                                        </td>
+                                        <td><p>This callback is executed when a favorite channel is triggered on the Brain The callback has two parameters:
+<strong>deviceId</strong>: string identifying the device.
+<strong>favoriteId</strong>: string identifying the favorite channel to execute</p>
+</td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                        </section>
+
+
+
+
+                        <section class="examples">
+
+                            <h3>Examples</h3>
+
+
+                                <pre><code class="hljs javascript">.registerFavoriteHandlers(
+  {
+    <span class="hljs-attr">execute</span>: <span class="hljs-function">(<span class="hljs-params">deviceId, favoriteId</span>) =&gt;</span> debug(<span class="hljs-string">'favorite executed'</span>, deviceId, favoriteId),
   }
 )</code></pre>
 

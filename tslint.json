@@ -7,7 +7,7 @@
   "jsRules": {},
   "rules": {
     "no-empty-interface": false,
-    "no-namespace": false,
+    "no-namespace": true,
     "no-empty": false,
     "quotemark": [true, "single"],
     "interface-name": [true, "never-prefix"],

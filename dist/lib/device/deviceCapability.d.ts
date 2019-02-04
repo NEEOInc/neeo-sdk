@@ -1,5 +1,6 @@
 import * as Models from '../models';
-export default function (deviceBuilder: Models.DeviceBuilder): {
-    capabilities: Models.Component[];
+export { buildDeviceCapabilities, };
+declare function buildDeviceCapabilities(deviceBuilder: Models.DeviceBuilder): {
+    capabilities: any[];
     handlers: Map<string, Models.CapabilityHandler>;
 };

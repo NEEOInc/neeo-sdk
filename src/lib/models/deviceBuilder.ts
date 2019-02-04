@@ -1,24 +1,33 @@
 import { ButtonHandler } from './buttonHandler';
-import { ButtonDescriptor } from './descriptors/buttonDescriptor';
-import { DirectoryDescriptor } from './descriptors/directoryDescriptor';
-import { ImageDescriptor } from './descriptors/imageDescriptor';
-import { SensorDescriptor } from './descriptors/sensorDescriptor';
-import { SliderDescriptor } from './descriptors/sliderDescriptor';
-import { SwitchDescriptor } from './descriptors/switchDescriptor';
-import { TextLabelDescriptor } from './descriptors/textLabelDescriptor';
+import {
+  ButtonDescriptor,
+  Descriptor,
+  DeviceSubscriptionHandler,
+  Directory,
+  Discovery,
+  FavoritesHandler,
+  Image,
+  PlayerWidget,
+  Registration,
+  Sensor,
+  Slider,
+  Subscription,
+  Switch,
+  TextLabel,
+} from './descriptors';
 import { DeviceAdapterModel } from './deviceAdapter';
+import { DeviceCapability } from './deviceCapability';
 import { DeviceSetup } from './deviceSetup';
-import { DeviceSubscriptionHandler } from './deviceSubscriptionHandler';
-import { DeviceTypes } from './deviceTypes';
-import { DiscoveryResult } from './discoveryResult';
+import { DeviceType } from './deviceType';
 import { InitialiseFunction } from './initialiseFunction';
-import { Registration } from './registration';
-import { SubscriptionFunction } from './subscriptionFunction';
-import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking the @module above is for this function.
+import { TimingSpecifier } from './timingSpecifier';
+
+/* tslint:disable:max-line-length */
 
 /**
  * @module DeviceBuilder
- * @description Factory method to build a custom device. All the controller functions must return a value or a promise object.
+ * @description Factory method to build a custom device.
+ * All the controller functions must return a value or a promise object.
  * @example
  *  neeoapi.buildDevice('simpleDevice1')
  *    .setManufacturer('NEEO')
@@ -35,44 +44,46 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
  *
  */
 
-// tslint:disable-next-line:prettier
-/** */ export interface DeviceBuilder {
+// avoid doxdox thinking the @module above is for this function.
+/** */
+export interface DeviceBuilder {
   readonly manufacturer: string;
   readonly deviceidentifier: string;
   readonly directories: Array<{
-    param: DirectoryDescriptor;
-    controller: DirectoryDescriptor.Controller;
+    param: Directory.Descriptor;
+    controller: Directory.Controller;
   }>;
   readonly buttons: ReadonlyArray<{ param: ButtonDescriptor }>;
-  readonly discovery: ReadonlyArray<{ controller: DiscoveryResult.Controller }>;
+  readonly discovery: ReadonlyArray<{ controller: Discovery.Controller }>;
   readonly switches: ReadonlyArray<{
-    param: SwitchDescriptor;
-    controller: SwitchDescriptor.Controller;
+    param: Descriptor;
+    controller: Switch.Controller;
   }>;
   readonly sliders: ReadonlyArray<{
-    param: SliderDescriptor;
-    controller: SliderDescriptor.Controller;
+    param: Slider.Descriptor;
+    controller: Slider.Controller;
   }>;
   readonly textLabels: ReadonlyArray<{
-    param: TextLabelDescriptor;
-    controller: { getter: TextLabelDescriptor.Controller };
+    param: TextLabel.Descriptor;
+    controller: { getter: TextLabel.Controller };
   }>;
   readonly sensors: ReadonlyArray<{
-    param: SensorDescriptor;
-    controller: SensorDescriptor.Controller;
+    param: Sensor.Descriptor;
+    controller: Sensor.Controller;
   }>;
   readonly imageUrls: ReadonlyArray<{
-    param: ImageDescriptor;
-    controller: { getter: ImageDescriptor.Controller };
+    param: Image.Descriptor;
+    controller: { getter: Image.Controller };
   }>;
   readonly hasPowerStateSensor: boolean;
   readonly additionalSearchTokens: ReadonlyArray<string>;
-  readonly deviceCapabilities: ReadonlyArray<string>;
+  readonly deviceCapabilities: ReadonlyArray<DeviceCapability>;
   readonly devicename: string;
-  readonly type: DeviceTypes;
+  readonly type: DeviceType;
   readonly setup: DeviceSetup;
   readonly buttonHandler?: ButtonHandler;
   readonly deviceSubscriptionHandlers?: DeviceSubscriptionHandler.Controller;
+  readonly favoritesHandler?: FavoritesHandler.Controller;
   readonly registration: any[];
   readonly driverVersion?: number;
 
@@ -102,6 +113,7 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * @param {string} type supported device classes:
    *
    * * ACCESSORY
+   * * AUDIO
    * * AVRECEIVER
    * * DVB (aka. satellite receiver)
    * * DVD (aka. disc player)
@@ -114,11 +126,12 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * * TUNER
    * * TV
    * * VOD (aka. Video-On-Demand box like Apple TV, Fire TV...)
-   * @description Optional parameter to define the device type. Default type is ACCESSOIRE. It is used to determine the display style and wiring suggestions in the NEEO app. Please note, ACCESSOIRE devices do not generate a view but can be used in other views as shortcut.
+   * * SOUNDBAR
+   * @description Optional parameter to define the device type. Default type is ACCESSORY. It is used to determine the display style and wiring suggestions in the NEEO app. Please note, ACCESSORY devices do not generate a view but can be used in other views as shortcut.
    * @return {DeviceBuilder} DeviceBuilder for chaining.
    * @example .setType('light')
    */
-  setType(type: DeviceTypes): this;
+  setType(type: DeviceType): this;
 
   /**
    * @function setIcon
@@ -200,7 +213,7 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
       description: string;
       enableDynamicDeviceBuilder: boolean;
     },
-    controller: DiscoveryResult.Controller
+    controller: Discovery.Controller
   ): this;
 
   /**
@@ -211,6 +224,15 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    *    if (device.supportsTiming()) { }
    */
   supportsTiming(): boolean;
+
+  /**
+   * @function supportsFavorites
+   * @description This function allows you to check if the current device type supports favorites.
+   * @return {Boolean} Whether favorites are supported or not for this device type.
+   * @example
+   *    if (device.supportsFavorites()) { }
+   */
+  supportsFavorites(): boolean;
 
   /**
    * @function defineTiming
@@ -227,36 +249,59 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
 
   /**
    * @function registerSubscriptionFunction
-   * @param {Function} controller Callback function which will be called when the NEEO SDK Server starts, to register the update notification callback function and optional callback functions.
-   * OptionalCallbacks: if the device supports power state (see **addPowerStateSensor**) this additional callbacks are present: **powerOnNotificationFunction** - call this function with its deviceid when the device powers on.
-   * **powerOffNotificationFunction** - call this function with its deviceid when the device powers on
-   * @description This is used for devices which need to send dynamic value updates (for example switches or sliders state) to the Brain they are registered on.
-   * When the device is added to a Brain the SDK will call the controller function with an update function as argument (aka. inject the function). This function can be used to then send updates to the Brain when the value of the device updates.
-   * For example a device with a physical slider can use this to keep the digital slider in sync. This function can be only defined once per device definition.
-   * NOTE: if you use ES6 classes, make sure to wrap your callback in an arrow function, for example: .registerSubscriptionFunction((...args) => controller.setNotificationCallbacks(...args))
+   * @param {Function} controller Called with the notification and optional power state callback functions:
+   *
+   * - The first argument is the component update callback `updateCallback(options)`
+   * - The Second argument contains optional power state callbacks:
+   *   if the device supports power state (see **addPowerStateSensor**) 2 additional callbacks are present:
+   *   - **powerOnNotificationFunction**, usage: `powerOnNotificationFunction(deviceId)`
+   *   - **powerOffNotificationFunction**, usage: `powerOffNotificationFunction(deviceId)`
+   * @description Registering this allows sending updated component values to the NEEO Brain
+   * (for example switches or sliders state changes).
+   * This function can be only defined once per device definition.
+   *
+   * When the SDK is registered with a Brain the callback will be triggered with an update function as argument
+   * (aka. inject the function) and power state update functions.
+   * The update function can be used to then send updates to the Brain when the value device components changes
+   * (for example a physical slider is moved on the device, the digital slider is updated to the same value).
+   * The power updates can be used to notifiy the Brain when a device turns on or off
+   * (for example a light is turned off with a physical button).
+   *
+   * NOTE: if you use ES6 classes, make sure to wrap your callback in an arrow function,
+   * for example: `.registerSubscriptionFunction((...args) => controller.setNotificationCallbacks(...args))`
    * @return {DeviceBuilder} DeviceBuilder for chaining.
    * @example
-   * let updateCallbackReference, markDeviceOn, markDeviceOff;
-   * deviceBuilder.registerSubscriptionFunction((updateCallback, optionalCallbackFunctions) => {
-   *   updateCallbackReference = updateCallback;
-   *   if (optionalCallbackFunctions && optionalCallbackFunctions.powerOnNotificationFunction) {
-   *     markDeviceOn = optionalCallbackFunctions.powerOnNotificationFunction;
+   * let sendComponentUpdate, markDeviceOn, markDeviceOff;
+   * deviceBuilder.registerSubscriptionFunction((updateCallback, optionalCallbacks) => {
+   *   sendComponentUpdate = updateCallback;
+   *   if (optionalCallbacks && optionalCallbacks.powerOnNotificationFunction) {
+   *     markDeviceOn = optionalCallbacks.powerOnNotificationFunction;
    *   }
-   *   if (optionalCallbackFunctions && optionalCallbackFunctions.powerOffNotificationFunction) {
-   *     markDeviceOff = optionalCallbackFunctions.powerOffNotificationFunction;
+   *   if (optionalCallbacks && optionalCallbacks.powerOffNotificationFunction) {
+   *     markDeviceOff = optionalCallbacks.powerOffNotificationFunction;
    *   }
    * });
    *
    * // Update sensor at some later point
-   * if (updateCallbackReference) {
+   * if (sendComponentUpdate) {
    *   sendComponentUpdate({
-   *     uniqueDeviceId: uniqueDeviceId,
-   *     component: nameOfDeviceComponent, // slider or switch
-   *     value: updatedSensorValue
+   *     uniqueDeviceId: 'default',  // If enableDiscovery is used, use matching deviceId.
+   *     component: 'VOLUME_SENSOR', // Name of the component added on start
+   *                                 // with the device builder (see `addSlider()` for example)
+   *     value: 50,                  // Value to update component to
+   *                                 // Should match component type (boolean for switch, ...)
+   *   }).catch((error) => {
+   *     // sendComponentUpdate returns a Promise
+   *     // adding a catch is needed to prevent an unhandled rejection.
+   *     console.error('NOTIFICATION_FAILED', error.message);
    *   });
    * }
+   * // Update device powerState
+   * if (markDeviceOn) {
+   *   markDeviceOn('default'); // again if enableDiscovery is used, use matching deviceId
+   * }
    */
-  registerSubscriptionFunction(controller: SubscriptionFunction): this;
+  registerSubscriptionFunction(controller: Subscription.Controller): this;
 
   /**
    * @function registerInitialiseFunction
@@ -302,7 +347,7 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * @return {DeviceBuilder} DeviceBuilder for chaining.
    * @example
    * .addButtonGroup('Numpad')
-   * .addButtonHandler((name, deviceid) => {
+   * .addButtonHandler((name, deviceId) => {
    *   // handle button events here
    * })
    */
@@ -314,7 +359,7 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * @description Handles the events for all the registered buttons. This function can be only defined once per device definition and MUST be defined if you have added at least one button.
    * @return {DeviceBuilder} DeviceBuilder for chaining.
    * @example
-   * .addButtonHandler((name, deviceid) => {
+   * .addButtonHandler((name, deviceId) => {
    *    if (name === 'power-on') {
    *      // Power on
    *    } else {
@@ -339,10 +384,13 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * @example
    * .addSlider(
    *   { name: 'example-slider', label: 'my slider', range: [0,200], unit: '%' },
-   *   { setter: (newValue) => sensorValue = newValue, getter: () => sensorValue ) }
+   *   {
+   *     setter: (deviceId, newValue) => sliderValue = newValue,
+   *     getter: (deviceId) => sliderValue,
+   *   }
    * )
    */
-  addSlider(param: SliderDescriptor, controller: SliderDescriptor.Controller): this;
+  addSlider(param: Slider.Descriptor, controller: Slider.Controller): this;
 
   /**
    * @function addSensor
@@ -359,10 +407,25 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * @example
    * .addSensor(
    *   { name: 'example-sensor', label: 'my sensor', type: 'range', range: [0,200], unit: '%' },
-   *   { getter: () => sensorValue ) }
+   *   { getter: (deviceId) => sensorValue ) }
    * )
    */
-  addSensor(param: SensorDescriptor, controller: SensorDescriptor.Controller): this;
+  addSensor(param: Sensor.Descriptor, controller: Sensor.Controller): this;
+
+  /**
+   * @function addPowerStateSensor
+   * @description Adds a special sensor that can be used to update device power state.
+   * @param {Object} controller Controller callbacks Object
+   * @param {Function} controller.getter return current value of the power sensor
+   * @param {Function} controller.setter update current value of the power sensor
+   * @return {DeviceBuilder} DeviceBuilder for chaining.
+   * @example
+   * .addPowerStateSensor({
+   *   setter: (deviceId, newValue) => sensorState = newValue,
+   *   getter: (deviceId) => sensorState ),
+   *  })
+   */
+  addPowerStateSensor(controller: Sensor.PowerStateController): this;
 
   /**
    * @function addSwitch
@@ -377,28 +440,13 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * @example
    * .addSwitch(
    *   { name: 'example-switch', label: 'my switch' },
-   *   { setter: (newValue) => switchState = newValue, getter: () => switchState ) }
+   *   {
+   *     setter: (deviceId, newValue) => switchState = newValue,
+   *     getter: (deviceId) => switchState,
+   *   }
    *  )
    */
-  addPowerStateSensor(controller: SensorDescriptor.PowerStateController): this;
-
-  /**
-   * @function addSwitch
-   * @param {Object} configuration JSON Configuration Object
-   * @param {String} configuration.name identifier of this element
-   * @param {String} configuration.label optional, visible label in the mobile app or on the NEEO Remote
-   * @param {Object} controller Controller callbacks Object
-   * @param {Function} controller.getter return current value of the Switch
-   * @param {Function} controller.setter update current value of the Switch
-   * @description Add a (binary) switch to your custom element
-   * @return {DeviceBuilder} DeviceBuilder for chaining.
-   * @example
-   * .addSwitch(
-   *   { name: 'example-switch', label: 'my switch' },
-   *   { setter: (newValue) => switchState = newValue, getter: () => switchState ) }
-   *  )
-   */
-  addSwitch(param: SwitchDescriptor, controller: SwitchDescriptor.Controller): this;
+  addSwitch(param: Descriptor, controller: Switch.Controller): this;
 
   /**
    * @function addTextLabel
@@ -412,10 +460,10 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * @example
    * .addTextLabel(
    *   { name: 'artistname', label: 'Artist name', isLabelVisible: false },
-   *   controller.getArtist
+   *   (deviceId) => 'Rude Tins'
    *  )
    */
-  addTextLabel(param: TextLabelDescriptor, controller: TextLabelDescriptor.Controller): this;
+  addTextLabel(param: TextLabel.Descriptor, controller: TextLabel.Controller): this;
 
   /**
    * @function addImageUrl
@@ -442,10 +490,10 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * @example
    * .addImageUrl(
    *   { name: 'albumcover', label: 'Cover for current album', size: 'small' },
-   *   controller.getImageUri
+   *   (deviceId) => 'http://imageurl'
    * )
    */
-  addImageUrl(param: ImageDescriptor, controller: ImageDescriptor.Controller): this;
+  addImageUrl(param: Image.Descriptor, controller: Image.Controller): this;
 
   /**
    * @function addDirectory
@@ -458,17 +506,45 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * @param {Function} controller.getter should return a list built by listBuilder so the App/NEEO Remote can display the browse result as a list. If the getter callback encounters an error, you can build a list with a 'ListInfoItem' to inform the user about the error
    * @param {Function} controller.action will be called when an item is clicked
    * @return {Object} DeviceBuilder
-   * @deprecated use addQueueDirectory or addRootDirectory
    * @example
    * .addDirectory({
    *   name: 'DEVICE_PLAY_QUEUE_DIRECTORY',
    *   label: 'Queue',
    *   role: 'QUEUE'
-   * }, controller.handleDirectory)
+   * }, {
+   *   getter: (deviceId, params) => controller.browse(deviceId, params),
+   *   action: (deviceId, params) => controller.listAction(deviceId, params),
+   * })
    */
   addDirectory(
-    configuration: DirectoryDescriptor,
-    controller: DirectoryDescriptor.Controller
+    configuration: Directory.Descriptor,
+    controller: Directory.Controller
+  ): this;
+
+  /**
+   * @function addQueueDirectory
+   * @description **deprecated**: this funciton is for backwards compatibility, use `addDirectory()` instead.
+   * @deprecated use `addDirectory()` with the `'QUEUE'` role.
+   * @param {Object} configuration JSON Configuration Object, see `addDirectory()` for details.
+   * @param {Object} controller Controller callbacks Object, see `addDirectory()` for details.
+   * @return {Object} DeviceBuilder
+   */
+  addQueueDirectory(
+    configuration: Directory.Descriptor,
+    controller: Directory.Controller
+  ): this;
+
+  /**
+   * @function addRootDirectory
+   * @description **deprecated**: this funciton is for backwards compatibility, use `addDirectory()` instead.
+   * @deprecated use `addDirectory()` with the `'ROOT'` role.
+   * @param {Object} configuration JSON Configuration Object, see `addDirectory()` for details.
+   * @param {Object} controller Controller callbacks Object, see `addDirectory()` for details.
+   * @return {Object} DeviceBuilder
+   */
+  addRootDirectory(
+    configuration: Directory.Descriptor,
+    controller: Directory.Controller
   ): this;
 
   /**
@@ -487,6 +563,54 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
   addCapability(
     capability: 'alwaysOn' | 'bridgeDevice' | 'dynamicDevice' | 'addAnotherDevice'
   ): this;
+
+  /**
+   * @function addPlayerWidget
+   * @description This is a helper to implement a player widget, it's similar to the button groups
+   * because it defines multiple sub components (buttons, sensors, sliders, ...). The player can
+   * only be added for the MUSICPLAYER / MEDIAPLAYER / VOD device types.
+   *
+   * PLEASE NOTE: this is a BETA feature, development is still in progress
+   *
+   * The following components will be registered:
+   * - Buttons: PLAY, PLAY TOGGLE, PAUSE, VOLUME UP, VOLUME DOWN, MUTE TOGGLE, NEXT TRACK, PREVIOUS TRACK, SHUFFLE TOGGLE, REPEAT TOGGLE, CLEAR QUEUE
+   * - Directories: root, (optional) queue
+   * - Slider: VOLUME
+   * - Sensors: COVER_ART_SENSOR, TITLE_SENSOR, DESCRIPTION_SENSOR
+   * - Switches: PLAYING, MUTE, SHUFFLE, REPEAT
+   *
+   * Note: it is also possible to add all the required components manually
+   * without using addPlayerWidget(), it can be more flexible for advanced use
+   * but it is more error prone.
+   * @param {PlayerWidget.Controller} controller Controller and player settings definition.
+   * @return {DeviceBuilder} DeviceBuilder for chaining.
+   * @example
+   * .addPlayerWidget({
+   *   rootDirectory: {
+   *     name: 'PLAYER_ROOT_DIRECTORY', // Optional: will default to ROOT_DIRECTORY
+   *     label: 'My Library', // Optional: will default to ROOT
+   *     controller: { getter: (deviceId, params) => ..., action: (deviceId, params) => ...},
+   *   },
+   *   // Optional:
+   *   queueDirectory: {
+   *     name: 'PLAYER_QUEUE_DIRECTORY', // Optional: will default to QUEUE_DIRECTORY
+   *     label: 'Queue', // Optional: will default to QUEUE
+   *     controller: { getter: (deviceId, params) => ..., action: (deviceId, params) => ...},
+   *   },
+   *   volumeController: { getter: (deviceId) => ..., setter: (deviceId, params) => ...},
+   *   coverArtController: { getter: (deviceId) => ... },
+   *   titleController: { getter: (deviceId) => ... },
+   *   descriptionController: { getter: (deviceId) => ... },
+   *   playingController: { getter: (deviceId) => ..., setter: (deviceId, params) => ...},
+   *   muteController: { getter: (deviceId) => ..., setter: (deviceId, params) => ...},
+   *   shuffleController: { getter: (deviceId) => ..., setter: (deviceId, params) => ...},
+   *   repeatController: { getter: (deviceId) => ..., setter: (deviceId, params) => ...},
+   * })
+   * .addButtonHandler(((deviceid, name) => {
+   *   // The button handler is needed, but still registered separately.
+   * }));
+   */
+  addPlayerWidget(handler: PlayerWidget.Controller): this;
 
   /**
    * @function enableRegistration
@@ -550,4 +674,25 @@ import { TimingSpecifier } from './timingSpecifier'; // avoid doxdox thinking th
    * )
    */
   registerDeviceSubscriptionHandler(controller: DeviceSubscriptionHandler.Controller): this;
+
+  /**
+   * @function registerFavoriteHandlers
+   * @param {FavoritesHandler.Controller} controller Controller callbacks Object
+   * @param {Function} controller.execute This callback is executed when a favorite channel is triggered on the Brain
+   * The callback has two parameters:
+   * **deviceId**: string identifying the device.
+   * **favoriteId**: string identifying the favorite channel to execute
+   * @description This allows a device that supports favorites (only TV, DVB or TUNER)
+   * to implement a custom handler, for example for channel "42", rather than
+   * 2 buttonHandler calls for "4" and "2", a single call with "42" will be
+   * made to the favoriteHandler.
+   * @return {DeviceBuilder} DeviceBuilder for chaining.
+   * @example
+   * .registerFavoriteHandlers(
+   *   {
+   *     execute: (deviceId, favoriteId) => debug('favorite executed', deviceId, favoriteId),
+   *   }
+   * )
+   */
+  registerFavoriteHandlers(controller: FavoritesHandler.Controller): this;
 }

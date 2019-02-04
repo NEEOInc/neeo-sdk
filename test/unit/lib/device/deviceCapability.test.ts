@@ -2,7 +2,7 @@
 
 import { expect } from 'chai';
 import { DeviceBuilder } from '../../../../src/lib/device/deviceBuilder';
-import buildDeviceCapability from '../../../../src/lib/device/deviceCapability';
+import { buildDeviceCapabilities } from '../../../../src/lib/device/deviceCapability';
 import * as Models from '../../../../src/lib/models';
 
 describe('./lib/device/deviceCapability.ts', () => {
@@ -10,28 +10,28 @@ describe('./lib/device/deviceCapability.ts', () => {
     it('should fail to build devicecapability, no parameters', () => {
       expect(() => {
         // @ts-ignore
-        buildDeviceCapability();
+        buildDeviceCapabilities();
       }).to.throw(/INVALID_PARAMETERS/);
     });
 
     it('should fail to build devicecapability, invalid parameters', () => {
       expect(() => {
         // @ts-ignore
-        buildDeviceCapability(4);
+        buildDeviceCapabilities(4);
       }).to.throw(/INVALID_PARAMETERS/);
     });
 
     it('should fail to build devicecapability, empty object', () => {
       expect(() => {
         // @ts-ignore
-        buildDeviceCapability({});
+        buildDeviceCapabilities({});
       }).to.throw(/EMPTY_OBJECT/);
     });
 
     it('should build empty devicecapability', () => {
       const data = buildMockDeviceData();
 
-      const result = buildDeviceCapability(data);
+      const result = buildDeviceCapabilities(data);
 
       expect(result.capabilities).to.deep.equal([]);
       expect(result.handlers.size).to.equal(0);
@@ -42,16 +42,16 @@ describe('./lib/device/deviceCapability.ts', () => {
       data.addCapability('addAnotherDevice');
 
       expect(() => {
-        buildDeviceCapability(data);
+        buildDeviceCapabilities(data);
       }).to.throw(/DISCOVERY_REQUIRED/);
     });
 
     it('should not fail if discovery missing but dynamic device is defined', () => {
-      const data = buildMockDeviceData();
-      // @ts-ignore
-      data.deviceCapabilities = ['addAnotherDevice', 'dynamicDevice'];
+      const device = buildMockDeviceData()
+        .addCapability('addAnotherDevice')
+        .addCapability('dynamicDevice');
 
-      const result = buildDeviceCapability(data);
+      const result = buildDeviceCapabilities(device);
       expect(typeof result).to.equal('object');
     });
 
@@ -59,7 +59,7 @@ describe('./lib/device/deviceCapability.ts', () => {
     it('should build devicecapability with one button, make sure devicehandler can be accessed using the encoded name', () => {
       const data = buildMockDeviceData();
       data.addButton({ name: 'power on', label: 'Power On' }).addButtonHandler(() => {});
-      const result = buildDeviceCapability(data);
+      const result = buildDeviceCapabilities(data);
 
       expect(result.capabilities).to.deep.equal([
         {
@@ -81,7 +81,7 @@ describe('./lib/device/deviceCapability.ts', () => {
         (deviceId) => 'text'
       );
 
-      const result = buildDeviceCapability(data);
+      const result = buildDeviceCapabilities(data);
 
       expect(result.capabilities).to.deep.equal([
         {
@@ -106,7 +106,7 @@ describe('./lib/device/deviceCapability.ts', () => {
       const data = buildMockDeviceData();
       data.addImageUrl({ name: 'image', label: 'Image', uri: 'img', size: 'small' }, () => 'text');
 
-      const result = buildDeviceCapability(data);
+      const result = buildDeviceCapabilities(data);
 
       expect(result.capabilities).to.deep.equal([
         {
@@ -132,7 +132,7 @@ describe('./lib/device/deviceCapability.ts', () => {
       const data = buildMockDeviceData();
       data.addSwitch({ name: 'switch', label: 'Switch' }, { getter: () => true, setter: () => {} });
 
-      const result = buildDeviceCapability(data);
+      const result = buildDeviceCapabilities(data);
 
       expect(result.capabilities).to.deep.equal([
         {
@@ -156,7 +156,7 @@ describe('./lib/device/deviceCapability.ts', () => {
       const data = buildMockDeviceData();
       data.addSlider({ name: 'slider', label: 'Slider' }, { getter: () => 100, setter: () => {} });
 
-      const result = buildDeviceCapability(data);
+      const result = buildDeviceCapabilities(data);
 
       expect(result.capabilities).to.deep.equal([
         {
@@ -183,6 +183,17 @@ describe('./lib/device/deviceCapability.ts', () => {
           path: `/device/${data.deviceidentifier}/slider`,
         },
       ]);
+    });
+
+    it('should register favorites handler route', () => {
+      const device = buildMockDeviceData()
+        .setType('DVB')
+        .registerFavoriteHandlers({ execute: () => {}});
+
+      const result = buildDeviceCapabilities(device);
+
+      expect(result.handlers.size).to.equal(1);
+      expect(typeof result.handlers.get('favoritehandler')).to.equal('object');
     });
   });
 

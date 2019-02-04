@@ -242,13 +242,13 @@ describe('./lib/device/validation/list.ts', () => {
         name: 'missing "_meta" property',
         shouldFail: true,
         data: { _meta: null },
-        error: /meta can\'t be blank/,
+        error: /property "_meta" not present/,
       },
       {
         name: 'missing "_meta.current" property',
         shouldFail: true,
         data: { _meta: { current: null } },
-        error: /Current can\'t be blank/,
+        error: /property "current" not present/,
       },
       {
         name: '"_meta.current.browseIdentifier" must be string',
